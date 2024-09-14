@@ -479,7 +479,6 @@ onMounted(retScroll);
 <style scoped>
 .home-main {
   width: 76%;
-  height: 70vh;
   display: flex;
   margin: 0 auto;
   justify-content: space-between;

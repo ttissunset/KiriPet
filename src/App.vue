@@ -15,6 +15,21 @@
   word-break: break-all;
 }
 
+/* 图片懒加载 */
+/* .lazy__img[lazy="loading"] {
+  padding: 5em 0;
+  width: 48px;
+}
+
+.lazy__img[lazy="loaded"] {
+  width: 100%;
+}
+
+.lazy__img[lazy="error"] {
+  padding: 5em 0;
+  width: 48px;
+} */
+
 :root {
   /* font-size */
   --fs-12: 12px;
