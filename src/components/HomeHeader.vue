@@ -2,18 +2,20 @@
 import { onMounted } from "vue";
 import { inject, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useUserStore } from "../stores/useStore";
+
 const router = useRouter();
 const route = useRoute();
 
-// const light = ref(null);
-// const dark = ref(null);
-// 切换主题色
-// const toggleTheme = () => {
-//   // 切换主题色
-//   document.body.classList.toggle("dark-mode-variables");
-//   dark.value.classList.toggle("active");
-//   light.value.classList.toggle("active");
-// };
+const userStore = useUserStore();
+const test = true;
+// 退出登录的业务逻辑
+const confirm = () => {
+  // 1.清除用户信息
+  userStore.clearUserInfo();
+  // 2.跳转到登录页
+  router.push("/login");
+};
 
 const menuList = [
   { id: 0, name: "首页", path: "/home" },
@@ -95,18 +97,24 @@ onMounted(getCurrentMenuId);
               item.name
             }}</span>
           </li>
-          <button @click="router.push('/login')">登录</button>
+          <!-- 多模板渲染 用于区分登录状态和未登录状态 -->
+          <!--! 记得改成userStore.userInfo.token -->
+          <template v-if="test">
+            <li>
+              <span @click="router.push('/user')"
+                ><img src="../assets/image/pet-food.png"
+              /></span>
+            </li>
+            <button class="exitLoginBtn">退出登录</button>
+          </template>
+          <template v-else>
+            <button @click="router.push('/login')" class="loginBtn">
+              登录
+            </button>
+          </template>
         </ul>
       </div>
       <!-- NavList End -->
-
-      <!-- 主题切换-->
-      <!-- <div class="dark-mode" @click="toggleTheme">
-        <span ref="light" class="material-icons-sharp active">
-          light_mode
-        </span>
-        <span ref="dark" class="material-icons-sharp"> dark_mode </span>
-      </div> -->
     </div>
   </div>
 </template>
@@ -181,15 +189,20 @@ onMounted(getCurrentMenuId);
 /* 导航列表部分 */
 .home-header-right .header-nav ul {
   display: flex;
-  flex-direction: row;
+  align-items: center;
   font-size: var(--fs-18);
   font-family: var(--ff-llt);
 }
 
 .home-header-right .header-nav ul li {
   margin-right: 25px;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   font-weight: var(--fw-500);
+}
+
+.home-header-right .header-nav ul li img {
+  width: 35px;
+  height: 35px;
 }
 
 .selected {
@@ -203,7 +216,25 @@ onMounted(getCurrentMenuId);
   cursor: pointer;
 }
 
-.home-header-right .header-nav button {
+.home-header-right .header-nav .exitLoginBtn {
+  width: 100px;
+  height: 40px;
+  font-size: var(--fs-16);
+  font-family: var(--ff-llt);
+  color: var(--light-white);
+  border-radius: var(--radius-8);
+  background-color: var(--orange-crayola);
+}
+
+.home-header-right .header-nav .exitLoginBtn:hover {
+  border: 2px solid var(--orange-crayola);
+  background-color: var(--light-white);
+  color: var(--orange-crayola);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.home-header-right .header-nav .loginBtn {
   width: 100px;
   height: 40px;
   font-size: var(--fs-16);
@@ -213,37 +244,39 @@ onMounted(getCurrentMenuId);
   background-color: var(--youth-green-2);
 }
 
-.home-header-right .header-nav button:hover {
+.home-header-right .header-nav .loginBtn:hover {
   border: 2px solid var(--youth-green-2);
   background-color: var(--light-white);
   color: var(--youth-green-2);
   transition: all 0.3s ease-in-out;
   cursor: pointer;
 }
-
-/* 主题切换部分 */
-/* .home-header-right .dark-mode {
-  background-color: var(--light-gray);
-  display: flex;
-  align-items: center;
-  height: 1.6rem;
-  width: 4.2rem;
-  cursor: pointer;
-  border-radius: var(--radius-10);
-}
-
-.home-header-right .dark-mode span {
-  font-size: 1.2rem;
-  width: 50%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.home-header-right .dark-mode span.active {
-  background-color: var(--youth-green-2);
-  color: white;
-  border-radius: var(--radius-10);
-} */
 </style>
+
+<!-- // const light = ref(null);
+// const dark = ref(null);
+// 切换主题色
+// const toggleTheme = () => {
+//   // 切换主题色
+//   document.body.classList.toggle("dark-mode-variables");
+//   dark.value.classList.toggle("active");
+//   light.value.classList.toggle("active");
+// }; -->
+
+<!-- 切换暗黑模式 -->
+<!-- 
+    <div class="dark-mode" @click="toggleTheme">
+        <span ref="light" class="material-icons-sharp active">
+          light_mode
+        </span>
+        <span ref="dark" class="material-icons-sharp"> dark_mode </span>
+    </div>
+-->
+
+/* 主题切换部分 */ /* .home-header-right .dark-mode { background-color:
+var(--light-gray); display: flex; align-items: center; height: 1.6rem; width:
+4.2rem; cursor: pointer; border-radius: var(--radius-10); } .home-header-right
+.dark-mode span { font-size: 1.2rem; width: 50%; height: 100%; display: flex;
+align-items: center; justify-content: center; } .home-header-right .dark-mode
+span.active { background-color: var(--youth-green-2); color: white;
+border-radius: var(--radius-10); } */
