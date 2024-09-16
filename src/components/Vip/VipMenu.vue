@@ -56,13 +56,13 @@ onMounted(getCurrentListId);
 
 <style scoped>
 .vip-list {
-  width: 100%;
+  width: 76%;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
   list-style: none;
   gap: 40px;
-  margin-top: 20px;
   z-index: 100;
 }
 
