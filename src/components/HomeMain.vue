@@ -693,8 +693,8 @@ onMounted(retScroll);
 }
 
 .home-petInfo .info-section-img-wrapper img {
-  width: 250px;
-  height: 200px;
+  width: 300px;
+  height: 250px;
   border-radius: var(--radius-8);
 }
 

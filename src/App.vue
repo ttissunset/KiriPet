@@ -74,18 +74,6 @@
   /*spacing*/
   --section-padding: 90px;
 
-  /*shadow*/
-  --shadow-1: 0 0 20px hsla(216, 14%, 14%, 0.05);
-  --shadow-2: 0 0 0 0.05rem hsla(214, 88%, 27%, 0.08),
-    0 0 1.25rem hsla(216, 14%, 14%, 0.06);
-  --shadow-3: 0 0 1.25rem hsla(216, 14%, 14%, 0.04);
-  --shadow-4: 0 0 1.25rem hsla(226, 18%, 18%, 0.05);
-  --shadow-5: 0.5rem 0.5rem 1.25rem hsla(250, 20%, 20%, 0.06);
-  --shadow-6: 0.7rem 0.8rem 1.35rem hsla(270, 25%, 25%, 0.07),
-    0 0 1.25rem hsla(216, 14%, 14%, 0.06);
-  --box-shadow: 0 0.5em 1em rgba(208, 187, 208, 0.5);
-  --box-shadow-1: 0 0.7em 2em rgba(208, 187, 208, 0.5);
-
   /* color */
   --danger: #ff0060;
   --success: #1b9c85;
@@ -154,6 +142,19 @@
   --transition-2: 0.5s ease;
   --transition-3: 0.3s ease-in-out;
   --transition-4: 0.3s ease-in-out;
+
+  /*shadow*/
+  --shadow-1: 0 0 20px hsla(216, 14%, 14%, 0.05);
+  --shadow-2: 0 0 0 0.05rem hsla(214, 88%, 27%, 0.08),
+    0 0 1.25rem hsla(216, 14%, 14%, 0.06);
+  --shadow-3: 0 0 1.25rem hsla(216, 14%, 14%, 0.04);
+  --shadow-4: 0 0 1.25rem hsla(226, 18%, 18%, 0.05);
+  --shadow-5: 0.5rem 0.5rem 1.25rem hsla(250, 20%, 20%, 0.06);
+  --shadow-6: 0.7rem 0.8rem 1.35rem hsla(270, 25%, 25%, 0.07),
+    0 0 1.25rem hsla(216, 14%, 14%, 0.06);
+  --box-shadow: 0 0.5em 1em rgba(208, 187, 208, 0.5);
+  --box-shadow-1: 0 0.7em 2em rgba(208, 187, 208, 0.5);
+  --box-shadow-2: 0 0.2em 1em rgba(202, 166, 243, 0.5);
 
   /* black mode */
   --color-background: rgba(255, 255, 255, 0.8);
