@@ -2,7 +2,7 @@
 import { onMounted } from "vue";
 import { inject, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useUserStore } from "../stores/useStore";
+import { useUserStore } from "../../stores/useStore";
 
 const router = useRouter();
 const route = useRoute();
@@ -21,9 +21,8 @@ const confirm = () => {
 const menuList = [
   { id: 0, name: "首页", path: "/home" },
   { id: 1, name: "宠物百科", path: "/info" },
-  { id: 2, name: "宠物商店", path: "/adopt" },
-  { id: 3, name: "宠物乐园", path: "/fun" },
-  { id: 4, name: "成为会员", path: "/vip" },
+  { id: 2, name: "宠物商店", path: "/shop" },
+  { id: 3, name: "宠物收养", path: "/adopt" },
 ];
 const menu = ref(null);
 var currentId = 0;

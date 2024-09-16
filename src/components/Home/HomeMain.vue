@@ -1,13 +1,16 @@
 <script setup>
 import ScrollReveal from "scrollreveal";
 import { reactive, ref, onMounted } from "vue";
-import vips from "../mock/vips";
-import infos from "../mock/infos";
-import shops from "../mock/shops";
-import goods from "../mock/goods";
+import { useRouter } from "vue-router";
+import vips from "../../mock/vips";
+import infos from "../../mock/infos";
+import shops from "../../mock/shops";
+import goods from "../../mock/goods";
 
+const router = useRouter();
+
+// 声明订阅栏的显示id
 let isOpen = ref(1);
-
 // 在reactive()中声明scrollReveal组件
 const data = reactive({
   scrollReveal: ScrollReveal(),
@@ -98,14 +101,14 @@ onMounted(retScroll);
       </button>
     </div>
     <div class="home-mian-right">
-      <img class="img" src="../assets/image/undraw_passing_by_0un9.svg" />
+      <img class="img" src="@/assets/image/undraw_passing_by_0un9.svg" />
     </div>
   </div>
 
   <!-- 服务内容 Start -->
   <div class="home-serve" id="servePage">
     <div class="home-serve-left">
-      <img src="../assets/image/0111.jpg" alt="" />
+      <img src="@/assets/image/0111.jpg" alt="" />
     </div>
     <div class="home-serve-right">
       <div class="home-serve-right-title">我们的内容都适用于哪些人?</div>
@@ -257,7 +260,7 @@ onMounted(retScroll);
           <h3 class="info-section-item-petName">{{ info.petName }}</h3>
           <p class="info-section-item-description">{{ info.miniDes }}</p>
           <div class="info-section-dots-background">
-            <img class="info-section-dots" src="../assets/image/dots.svg" />
+            <img class="info-section-dots" src="src/assets/image/dots.svg" />
           </div>
           <div class="info-section-button">
             <button class="info-section-infoBtn">了解更多</button>
@@ -282,7 +285,7 @@ onMounted(retScroll);
           <div class="adopt-section-main-left-main">
             <div class="adopt-section-main-left-main-title">
               <img
-                src="../assets/image/undraw_pet_adoption_-2-qkw.svg"
+                src="@/assets/image/undraw_pet_adoption_-2-qkw.svg"
                 class="circle-1"
               />
             </div>
@@ -466,7 +469,7 @@ onMounted(retScroll);
                 {{ vip.details.description }}
               </div>
               <div class="vip-section-subscribe">
-                <button>订阅计划</button>
+                <button @click="router.push('/vip-0')">订阅计划</button>
               </div>
             </div>
           </div>
@@ -1251,7 +1254,7 @@ onMounted(retScroll);
 .vip-section-vip-price {
   font-size: var(--fs-36);
   font-weight: var(--fw-600);
-  color: var(--red);
+  color: var(--danger);
   margin: 10px 0;
 }
 

@@ -30,15 +30,30 @@ const routes = [
   },
   {
     path: "/shop",
-    component: () => import("../pages/infoPages.vue"),
+    component: () => import("../pages/shopPages.vue"),
   },
   {
-    path: "/fun",
-    component: () => import("../pages/infoPages.vue"),
+    path: "/adopt",
+    component: () => import("../pages/shopPages.vue"),
   },
   {
     path: "/vip",
-    component: () => import("../pages/infoPages.vue"),
+    component: () => import("../pages/vipPages.vue"),
+    redirect:'/vip-0',
+    children: [
+      {
+        path: "/vip-0",
+        component: () => import("../components/Vip/VipFree.vue"),
+      },
+      {
+        path: "/vip-1",
+        component: () => import("../components/Vip/VipMonth.vue"),
+      },
+      {
+        path: "/vip-2",
+        component: () => import("../components/Vip/VipPermanent.vue"),
+      },
+    ],
   },
 ];
 
