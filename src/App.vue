@@ -111,7 +111,6 @@
   --bg-green: rgb(229, 243, 229);
   --blackish-green: rgb(40, 72, 64);
   --blue-purple: rgb(153, 180, 222);
-  --deongaree: rgb(139, 152, 228);
   --youth-blue: rgb(199, 206, 232);
   --youth-blue-dark: rgb(144, 162, 216);
   --youth-blue-purple: rgb(98, 125, 211);
@@ -124,14 +123,19 @@
   --youth-blue-2: rgb(215, 223, 250);
   --youth-blue-3: rgb(244, 246, 252);
   --blue: rgb(83, 147, 194);
-
-  /* main color */
   --blue-crayola: hsla(219, 72%, 56%, 1);
   --purplr-crayola: #c471d6;
   --pink-crayola: #ff74b0;
   --orange-crayola: #ff9483;
   --orange-crayola-light: #ffcac2;
   --yellow-crayola: #f9f871;
+
+  /* main color */
+  --deongaree: #8b98e4;
+  --deongaree-pr: #db95e0;
+  --deongaree-pi: #ff96c1;
+  --deongaree-or: #ffaa95;
+  --deongaree-yw: #f3f3e2;
 
   /*border radius*/
   --radius-circle: 50%;
@@ -276,6 +280,9 @@
   color: var(--color-dark);
 }
 
+body {
+  background-color: var(--white-a7);
+}
 a {
   color: var(--black);
   text-decoration: none;

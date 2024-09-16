@@ -118,7 +118,7 @@ const register = () => {
 
 .reg-container-reg-text span {
   font-size: var(--fs-60);
-  color: var(--blue-crayola);
+  color: var(--deongaree);
 }
 
 .reg-container-reg-text span:hover {
@@ -200,7 +200,7 @@ const register = () => {
   font-size: var(--fs-14);
   letter-spacing: 2px;
   border-radius: var(--radius-10);
-  background-color: var(--orange-crayola);
+  background-color: var(--deongaree);
   color: var(--light-white);
 }
 
@@ -214,7 +214,7 @@ const register = () => {
 }
 
 .right-reg-main .input:focus {
-  border: 1.5px solid #2d79f3;
+  border: 1.5px solid var(--deongaree);
 }
 
 .right-reg-main .right-reg-main-input-field .label {
@@ -232,7 +232,7 @@ const register = () => {
   top: 5px;
   left: 5px;
   font-size: var(--fs-12);
-  color: var(--blue-crayola);
+  color: var(--deongaree);
   background-color: #ffffff;
   padding-left: 5px;
   padding-right: 5px;
@@ -250,13 +250,13 @@ const register = () => {
   font-size: var(--fs-18);
   letter-spacing: 5px;
   font-weight: var(--fw-600);
-  background-color: var(--blue-crayola);
+  background-color: var(--deongaree);
 }
 
 .right-reg-main .right-reg-main-submitBtn button:hover {
   background-color: var(----light-white);
-  border: 2px solid var(--blue-crayola);
-  color: var(--blue-crayola);
+  border: 2px solid var(--deongaree);
+  color: var(--deongaree);
   transition: var(--transition-4);
 }
 
@@ -277,7 +277,7 @@ const register = () => {
 }
 
 .right-reg-main .toLogin {
-  color: var(--blue-crayola);
+  color: var(--deongaree);
   cursor: pointer;
   transition: var(--transition-1);
 }

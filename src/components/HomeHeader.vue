@@ -8,7 +8,8 @@ const router = useRouter();
 const route = useRoute();
 
 const userStore = useUserStore();
-const test = true;
+// 测试用 暂时代替userStore
+const test = false;
 // 退出登录的业务逻辑
 const confirm = () => {
   // 1.清除用户信息
@@ -151,12 +152,13 @@ onMounted(getCurrentMenuId);
 /* 输入框部分 */
 .home-header-right .input-container {
   position: relative;
-  background: var(--youth-blue-2);
+  /* background: var(--youth-blue-2); */
   padding: 5px 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
+  border: 1px solid var(--youth-blue-2);
   border-radius: var(--radius-20);
   width: 300px;
   margin-right: 20px;
@@ -180,6 +182,7 @@ onMounted(getCurrentMenuId);
 .home-header-right .input-container .input-search {
   width: 100%;
   border-radius: var(--radius-20);
+  /* background: var(--youth-blue-2); */
   outline: none;
   border: none;
   padding: 8px;

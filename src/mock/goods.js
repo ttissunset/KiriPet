@@ -3,7 +3,7 @@ const goods = [
     id: 1,
     name: "爱立方®冻干生骨肉",
     price: "$15.99",
-    description: "鸡肉口味 全期猫粮 人类食用级标准",
+    description: "全期猫粮 人类食用级标准",
     imageUrl: "src/assets/image/maoliang1.png",
   },
   {
@@ -16,8 +16,8 @@ const goods = [
   {
     id: 3,
     name: "UO猫®火山石猫砂",
-    price: "$8.99",
-    description: "奶香矿石砂除臭无尘 甄选原料 强力结团",
+    price: "$8.99", 
+    description: "奶香矿砂 除臭无尘 强力结团",
     imageUrl: "src/assets/image/maosha.png",
   },
 //   {

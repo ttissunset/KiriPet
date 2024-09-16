@@ -126,7 +126,7 @@ const router = useRouter();
   padding-left: 10px;
 }
 .left-login-main .input:focus {
-  border: 1.5px solid #2d79f3;
+  border: 1.5px solid var(--deongaree);
 }
 .left-login-main .left-login-main-input-field .label {
   position: absolute;
@@ -142,7 +142,7 @@ const router = useRouter();
   top: 5px;
   left: 5px;
   font-size: var(--fs-12);
-  color: var(--blue-crayola);
+  color: var(--deongaree);
   background-color: #ffffff;
   padding-left: 5px;
   padding-right: 5px;
@@ -181,13 +181,13 @@ const router = useRouter();
   font-size: var(--fs-18);
   letter-spacing: 5px;
   font-weight: var(--fw-600);
-  background-color: var(--blue-crayola);
+  background-color: var(--deongaree);
 }
 
 .left-login-main .left-login-main-submitBtn button:hover {
   background-color: var(----light-white);
-  border: 2px solid var(--blue-crayola);
-  color: var(--blue-crayola);
+  border: 2px solid var(--deongaree);
+  color: var(---deongaree);
   transition: var(--transition-4);
 }
 
@@ -280,7 +280,7 @@ const router = useRouter();
 }
 
 .left-login-main-authLogin div:hover {
-  background-color: var(--pink-crayola);
+  background-color: var(--deongaree);
   color: var(--light-white);
   border: none;
   transition: var(--transition-4);
@@ -309,7 +309,7 @@ const router = useRouter();
 
 .login-container-right-text span {
   font-size: var(--fs-60);
-  color: var(--blue-crayola);
+  color: var(--deongaree);
 }
 
 .login-container-right-text span:hover {

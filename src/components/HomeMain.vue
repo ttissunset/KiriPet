@@ -85,8 +85,7 @@ onMounted(retScroll);
     <div class="home-main-left">
       <div class="mian-box" ref="main"></div>
       <div class="main-box-text">
-        <span style="color: var(--orange-crayola)">KiriPet</span
-        >提供最佳的宠物服务
+        <span style="color: var(--deongaree)">KiriPet</span>提供优质的宠物知识
       </div>
       <div class="main-box-text">宠物改变了我们的生活 让我们 离“他”更近</div>
       <div class="main-box-subText">
@@ -94,7 +93,9 @@ onMounted(retScroll);
         我们一起找到一种方法来利用爱的力量，使社区和宠物家庭更亲密、更强大。
         凭借宠物的爱，我们正在打造一个充满知识的网站
       </div>
-      <button class="main-box-startBtn"><span href="#servePage" v-smooth-scroll>开始浏览</span></button>
+      <button class="main-box-startBtn" href="#servePage" v-smooth-scroll>
+        开始浏览
+      </button>
     </div>
     <div class="home-mian-right">
       <img class="img" src="../assets/image/undraw_passing_by_0un9.svg" />
@@ -123,7 +124,7 @@ onMounted(retScroll);
             >
               <path
                 d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
-                fill="#1296db"
+                fill="#8B98E4"
                 p-id="2729"
               ></path>
             </svg>
@@ -146,7 +147,7 @@ onMounted(retScroll);
             >
               <path
                 d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
-                fill="#1296db"
+                fill="#8B98E4"
                 p-id="2729"
               ></path>
             </svg>
@@ -169,7 +170,7 @@ onMounted(retScroll);
             >
               <path
                 d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
-                fill="#1296db"
+                fill="#8B98E4"
                 p-id="2729"
               ></path>
             </svg>
@@ -192,7 +193,7 @@ onMounted(retScroll);
             >
               <path
                 d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
-                fill="#1296db"
+                fill="#8B98E4"
                 p-id="2729"
               ></path>
             </svg>
@@ -215,7 +216,7 @@ onMounted(retScroll);
             >
               <path
                 d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
-                fill="#1296db"
+                fill="#8B98E4"
                 p-id="2729"
               ></path>
             </svg>
@@ -479,6 +480,7 @@ onMounted(retScroll);
 <style scoped>
 .home-main {
   width: 76%;
+  height: 80vh;
   display: flex;
   margin: 0 auto;
   justify-content: space-between;
@@ -513,7 +515,7 @@ onMounted(retScroll);
   font-size: var(--fs-24);
   white-space: 2px;
   font-weight: var(--fw-600);
-  background-color: var(--blue-crayola);
+  background-color: var(--deongaree);
   color: var(--light-white);
   border: none;
   border-radius: var(--radius-10);
@@ -522,10 +524,10 @@ onMounted(retScroll);
   position: relative;
 }
 
-.home-main-left .main-box-startBtn:hover{
+.home-main-left .main-box-startBtn:hover {
   background-color: var(----light-white);
-  border: 2px solid var(--blue-crayola);
-  color: var(--blue-crayola);
+  border: 2px solid var(--deongaree);
+  color: var(--deongaree);
   transition: var(--transition-4);
 }
 
@@ -603,13 +605,13 @@ onMounted(retScroll);
   font-weight: var(--fw-600);
   border-radius: var(--radius-8);
   color: var(--light-white);
-  background-color: var(--blue-crayola);
+  background-color: var(--deongaree);
 }
 
 .home-serve-right .home-serve-right-btn button:hover {
   background-color: var(--light-white);
-  color: var(--orange-crayola);
-  border: 2px solid var(--orange-crayola);
+  color: var(--deongaree);
+  border: 2px solid var(--deongaree);
   transform: translateY(-5px);
   transition: var(--transition-4);
 }
@@ -728,7 +730,7 @@ onMounted(retScroll);
 .home-petInfo .info-section-infoBtn {
   width: 180px;
   height: 48px;
-  background-color: var(--blue-crayola);
+  background-color: var(--deongaree);
   border-radius: var(--radius-10);
   font-size: var(--fs-16);
   font-weight: var(--fw-600);
@@ -737,8 +739,8 @@ onMounted(retScroll);
 
 .home-petInfo .info-section-infoBtn:hover {
   background-color: var(--light-white);
-  border: 2px solid var(--orange-crayola);
-  color: var(--orange-crayola);
+  border: 2px solid var(--deongaree);
+  color: var(--deongaree);
   transition: var(--transition-4);
 }
 /* 宠物百科部分End */
@@ -746,7 +748,7 @@ onMounted(retScroll);
 /* 宠物领养部分Start */
 .home-petAdopt {
   width: 76%;
-  height: 600px;
+  height: 800px;
   display: flex;
   margin: 0 auto;
   margin-top: 50px;
@@ -822,13 +824,13 @@ onMounted(retScroll);
   font-weight: var(--fw-600);
   border-radius: var(--radius-8);
   color: var(--light-white);
-  background-color: var(--blue-crayola);
+  background-color: var(--deongaree);
 }
 
 .adopt-section-main-right-title button:hover {
   background-color: var(--light-white);
-  border: 2px solid var(--orange-crayola);
-  color: var(--orange-crayola);
+  border: 2px solid var(--deongaree);
+  color: var(--deongaree);
   transition: var(--transition-4);
 }
 
@@ -916,7 +918,6 @@ onMounted(retScroll);
   width: 76%;
   height: 800px;
   margin: 0 auto;
-  margin-top: 80px;
   margin-bottom: 50px;
 }
 
@@ -1046,7 +1047,7 @@ onMounted(retScroll);
   text-align: center;
   border-radius: var(--radius-10);
   box-shadow: var(--box-shadow);
-  background-color: rgba(245, 245, 220, 0.74);
+  background-color: rgba(241, 243, 250, 0.88);
 }
 
 .right-box-main-item:hover {
@@ -1061,6 +1062,7 @@ onMounted(retScroll);
 .main-item-price {
   color: var(--danger);
   font-size: var(--fs-16);
+  font-weight: var(--fw-600);
   margin: 3px 0;
 }
 
@@ -1126,13 +1128,13 @@ onMounted(retScroll);
   font-weight: var(--fw-600);
   border-radius: var(--radius-8);
   color: var(--light-white);
-  background-color: var(--blue-crayola);
+  background-color: var(--deongaree);
 }
 
 .right-box-footer-btn button:hover {
   background-color: var(--light-white);
-  border: 2px solid var(--orange-crayola);
-  color: var(--orange-crayola);
+  border: 2px solid var(--deongaree);
+  color: var(--deongaree);
   transition: var(--transition-4);
 }
 /* 宠物商店部分 End */
@@ -1204,8 +1206,8 @@ onMounted(retScroll);
   padding-bottom: 21px;
   font-weight: var(--fw-500);
   font-family: var(--ff-llt);
-  color: var(--purplr-crayola);
-  border-bottom: 3px solid var(--blue-crayola);
+  color: var(--deongaree);
+  border-bottom: 3px solid var(--deongaree);
 }
 
 .vip-section-tab-content-wrapper {
@@ -1269,7 +1271,7 @@ onMounted(retScroll);
 .vip-section-vip-description {
   margin-top: 28px;
   font-size: var(--fs-18);
-  color: var(--dark-gray);
+  color: var(--dark);
 }
 
 .vip-section-subscribe button {
@@ -1279,13 +1281,13 @@ onMounted(retScroll);
   font-weight: var(--fw-600);
   border-radius: var(--radius-8);
   color: var(--light-white);
-  background-color: var(--danger);
+  background-color: var(--deongaree);
 }
 
 .vip-section-subscribe button:hover {
   background-color: var(----light-white);
-  color: var(--danger);
-  border: 2px solid var(--danger);
+  color: var(--deongaree);
+  border: 2px solid var(--deongaree);
   transition: var(--transition-3);
 }
 /* vip部分End */
