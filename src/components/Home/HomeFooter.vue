@@ -12,10 +12,10 @@
           <div class="home-footer-left-list-title">专业的宠物服务平台</div>
           <div class="home-footer-left-list-social">
             <div class="home-footer-left-list-social-icon">
-              <img src="../assets/image/facebook.png" />
+              <img src="../../assets/image/facebook.png" />
             </div>
             <div class="home-footer-left-list-social-icon">
-              <img src="../assets/image/telegram.png" />
+              <img src="../../assets/image/telegram.png" />
             </div>
           </div>
         </div>
@@ -120,10 +120,10 @@
   margin-right: 10px;
 }
 
-.home-footer-left-list-social-icon:hover{
-    transform: translateY(-5px);
-    cursor: pointer;
-    transition: var(--transition-3);
+.home-footer-left-list-social-icon:hover {
+  transform: translateY(-5px);
+  cursor: pointer;
+  transition: var(--transition-3);
 }
 
 .home-footer-container .home-footer-right {
@@ -158,7 +158,6 @@
 
 .home-footer-right-list-item-subTi:hover {
   color: var(--danger);
-  transition:var(--transition-3);
+  transition: var(--transition-3);
 }
 </style>
-

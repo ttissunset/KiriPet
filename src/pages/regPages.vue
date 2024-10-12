@@ -11,18 +11,19 @@ const password = ref("");
 const code = ref("");
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-let handleSubmit = () => {
-    if (!email.value || !emailRegex.test(email.value)) {
-        emailError.value = true;
-    } else {
-        console.log(emailRegex.test(email.value));
-        Swal.fire({
-            icon: "success",
-            title: "Thank You",
-            text: `${email.value} subscribed to our newsletter!`,
-        });
-    }
-};
+// 邮箱正则校验
+// let handleSubmit = () => {
+//     if (!email.value || !emailRegex.test(email.value)) {
+//         emailError.value = true;
+//     } else {
+//         console.log(emailRegex.test(email.value));
+//         Swal.fire({
+//             icon: "success",
+//             title: "Thank You",
+//             text: `${email.value} subscribed to our newsletter!`,
+//         });
+//     }
+// };
 
 const register = () => {
   console.log(user_name.value, password.value, email.value, code.value);
@@ -63,7 +64,7 @@ const register = () => {
           <label class="label" for="input">输入用户名</label>
         </div>
         <div class="right-reg-main-input-field">
-          <input required="" class="input" type="email" v-model="email" />
+          <input required="true" class="input" type="email" v-model="email" />
           <label class="label" for="input">输入邮箱</label>
         </div>
         <div class="right-reg-main-input-field verify-code">
@@ -76,7 +77,7 @@ const register = () => {
           <label class="label" for="input">输入密码</label>
         </div>
         <div class="right-reg-main-submitBtn">
-          <button @click="register()">登录</button>
+          <button @click="register()">注册</button>
         </div>
         <div class="right-reg-main-line">
           <img src="../assets/image/dots.svg" />

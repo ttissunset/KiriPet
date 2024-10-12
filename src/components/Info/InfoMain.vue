@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { catInfos } from "../mock/infos";
+import { catInfos } from "../../mock/infos";
 import { onMounted } from "vue";
 
 const list = catInfos;
@@ -51,6 +51,7 @@ onMounted(test);
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+  margin-bottom: 100px;
 }
 
 /* 猫咪百科 Start */

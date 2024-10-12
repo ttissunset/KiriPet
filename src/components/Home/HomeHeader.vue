@@ -22,7 +22,7 @@ const menuList = [
   { id: 0, name: "首页", path: "/home" },
   { id: 1, name: "宠物百科", path: "/info" },
   { id: 2, name: "宠物商店", path: "/shop" },
-  { id: 3, name: "宠物收养", path: "/adopt" },
+  { id: 3, name: "宠物领养", path: "/adopt" },
 ];
 const menu = ref(null);
 var currentId = 0;

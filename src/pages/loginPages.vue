@@ -1,6 +1,21 @@
 <script setup>
 import { useRouter } from "vue-router";
 const router = useRouter();
+
+import { ref } from "vue";
+import { loginAPI } from "@/apis/user.js";
+
+const user_name = ref("");
+const password = ref("");
+
+const login = () => {
+  console.log(user_name.value, password.value);
+  if (user_name.value === "" || password.value === "") {
+    alert("请填写所有必填项");
+    return;
+  }
+  loginAPI();
+};
 </script>
 
 <template>
@@ -13,11 +28,21 @@ const router = useRouter();
       <div class="left-login-main">
         <h1>登录</h1>
         <div class="left-login-main-input-field">
-          <input required="" class="input" type="text" />
-          <label class="label" for="input">输入邮箱</label>
+          <input
+            required="true"
+            class="input"
+            type="text"
+            v-model="user_name"
+          />
+          <label class="label" for="input">输入用户名</label>
         </div>
         <div class="left-login-main-input-field">
-          <input required="" class="input" type="password" />
+          <input
+            required="true"
+            class="input"
+            type="password"
+            v-model="password"
+          />
           <label class="label" for="input">输入密码</label>
         </div>
         <div class="left-login-main-remember">
@@ -29,7 +54,7 @@ const router = useRouter();
           >
         </div>
         <div class="left-login-main-submitBtn">
-          <button>登录</button>
+          <button @click="login()">登录</button>
         </div>
         <div class="left-login-main-line">
           <img src="../assets/image/dots.svg" />

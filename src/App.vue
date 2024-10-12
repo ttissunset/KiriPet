@@ -15,6 +15,10 @@
   word-break: break-all;
 }
 
+body{
+  scroll-behavior: smooth;
+}
+
 /* 图片懒加载 */
 /* .lazy__img[lazy="loading"] {
   padding: 5em 0;
