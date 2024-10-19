@@ -16,6 +16,11 @@ const login = () => {
   }
   loginAPI();
 };
+
+// const ouath = () => {
+//   window.location.href =
+//     "";
+// };
 </script>
 
 <template>
@@ -69,8 +74,8 @@ const login = () => {
               >Sign In With Google</span
             >
           </div>
-          <div class="authLogin-github">
-            <img src="../assets/image/github.png" alt="" />
+          <div class="authLogin-github" @click="ouath">
+            <img src="../assets/image/github.png" />
             <span>Sign In With Github</span>
           </div>
           <div class="authLogin-apple">

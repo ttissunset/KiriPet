@@ -29,6 +29,10 @@ const routes = [
     component: () => import("../pages/infoPages.vue"),
   },
   {
+    path: "/fun",
+    component: () => import("../pages/chatPages.vue"),
+  },
+  {
     path: "/shop",
     component: () => import("../pages/shopPages.vue"),
   },

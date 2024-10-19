@@ -23,6 +23,7 @@ const menuList = [
   { id: 1, name: "宠物百科", path: "/info" },
   { id: 2, name: "宠物商店", path: "/shop" },
   { id: 3, name: "宠物领养", path: "/adopt" },
+  { id: 4, name: "宠物乐园", path: "/fun" },
 ];
 const menu = ref(null);
 var currentId = 0;
