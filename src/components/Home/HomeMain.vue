@@ -471,7 +471,7 @@ onMounted(retScroll);
                 {{ vip.details.description }}
               </div>
               <div class="vip-section-subscribe">
-                <button @click="router.push(`/vip/${vip.id}`)">订阅计划</button>
+                <button @click="router.push(`/vip-${vip.id}`)">订阅计划</button>
               </div>
             </div>
           </div>

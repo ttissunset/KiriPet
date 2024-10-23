@@ -15,7 +15,7 @@
   word-break: break-all;
 }
 
-body{
+body {
   scroll-behavior: smooth;
 }
 

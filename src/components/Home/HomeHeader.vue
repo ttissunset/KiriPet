@@ -19,7 +19,7 @@ const confirm = () => {
 const menuList = [
   { id: 0, name: "首页", path: "/home" },
   { id: 1, name: "宠物百科", path: "/info" },
-  { id: 2, name: "宠物商店", path: "/shop" },
+  { id: 2, name: "宠物商店", path: "/goods" },
   { id: 3, name: "宠物服务", path: "/severe" },
   { id: 4, name: "宠物乐园", path: "/fun" },
 ];
