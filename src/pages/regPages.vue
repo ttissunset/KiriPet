@@ -3,7 +3,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 import { ref } from "vue";
-import { registerAPI } from "@/apis/user.js";
+import { registerAPI, sendVerificationCodeAPI } from "@/apis/user.js";
 
 const user_name = ref("");
 const email = ref("");
@@ -11,20 +11,20 @@ const password = ref("");
 const code = ref("");
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-// 邮箱正则校验
-// let handleSubmit = () => {
-//     if (!email.value || !emailRegex.test(email.value)) {
-//         emailError.value = true;
-//     } else {
-//         console.log(emailRegex.test(email.value));
-//         Swal.fire({
-//             icon: "success",
-//             title: "Thank You",
-//             text: `${email.value} subscribed to our newsletter!`,
-//         });
-//     }
-// };
+// 验证码
+const verify = () => {
+  if (!email.value || !emailRegex.test(email.value)) {
+    alert("请输入邮箱！");
+  } else {
+    console.log(email.value);
+    sendVerificationCodeAPI(email.value).then((res) => {
+      const { data } = res;
+      console.log(data.message);
+    });
+  }
+};
 
+// 注册
 const register = () => {
   console.log(user_name.value, password.value, email.value, code.value);
   if (
@@ -36,7 +36,19 @@ const register = () => {
     alert("请填写所有必填项");
     return;
   }
-  registerAPI(user_name, password, email, code);
+  registerAPI(user_name.value, password.value, email.value, code.value).then(
+    (res) => {
+      const { data } = res;
+      console.log(data);
+    }
+  );
+
+  user_name.value = "";
+  password.value = "";
+  email.value = "";
+  code.value = "";
+
+  router.push("/login");
 };
 </script>
 
@@ -60,7 +72,12 @@ const register = () => {
       <div class="right-reg-main">
         <h1>注册</h1>
         <div class="right-reg-main-input-field">
-          <input required="" class="input" type="text" v-model="user_name" />
+          <input
+            required="true"
+            class="input"
+            type="text"
+            v-model="user_name"
+          />
           <label class="label" for="input">输入用户名</label>
         </div>
         <div class="right-reg-main-input-field">
@@ -70,7 +87,7 @@ const register = () => {
         <div class="right-reg-main-input-field verify-code">
           <input required="" class="input" type="text" v-model="code" />
           <label class="label" for="input">输入验证码</label>
-          <button>验证</button>
+          <button @click="verify">验证</button>
         </div>
         <div class="right-reg-main-input-field">
           <input required="" class="input" type="password" v-model="password" />

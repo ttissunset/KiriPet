@@ -1,6 +1,6 @@
 const vips = [
   {
-    id: 1,
+    id: 0,
     name: "免费计划",
     details: {
       imageUrl: "src/assets/image/serve-1.jpg",
@@ -17,7 +17,7 @@ const vips = [
     },
   },
   {
-    id: 2,
+    id: 1,
     name: "月度会员计划",
     details: {
       imageUrl: "src/assets/image/serve-2.jpg",
@@ -34,7 +34,7 @@ const vips = [
     },
   },
   {
-    id: 3,
+    id: 2,
     name: "永久会员计划",
     details: {
       imageUrl: "src/assets/image/serve-3.jpg",

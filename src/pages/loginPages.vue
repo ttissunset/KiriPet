@@ -3,18 +3,21 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 import { ref } from "vue";
-import { loginAPI } from "@/apis/user.js";
+import { useUserStore } from "@/stores/useStore";
 
 const user_name = ref("");
 const password = ref("");
+const userStore = useUserStore();
 
-const login = () => {
-  console.log(user_name.value, password.value);
+// 登录
+const login = async () => {
   if (user_name.value === "" || password.value === "") {
     alert("请填写所有必填项");
     return;
   }
-  loginAPI();
+
+  await userStore.getUserInfo(user_name.value, password.value);
+  router.push("/home");
 };
 
 // const ouath = () => {
@@ -50,14 +53,14 @@ const login = () => {
           />
           <label class="label" for="input">输入密码</label>
         </div>
-        <div class="left-login-main-remember">
+        <!-- <div class="left-login-main-remember">
           <label class="left-login-main-remember-checkbox">
             <input type="checkbox" id="checkbox" />
           </label>
           <label for="checkbox" class="left-login-main-remember-checkbox-text"
             >记住我</label
           >
-        </div>
+        </div> -->
         <div class="left-login-main-submitBtn">
           <button @click="login()">登录</button>
         </div>
@@ -178,7 +181,7 @@ const login = () => {
   padding-right: 5px;
 }
 
-.left-login-main .left-login-main-remember {
+/* .left-login-main .left-login-main-remember {
   width: 100%;
   height: 40px;
   line-height: 40px;
@@ -197,10 +200,10 @@ const login = () => {
   cursor: pointer;
   font-size: var(--fs-14);
   color: var(--dark-variant);
-}
+} */
 
 .left-login-main .left-login-main-submitBtn {
-  margin-top: 10px;
+  margin-top: 30px;
 }
 
 .left-login-main .left-login-main-submitBtn button {

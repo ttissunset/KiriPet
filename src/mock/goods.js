@@ -16,17 +16,17 @@ const goods = [
   {
     id: 3,
     name: "UO猫®火山石猫砂",
-    price: "$8.99", 
+    price: "$8.99",
     description: "奶香矿砂 除臭无尘 强力结团",
     imageUrl: "src/assets/image/maosha.png",
   },
-//   {
-//     id: 4,
-//     name: "发现更多",
-//     price: "12",
-//     description: "12",
-//     imageUrl: "src/assets/image/pet-more.png",
-//   },
+  //   {
+  //     id: 4,
+  //     name: "发现更多",
+  //     price: "12",
+  //     description: "12",
+  //     imageUrl: "src/assets/image/pet-more.png",
+  //   },
 ];
 
 export default goods;

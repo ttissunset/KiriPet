@@ -18,6 +18,7 @@ const sendMessage = () => {
       .then((result) => {
         const { data } = result;
         // reply.value = data.result.chatReply;
+        console.log(data.result.chatReply);
         messages.value.push({
           id: "2",
           content: data.result.chatReply,
@@ -39,9 +40,10 @@ const sendMessage = () => {
         <div class="chat-area-title">[勢いにまかせて！]鬼塚夏美</div>
       </div>
       <div class="chat-area-main">
+        <!-- 默认消息 -->
         <div class="chat-msg">
           <div class="chat-msg-profile">
-            <img class="chat-msg-img" src="../../assets/image/kiri.png" />
+            <img class="chat-msg-img" src="../../assets/image/a1.png" />
           </div>
           <div class="chat-msg-content">
             <div class="chat-msg-text">
@@ -49,6 +51,8 @@ const sendMessage = () => {
             </div>
           </div>
         </div>
+
+        <!-- 消息渲染 -->
         <div
           class="chat-msg"
           v-for="(message, index) in messages"
@@ -56,7 +60,12 @@ const sendMessage = () => {
           :class="[{ owner: message.id === '1' }]"
         >
           <div class="chat-msg-profile">
-            <img class="chat-msg-img" src="../../assets/image/kiri.png" />
+            <img
+              v-if="message.id == 2"
+              class="chat-msg-img"
+              src="../../assets/image/a1.png"
+            />
+            <img v-else class="chat-msg-img" src="../../assets/image/a2.png" />
           </div>
           <div class="chat-msg-content">
             <!-- 遍历并显示消息 -->
@@ -66,6 +75,8 @@ const sendMessage = () => {
           </div>
         </div>
       </div>
+
+      <!-- 信息发送区 -->
       <div class="chat-area-footer">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -129,10 +140,12 @@ const sendMessage = () => {
         <button @click="sendMessage">发送</button>
       </div>
     </div>
+
+    <!-- 联系人详情 -->
     <div class="detail-area">
       <div class="detail-area-header">
         <div class="msg-profile">
-          <img src="../../assets//image/kiri.png" alt="" />
+          <img src="../../assets//image/a1.png" alt="" />
         </div>
         <div class="detail-title">[勢いにまかせて！]鬼塚夏美</div>
         <div class="detail-subtitle">私立結ヶ丘女子高等学校 1年级</div>
@@ -155,6 +168,7 @@ const sendMessage = () => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  overflow-y: auto;
 }
 
 .chat-area-header {
@@ -167,6 +181,7 @@ const sendMessage = () => {
   align-items: center;
   justify-content: space-between;
   padding: 20px;
+  background-color: #fff;
 }
 
 .chat-area-profile {
@@ -247,6 +262,7 @@ const sendMessage = () => {
   position: sticky;
   bottom: 0;
   left: 0;
+  background-color: #fff;
 }
 
 .chat-area-footer svg {

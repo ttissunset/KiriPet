@@ -3,7 +3,7 @@ import http from "@/utils/http";
 // 注册的接口函数
 export const registerAPI = (user_name, password, email, code) => {
   return http({
-    url: "/users/register",
+    url: "users/register",
     method: "post",
     data: {
       user_name,

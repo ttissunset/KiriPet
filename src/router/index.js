@@ -37,13 +37,12 @@ const routes = [
     component: () => import("../pages/shopPages.vue"),
   },
   {
-    path: "/adopt",
+    path: "/severe",
     component: () => import("../pages/shopPages.vue"),
   },
   {
     path: "/vip",
     component: () => import("../pages/vipPages.vue"),
-    redirect:'/vip-0',
     children: [
       {
         path: "/vip-0",
@@ -54,7 +53,7 @@ const routes = [
         component: () => import("../components/Vip/VipMonth.vue"),
       },
       {
-        path: "/vip-2",
+        path: "/vip-3",
         component: () => import("../components/Vip/VipPermanent.vue"),
       },
     ],

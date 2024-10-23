@@ -6,10 +6,8 @@ import { useUserStore } from "../../stores/useStore";
 
 const router = useRouter();
 const route = useRoute();
-
 const userStore = useUserStore();
-// 测试用 暂时代替userStore
-const test = false;
+
 // 退出登录的业务逻辑
 const confirm = () => {
   // 1.清除用户信息
@@ -22,7 +20,7 @@ const menuList = [
   { id: 0, name: "首页", path: "/home" },
   { id: 1, name: "宠物百科", path: "/info" },
   { id: 2, name: "宠物商店", path: "/shop" },
-  { id: 3, name: "宠物领养", path: "/adopt" },
+  { id: 3, name: "宠物服务", path: "/severe" },
   { id: 4, name: "宠物乐园", path: "/fun" },
 ];
 const menu = ref(null);
@@ -64,7 +62,7 @@ onMounted(getCurrentMenuId);
       </div>
     </div>
     <div class="home-header-right">
-      <!-- Search Start -->
+      <!-- 搜索框 Start -->
       <div class="input-container">
         <button class="input-button">
           <svg
@@ -88,9 +86,9 @@ onMounted(getCurrentMenuId);
           placeholder="Start searching OwO~"
         />
       </div>
-      <!-- Search End -->
+      <!-- 搜索框 End -->
 
-      <!-- NavList Start -->
+      <!-- 导航列表 Start -->
       <div class="header-nav">
         <ul>
           <li v-for="(item, index) in menuList" :key="index" ref="menu">
@@ -100,13 +98,13 @@ onMounted(getCurrentMenuId);
           </li>
           <!-- 多模板渲染 用于区分登录状态和未登录状态 -->
           <!--! 记得改成userStore.userInfo.token -->
-          <template v-if="test">
+          <template v-if="userStore.userInfo.token">
             <li>
               <span @click="router.push('/user')"
-                ><img src="../assets/image/pet-food.png"
+                ><img src="../../assets/image/a1.png"
               /></span>
             </li>
-            <button class="exitLoginBtn">退出登录</button>
+            <button class="exitLoginBtn" @click="confirm">退出登录</button>
           </template>
           <template v-else>
             <button @click="router.push('/login')" class="loginBtn">
@@ -115,7 +113,7 @@ onMounted(getCurrentMenuId);
           </template>
         </ul>
       </div>
-      <!-- NavList End -->
+      <!-- 导航列表 End -->
     </div>
   </div>
 </template>

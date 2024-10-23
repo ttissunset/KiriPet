@@ -10,7 +10,7 @@ import goods from "../../mock/goods";
 const router = useRouter();
 
 // 声明订阅栏的显示id
-let isOpen = ref(1);
+let isOpen = ref(0);
 // 在reactive()中声明scrollReveal组件
 const data = reactive({
   scrollReveal: ScrollReveal(),
@@ -228,7 +228,7 @@ onMounted(retScroll);
         </div>
       </div>
       <div class="home-serve-right-btn">
-        <button>前往乐园</button>
+        <button @click="router.push('/fun')">前往乐园</button>
       </div>
     </div>
   </div>
@@ -263,7 +263,9 @@ onMounted(retScroll);
             <img class="info-section-dots" src="src/assets/image/dots.svg" />
           </div>
           <div class="info-section-button">
-            <button class="info-section-infoBtn">了解更多</button>
+            <button class="info-section-infoBtn" @click="router.push('/info')">
+              了解更多
+            </button>
           </div>
         </div>
       </div>
@@ -294,7 +296,7 @@ onMounted(retScroll);
         <div class="adopt-section-main-right">
           <div class="adopt-section-main-right-title">
             <h3>仅需4步，即可把“他”带回家</h3>
-            <button>立即领养</button>
+            <button @click="router.push('/severe')">立即领养</button>
           </div>
           <div class="adopt-section-main-right-steps-list">
             <div class="adopt-section-steps-item">
@@ -407,7 +409,7 @@ onMounted(retScroll);
                 <div>严格筛选 质量保障 只为给“他/她”最好的</div>
               </div>
               <div class="right-box-footer-btn">
-                <button>立即选购</button>
+                <button @click="router.push('/shop')">立即选购</button>
               </div>
             </div>
           </div>
@@ -469,7 +471,7 @@ onMounted(retScroll);
                 {{ vip.details.description }}
               </div>
               <div class="vip-section-subscribe">
-                <button @click="router.push('/vip-0')">订阅计划</button>
+                <button @click="router.push(`/vip/${vip.id}`)">订阅计划</button>
               </div>
             </div>
           </div>

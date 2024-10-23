@@ -30,10 +30,10 @@
             </div>
           </div>
           <div class="home-footer-right-list-item">
-            <div class="home-footer-right-list-item-title">宠物领养</div>
+            <div class="home-footer-right-list-item-title">宠物服务</div>
             <div class="home-footer-right-list-item-sub">
-              <div class="home-footer-right-list-item-subTi">可爱小猫</div>
-              <div class="home-footer-right-list-item-subTi">可爱小狗</div>
+              <div class="home-footer-right-list-item-subTi">预约体检</div>
+              <div class="home-footer-right-list-item-subTi">领养宠物</div>
             </div>
           </div>
           <div class="home-footer-right-list-item">
