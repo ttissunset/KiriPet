@@ -12,11 +12,11 @@ import { useMouseInElement } from "@vueuse/core";
 
 // 图片列表
 const imageList = [
-  "https://img.alicdn.com/imgextra/i4/3076702445/O1CN01xiUuFU1TvrNZFYiv6_!!3076702445.jpg_q50.jpg_.webp",
-  "https://img.alicdn.com/imgextra/i2/3076702445/O1CN010dnpYl1TvrNRzw5IO_!!3076702445.jpg_q50.jpg_.webp",
   "https://img.alicdn.com/imgextra/i1/3076702445/O1CN01z7Yl8X1TvrNX75kg4_!!3076702445.jpg_q50.jpg_.webp",
-  "https://img.alicdn.com/imgextra/i4/3076702445/O1CN01WApn6Y1TvrNYdFIu0_!!3076702445.jpg_q50.jpg_.webp",
+  "https://img.alicdn.com/imgextra/i2/3076702445/O1CN010dnpYl1TvrNRzw5IO_!!3076702445.jpg_q50.jpg_.webp",
+  "https://img.alicdn.com/imgextra/i4/3076702445/O1CN01xiUuFU1TvrNZFYiv6_!!3076702445.jpg_q50.jpg_.webp",
   "https://img.alicdn.com/imgextra/i1/3076702445/O1CN01SdxCQs1TvrNaGmVmo_!!3076702445.jpg_q50.jpg_.webp",
+  "https://img.alicdn.com/imgextra/i4/3076702445/O1CN01WApn6Y1TvrNYdFIu0_!!3076702445.jpg_q50.jpg_.webp",
 ];
 
 // 1.小图切换大图显示
@@ -34,6 +34,7 @@ const top = ref(0);
 
 const positionX = ref(0);
 const positionY = ref(0);
+
 watch([elementX, elementY, isOutside], () => {
   // 如果鼠标没有进入盒子中，不执行后面的逻辑
   if (isOutside.value) return;
@@ -48,13 +49,13 @@ watch([elementX, elementY, isOutside], () => {
   }
 
   // 处理边界
-  if (elementX > 600) {
+  if (elementX > 550) {
     left.value = 200;
   }
   if (elementX > 100) {
     left.value = 0;
   }
-  if (elementY > 600) {
+  if (elementY > 550) {
     top.value = 200;
   }
   if (elementY > 100) {
@@ -116,6 +117,7 @@ watch([elementX, elementY, isOutside], () => {
   width: 600px;
   height: 600px;
   background: #f5f5f5;
+  border: 1px solid var(--deongaree-or);
 }
 
 .large {
@@ -153,10 +155,13 @@ watch([elementX, elementY, isOutside], () => {
   margin-left: 12px;
   margin-bottom: 14px;
   cursor: pointer;
+}
 
-  &:hover,
-  &.active {
-    border: 2px solid var(--success);
-  }
+.small img:hover {
+  border: 1px solid var(--deongaree-or);
+}
+
+.active img {
+  border: 1px solid var(--deongaree-or);
 }
 </style>

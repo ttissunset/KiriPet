@@ -2,9 +2,7 @@
 
 <template>
   <div class="crumb-container">
-    <h1>
-      11111111111111111111111111111111111111111111111111111111111111111111
-    </h1>
+    <h3>我是面包屑我是面包屑我是面包屑我是面包屑</h3>
   </div>
 </template>
 
@@ -12,9 +10,9 @@
 .crumb-container {
   width: 76%;
   height: 50px;
-  margin: 10px auto;
-  justify-content: space-between;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  display: flex;
   align-items: center;
-  background-color: aqua;
 }
 </style>

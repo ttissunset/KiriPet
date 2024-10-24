@@ -145,7 +145,7 @@ body {
   --transition-1: 0.25s ease;
   --transition-2: 0.5s ease;
   --transition-3: 0.3s ease-in-out;
-  --transition-4: 0.3s ease-in-out;
+  --transition-4: 0.5s ease-in-out;
 
   /*shadow*/
   --shadow-1: 0 0 20px hsla(216, 14%, 14%, 0.05);
@@ -279,15 +279,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.dark-mode-variables {
+/* .dark-mode-variables {
   background-color: var(--color-light);
   background-size: cover;
   color: var(--color-dark);
-}
+} */
 
 body {
   background-color: var(--white-a7);
 }
+
 a {
   color: var(--black);
   text-decoration: none;
