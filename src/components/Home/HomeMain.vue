@@ -260,7 +260,7 @@ onMounted(retScroll);
           <h3 class="info-section-item-petName">{{ info.petName }}</h3>
           <p class="info-section-item-description">{{ info.miniDes }}</p>
           <div class="info-section-dots-background">
-            <img class="info-section-dots" src="src/assets/image/dots.svg" />
+            <img class="info-section-dots" src="@/assets/image/dots.svg" />
           </div>
           <div class="info-section-button">
             <button class="info-section-infoBtn" @click="router.push('/info')">

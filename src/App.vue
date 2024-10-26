@@ -80,7 +80,7 @@ body {
 
   /* color */
   --danger: #ff0060;
-  --success: #1b9c85;
+  --success: #3dc23bdc;
   --warning: #f7d060;
   --info-dark: #7d8da1;
   --dark: #363949;

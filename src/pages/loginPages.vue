@@ -1,4 +1,5 @@
 <script setup>
+import notification from "@/components/Notify/notification.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
@@ -28,6 +29,7 @@ const login = async () => {
 
 <template>
   <div class="login-container">
+    <notification></notification>
     <div class="login-container-left">
       <div class="left-login-logo">
         <img src="@/assets/image/logo.png" @click="router.push('/home')" />

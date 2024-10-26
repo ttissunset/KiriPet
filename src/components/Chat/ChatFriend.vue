@@ -75,15 +75,6 @@ const friends = [
     status: "0",
   },
 ];
-
-const list = ref(null);
-const apply = ref(null);
-// 切换主题色
-const toggleSelectd = () => {
-  // 切换主题色
-  list.value.classList.toggle("selected");
-  apply.value.classList.toggle("selected");
-};
 </script>
 
 <template>
@@ -97,7 +88,7 @@ const toggleSelectd = () => {
         class="friend"
         v-for="(item, index) in friends"
         :key="index"
-        :class="[{ online: item.status === '1' }]"
+        :class="[{ online: item.status === '1' }, { active: item.id === '1' }]"
       >
         <img class="friend-profile" :src="item.imgUrl" />
         <div class="friend-detail">
@@ -120,6 +111,7 @@ const toggleSelectd = () => {
   display: flex;
   flex-direction: row;
   margin-top: 20px;
+  margin-bottom: 5px;
 }
 
 .friend-bar span {
@@ -130,8 +122,8 @@ const toggleSelectd = () => {
   justify-content: center;
 }
 
-.selected {
-  background-color: #0086ff;
+.friend-bar .selected {
+  background-color: var(--deongaree);
   border-radius: 8px;
   color: #fff;
 }
@@ -140,7 +132,7 @@ const toggleSelectd = () => {
   width: 100%;
 }
 
-.friend-profile {
+.friend-list .friend-profile {
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -148,7 +140,7 @@ const toggleSelectd = () => {
   margin-right: 15px;
 }
 
-.friend {
+.friend-list .friend {
   display: flex;
   align-items: center;
   padding: 20px;
@@ -157,23 +149,23 @@ const toggleSelectd = () => {
   position: relative;
 }
 
-.friend:hover {
+.friend-list .friend:hover {
   background-color: rgba(202, 209, 212, 0.4);
 }
 
 .active {
   background: linear-gradient(
     to right,
-    rgba(238, 242, 244, 0.4) 0%,
+    rgba(212, 247, 212, 0.4) 0%,
     rgba(238, 242, 244, 0) 100%
   );
-  border-left: 4px solid #0086ff;
+  border-left: 4px solid var(--youth-green);
 }
 
 .friend.online:before {
   content: "";
   position: absolute;
-  background-color: #23be7e;
+  background-color: var(--youth-green-3);
   width: 9px;
   height: 9px;
   border-radius: 50%;
@@ -187,7 +179,7 @@ const toggleSelectd = () => {
 }
 
 .friend-username {
-  font-weight: 600;
-  font-size: 15px;
+  font-weight: var(--fw-600);
+  font-size: var(--fs-15);
 }
 </style>
