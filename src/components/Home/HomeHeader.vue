@@ -57,7 +57,9 @@ onMounted(getCurrentMenuId);
   <div class="home-header">
     <div class="home-header-left">
       <div class="logo">
-        <img src="@/assets/image/logo.png" />
+        <img
+          src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T091235Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=cc59721cbb0e7b2652d99991f5e4cb926b6642050567ae1904e256fff8bbf87d"
+        />
         <h2>KiriPet</h2>
       </div>
     </div>
@@ -101,7 +103,8 @@ onMounted(getCurrentMenuId);
           <template v-if="userStore.userInfo.token">
             <li>
               <span @click="router.push('/user')"
-                ><img src="../../assets/image/a1.png"
+                ><img
+                  src="https://kiripet.tos-cn-beijing.volces.com/image/a1.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T091314Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=98d0ddbfa9b8682f88dc0a09b6c55d6b586b03a322eb04de7d52f9095061bf0c"
               /></span>
             </li>
             <button class="exitLoginBtn" @click="confirm">退出登录</button>

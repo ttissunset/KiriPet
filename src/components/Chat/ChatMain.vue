@@ -43,7 +43,10 @@ const sendMessage = () => {
         <!-- 默认消息 -->
         <div class="chat-msg">
           <div class="chat-msg-profile">
-            <img class="chat-msg-img" src="../../assets/image/a1.png" />
+            <img
+              class="chat-msg-img"
+              src="https://kiripet.tos-cn-beijing.volces.com/image/a1.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T090954Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=73fc640c1c1ea4556b1d393543fe40344f1f5f964650f12a682f9d48b0140d77"
+            />
           </div>
           <div class="chat-msg-content">
             <div class="chat-msg-text">
@@ -63,9 +66,13 @@ const sendMessage = () => {
             <img
               v-if="message.id == 2"
               class="chat-msg-img"
-              src="../../assets/image/a1.png"
+              src="https://kiripet.tos-cn-beijing.volces.com/image/a1.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T090954Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=73fc640c1c1ea4556b1d393543fe40344f1f5f964650f12a682f9d48b0140d77"
             />
-            <img v-else class="chat-msg-img" src="../../assets/image/a2.png" />
+            <img
+              v-else
+              class="chat-msg-img"
+              src="https://kiripet.tos-cn-beijing.volces.com/image/a2.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T091019Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=972c821452851ff959d0ca51e656085d7f3d27cc5df1a3b641e785693c25033e"
+            />
           </div>
           <div class="chat-msg-content">
             <!-- 遍历并显示消息 -->
@@ -145,7 +152,10 @@ const sendMessage = () => {
     <div class="detail-area">
       <div class="detail-area-header">
         <div class="msg-profile">
-          <img src="../../assets//image/a1.png" alt="" />
+          <img
+            src="https://kiripet.tos-cn-beijing.volces.com/image/a1.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T091057Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=08f407b9a265ae5931355cc5827dfd658a09742c339f10971101fc1929e4e69e"
+            alt=""
+          />
         </div>
         <div class="detail-title">[勢いにまかせて！]鬼塚夏美</div>
         <div class="detail-subtitle">私立結ヶ丘女子高等学校 1年级</div>

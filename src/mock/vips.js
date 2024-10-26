@@ -3,7 +3,8 @@ const vips = [
     id: 0,
     name: "免费计划",
     details: {
-      imageUrl: "src/assets/image/serve-1.jpg",
+      imageUrl:
+        "https://kiripet.tos-cn-beijing.volces.com/image/serve-1.jpg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T090853Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=f0208fc86125c535d4eb9cf82c55ad964c2e2c43e986a8e9634a0ae736545424",
       title: "免费会员计划-爱宠初体验",
       price: "$0.00",
       serve: {
@@ -20,7 +21,8 @@ const vips = [
     id: 1,
     name: "月度会员计划",
     details: {
-      imageUrl: "src/assets/image/serve-2.jpg",
+      imageUrl:
+        "https://kiripet.tos-cn-beijing.volces.com/image/serve-2.jpg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T090903Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=d102348931810ccf6f23d97103d3f1431ec3db4823bfd4ad68d7a35b662a49ed",
       title: "月度会员计划-爱宠成长伴",
       price: "$9.99/月",
       serve: {
@@ -37,7 +39,8 @@ const vips = [
     id: 2,
     name: "永久会员计划",
     details: {
-      imageUrl: "src/assets/image/serve-3.jpg",
+      imageUrl:
+        "https://kiripet.tos-cn-beijing.volces.com/image/serve-3.jpg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T090921Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=90e33187525a8311efeb827258c792916dd0de1a5ecbaddadb887255c37ebccc",
       title: "永久会员计划-爱宠终身伴",
       price: "$99.99/年",
       serve: {

@@ -32,7 +32,7 @@ const login = async () => {
     <notification></notification>
     <div class="login-container-left">
       <div class="left-login-logo">
-        <img src="@/assets/image/logo.png" @click="router.push('/home')" />
+        <img src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T091945Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=c2697d4fa4d9cc2796d9d117bb3b0f5e1d8c5bd81cf9cc4da0c1aaed4664aaf0" @click="router.push('/home')" />
         <h2 @click="router.push('/home')">KiriPet</h2>
       </div>
       <div class="left-login-main">
@@ -67,7 +67,7 @@ const login = async () => {
           <button @click="login()">登录</button>
         </div>
         <div class="left-login-main-line">
-          <img src="../assets/image/dots.svg" />
+          <img src="https://kiripet.tos-cn-beijing.volces.com/image/dots.svg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T092019Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=071cf32549b60ff309d90e521527754549c23ffaef4628118f7d352255cc5f32" />
         </div>
         <div class="left-login-main-toReg">
           <span>还没有账户?</span>
@@ -75,16 +75,16 @@ const login = async () => {
         </div>
         <div class="left-login-main-authLogin">
           <div class="authLogin-google">
-            <img src="../assets/image/google.png" alt="" /><span
+            <img src="https://kiripet.tos-cn-beijing.volces.com/image/google.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T092034Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=15ca9061957e6baa494bae98c5096664078439f5370001670ad7fce6f0b56c60" alt="" /><span
               >Sign In With Google</span
             >
           </div>
           <div class="authLogin-github" @click="ouath">
-            <img src="../assets/image/github.png" />
+            <img src="https://kiripet.tos-cn-beijing.volces.com/image/github.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T092048Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=735ba09fa34f26d84162778a2bf6ee8ac8d46b74c9a52151a4d3e8316db9fece" />
             <span>Sign In With Github</span>
           </div>
           <div class="authLogin-apple">
-            <img src="../assets/image/apple.png" alt="" /><span
+            <img src="https://kiripet.tos-cn-beijing.volces.com/image/apple.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T092105Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=f1f58dd99e3bf18abf0177644563a40b06726d42fb38f09abd143f80dced556c" alt="" /><span
               >Sign In With Apple</span
             >
           </div>
@@ -98,7 +98,7 @@ const login = async () => {
         <p>带你走入毛茸茸宠物的世界</p>
       </div>
       <div class="login-container-right-svg">
-        <img src="../assets/image/undraw_welcome_cats_thqn.svg" alt="" />
+        <img src="https://kiripet.tos-cn-beijing.volces.com/image/undraw_welcome_cats_thqn.svg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T092120Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=dc586bb8cba3485aaf8c6290070b9e75db43d720a131b846c6529c6560498fbb" alt="" />
       </div>
     </div>
   </div>

@@ -61,12 +61,18 @@ const register = () => {
         <p>带你走入毛茸茸宠物的世界</p>
       </div>
       <div class="reg-container-reg-svg">
-        <img src="../assets/image/undraw_friends_r511.svg" alt="" />
+        <img
+          src="https://kiripet.tos-cn-beijing.volces.com/image/undraw_friends_r511.svg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T092141Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=33fcac70ceb37bd6349f10b47771294a9b442d160f13a00ac7dcaa530b4da82d"
+          alt=""
+        />
       </div>
     </div>
     <div class="reg-container-right">
       <div class="right-reg-logo">
-        <img src="@/assets/image/logo.png" @click="router.push('/home')" />
+        <img
+          src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T091945Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=c2697d4fa4d9cc2796d9d117bb3b0f5e1d8c5bd81cf9cc4da0c1aaed4664aaf0"
+          @click="router.push('/home')"
+        />
         <h2 @click="router.push('/home')">KiriPet</h2>
       </div>
       <div class="right-reg-main">
@@ -97,7 +103,7 @@ const register = () => {
           <button @click="register()">注册</button>
         </div>
         <div class="right-reg-main-line">
-          <img src="../assets/image/dots.svg" />
+          <img src="https://kiripet.tos-cn-beijing.volces.com/image/dots.svg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T092159Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=7bf032aa77f29b56e6eb47a982ae29cf18ffd05e44ad872b7aa0e1afdaef7e1d" />
         </div>
         <div class="right-reg-main-toLogin">
           <span>已有账户!</span>
