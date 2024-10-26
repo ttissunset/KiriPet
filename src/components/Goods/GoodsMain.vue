@@ -38,14 +38,14 @@
       <div class="detail">
         <div class="detail-title">每一颗冻干生骨肉都完美锁鲜</div>
         <img
-          src="https://kiripet.tos-cn-beijing.volces.com/image/61.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T091127Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=a24980ed67f2dd94c4cc210d7afb1c15ec7cd219b5b0d7f41db2e5bab4362f41"
+          src="https://kiripet.tos-cn-beijing.volces.com/image/61.png"
           class="detail-img"
         />
       </div>
       <div class="detail">
         <div class="detail-title">5倍鲜肉制成，再挑食也能满足</div>
         <img
-          src="https://kiripet.tos-cn-beijing.volces.com/image/50.png?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T091137Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=99c1c89a4067a543d4c80874de297146ac649e60d0cbd2993332c611e422e87a"
+          src="https://kiripet.tos-cn-beijing.volces.com/image/50.png"
           class="detail-img"
         />
       </div>

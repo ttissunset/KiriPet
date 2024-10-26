@@ -103,7 +103,7 @@ onMounted(retScroll);
     <div class="home-mian-right">
       <img
         class="img"
-        src="https://kiripet.tos-cn-beijing.volces.com/image/undraw_passing_by_0un9.svg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T085921Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=1a2cd93330fb3ba56edbe0a1b2ce7f7ce3eb9da103a5ab7a4b69d2515a329e41"
+        src="https://kiripet.tos-cn-beijing.volces.com/image/undraw_passing_by_0un9.svg"
       />
     </div>
   </div>
@@ -112,7 +112,7 @@ onMounted(retScroll);
   <div class="home-serve" id="servePage">
     <div class="home-serve-left">
       <img
-        src="https://kiripet.tos-cn-beijing.volces.com/image/0111.jpg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T085951Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=addba7c616e16aefea2b7c5a51383a2925c11644df22841aa26347d20f15e28a"
+        src="https://kiripet.tos-cn-beijing.volces.com/image/0111.jpg"
         alt=""
       />
     </div>
@@ -268,7 +268,7 @@ onMounted(retScroll);
           <div class="info-section-dots-background">
             <img
               class="info-section-dots"
-              src="https://kiripet.tos-cn-beijing.volces.com/image/dots.svg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T090154Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=ba18a646642274511973ea85737113c4ab230b173cc1608e0efb3510a82cf85b"
+              src="https://kiripet.tos-cn-beijing.volces.com/image/dots.svg"
             />
           </div>
           <div class="info-section-button">
@@ -296,7 +296,7 @@ onMounted(retScroll);
           <div class="adopt-section-main-left-main">
             <div class="adopt-section-main-left-main-title">
               <img
-                src="https://kiripet.tos-cn-beijing.volces.com/image/undraw_pet_adoption_-2-qkw.svg?X-Tos-Algorithm=TOS4-HMAC-SHA256&X-Tos-Content-Sha256=UNSIGNED-PAYLOAD&X-Tos-Credential=AKTP27DqEuwTWhYpm5sMGwPbLWcydV3d09tLXwH0rEd217A%2F20241026%2Fcn-beijing%2Ftos%2Frequest&X-Tos-Date=20241026T090224Z&X-Tos-Expires=3600&X-Tos-SignedHeaders=host&X-Tos-Security-Token=nCgdqdEROend3.ChsKBzNzX056d3cSEAH9Awz_4UWksSISo8PLnaAQsdvyuAYYwffyuAYg7Ou76gcoATDs67vqBzoEcm9vdEIDdG9zUgZLaXJpaWlYAWAB.5dJfdZKomWH7-qquhGbRbWAdo4YnXn-BjszynZsxbfx2JY6toqY8RQD2SsgN_-9FE5pq-67BLGU9VI4Ai9Gq7w&X-Tos-Signature=2e38248d119f208473e933c4ccf2abdaa01a3d2931df2c31ffcc3a7752a11e2a"
+                src="https://kiripet.tos-cn-beijing.volces.com/image/undraw_pet_adoption_-2-qkw.svg"
                 class="circle-1"
               />
             </div>
