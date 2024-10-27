@@ -2,6 +2,7 @@
 import notification from "@/components/Notify/notification.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
+import { log } from "@/directives/logger";
 
 import { ref } from "vue";
 import { useUserStore } from "@/stores/useStore";
@@ -18,6 +19,7 @@ const login = async () => {
   }
 
   await userStore.getUserInfo(user_name.value, password.value);
+  log.success("ok")
   router.push("/home");
 };
 

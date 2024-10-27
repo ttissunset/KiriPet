@@ -4,6 +4,7 @@ import { chatAPI, uploadAPI } from "../../apis/chat";
 
 import { useRouter } from "vue-router";
 const router = useRouter();
+import { log } from "@/directives/logger";
 
 //  消息ref
 const newMessage = ref("");
