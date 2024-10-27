@@ -124,7 +124,7 @@ onMounted(getCurrentMenuId);
 <style scoped>
 .home-header {
   width: 76%;
-  height: 150px;
+  height: 100px;
   display: flex;
   margin: 0 auto;
   justify-content: space-between;

@@ -45,6 +45,10 @@ const routes = [
     component: () => import("../pages/goodsPages.vue"),
   },
   {
+    path: "/user",
+    component: () => import("../pages/userPages.vue"),
+  },
+  {
     path: "/vip",
     component: () => import("../pages/vipPages.vue"),
     children: [

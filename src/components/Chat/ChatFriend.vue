@@ -75,6 +75,15 @@ const friends = [
     status: "0",
   },
 ];
+
+const list = ref(null);
+const apply = ref(null);
+
+// 切换选中对象
+const toggleSelectd = () => {
+  list.value.classList.toggle("selected");
+  apply.value.classList.toggle("selected");
+};
 </script>
 
 <template>
@@ -110,8 +119,8 @@ const friends = [
 .friend-bar {
   display: flex;
   flex-direction: row;
-  margin-top: 20px;
-  margin-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .friend-bar span {

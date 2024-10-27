@@ -29,10 +29,13 @@ const login = async () => {
 
 <template>
   <div class="login-container">
-    <notification></notification>
+    <!-- <notification></notification> -->
     <div class="login-container-left">
       <div class="left-login-logo">
-        <img src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png" @click="router.push('/home')" />
+        <img
+          src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png"
+          @click="router.push('/home')"
+        />
         <h2 @click="router.push('/home')">KiriPet</h2>
       </div>
       <div class="left-login-main">
@@ -75,18 +78,22 @@ const login = async () => {
         </div>
         <div class="left-login-main-authLogin">
           <div class="authLogin-google">
-            <img src="https://kiripet.tos-cn-beijing.volces.com/image/google.png" alt="" /><span
-              >Sign In With Google</span
-            >
+            <img
+              src="https://kiripet.tos-cn-beijing.volces.com/image/google.png"
+              alt=""
+            /><span>Sign In With Google</span>
           </div>
           <div class="authLogin-github" @click="ouath">
-            <img src="https://kiripet.tos-cn-beijing.volces.com/image/github.png" />
+            <img
+              src="https://kiripet.tos-cn-beijing.volces.com/image/github.png"
+            />
             <span>Sign In With Github</span>
           </div>
           <div class="authLogin-apple">
-            <img src="https://kiripet.tos-cn-beijing.volces.com/image/apple.png" alt="" /><span
-              >Sign In With Apple</span
-            >
+            <img
+              src="https://kiripet.tos-cn-beijing.volces.com/image/apple.png"
+              alt=""
+            /><span>Sign In With Apple</span>
           </div>
         </div>
       </div>
@@ -98,7 +105,10 @@ const login = async () => {
         <p>带你走入毛茸茸宠物的世界</p>
       </div>
       <div class="login-container-right-svg">
-        <img src="https://kiripet.tos-cn-beijing.volces.com/image/undraw_welcome_cats_thqn.svg" alt="" />
+        <img
+          src="https://kiripet.tos-cn-beijing.volces.com/image/undraw_welcome_cats_thqn.svg"
+          alt=""
+        />
       </div>
     </div>
   </div>
