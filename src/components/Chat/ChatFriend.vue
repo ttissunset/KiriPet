@@ -5,73 +5,85 @@ const friends = [
   {
     id: "1",
     name: "鬼塚夏美",
+    des: "[勢いにまかせて！]",
     imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/a1.png",
     status: "1",
   },
   {
     id: "2",
-    name: "22",
-    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/a1.png",
+    name: "桜小路きな子",
+    des: "[夢へ踏み出す第一歩]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3908.png",
     status: "0",
   },
   {
     id: "3",
-    name: "33",
-    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/a1.png",
+    name: "葉月恋",
+    des: "[止まらない胸の高鳴り]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3907.png",
     status: "1",
   },
   {
     id: "4",
-    name: "44",
-    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/a1.png",
+    name: "唐可可",
+    des: "[スカートの揺らめき]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3904.png",
     status: "1",
   },
   {
     id: "5",
-    name: "55",
-    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/a1.png",
+    name: "黒澤ルビィ",
+    des: "[華やぐ笑顔]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3902.png",
     status: "0",
   },
   {
     id: "6",
-    name: "66",
-    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/a1.png",
+    name: "国木田花丸",
+    des: "[まだ知らぬ世界へ]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3900.png",
     status: "1",
   },
   {
     id: "7",
-    name: "77",
-    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/a1.png",
+    name: "津島善子",
+    des: "[一瞬の瞬きの間に]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3899.png",
     status: "0",
   },
   {
     id: "8",
-    name: "88",
-    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/a1.png",
+    name: "桜内梨子",
+    des: "[未来を告げる風]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3895.png",
     status: "0",
   },
   {
     id: "9",
-    name: "99",
-    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/a1.png",
+    name: "渡辺曜",
+    des: "[光指す水平線]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3898.png",
     status: "0",
   },
   {
     id: "10",
-    name: "00",
-    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/a1.png",
+    name: "黒澤ダイヤ",
+    des: "[前進あるのみ！]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3897.png",
     status: "0",
   },
   {
-    id: "10",
-    name: "00",
-    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/a1.png",
+    id: "11",
+    name: "高海千歌",
+    des: "[今始まる未来]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3894.png",
     status: "0",
   },
   {
-    id: "10",
-    name: "00",
-    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/a1.png",
+    id: "12",
+    name: "松浦果南",
+    des: "[バタフライエフェクト]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3896.png",
     status: "0",
   },
 ];
@@ -102,6 +114,7 @@ const toggleSelectd = () => {
         <img class="friend-profile" :src="item.imgUrl" />
         <div class="friend-detail">
           <div class="friend-username">{{ item.name }}</div>
+          <div class="friend-userdes">{{ item.des }}</div>
         </div>
       </div>
     </div>
@@ -190,5 +203,11 @@ const toggleSelectd = () => {
 .friend-username {
   font-weight: var(--fw-600);
   font-size: var(--fs-15);
+}
+
+.friend-userdes {
+  font-weight: var(--fw-500);
+  font-size: var(--fs-12);
+  color: var(--dark);
 }
 </style>

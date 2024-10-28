@@ -1430,7 +1430,7 @@ onUnmounted(() => {
           <div class="file-actions">
             <template v-if="file.status === 'success'">
               <i class="fa-solid fa-check"></i>
-              <i class="fa-solid fa-ban" @click="removeFile(index)"></i>
+              <i class="fa-solid fa-xmark" @click="removeFile(index)"></i>
             </template>
             <template v-else-if="file.status === 'error'">
               <i class="fa-solid fa-triangle-exclamation"></i>
@@ -1496,6 +1496,9 @@ onUnmounted(() => {
         <div class="detail-title">[勢いにまかせて！]鬼塚夏美</div>
         <div class="detail-subtitle">私立結ヶ丘女子高等学校 1年级</div>
       </div>
+      <div class="detail-area-main">
+
+      </div>
     </div>
   </div>
 </template>
@@ -1524,6 +1527,7 @@ onUnmounted(() => {
   z-index: 2;
   width: 100%;
   align-items: center;
+  border-bottom: 1px solid #e1e4e7;
   padding: 20px;
   background-color: #fff;
 }
@@ -1549,6 +1553,8 @@ onUnmounted(() => {
   flex-grow: 1;
   height: 100vh;
   overflow-y: auto;
+  margin-top: 10px;
+  font-family: var(--ff-llt);
 }
 
 .chat-msg-img {
@@ -1688,6 +1694,7 @@ onUnmounted(() => {
 .detail-subtitle {
   font-size: 12px;
   font-weight: 600;
+  color: var(--dark-variant);
 }
 
 /* emoji表情 */
@@ -1824,7 +1831,7 @@ onUnmounted(() => {
 
 .file-actions {
   display: flex;
-  gap: 8px;
+  gap: 15px;
   margin-left: 16px;
   cursor: pointer;
 }

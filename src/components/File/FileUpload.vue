@@ -189,12 +189,12 @@ const formatFileSize = (bytes) => {
         <div class="file-actions">
           <template v-if="file.status === 'success'">
             <i class="fa-solid fa-check"></i>
-            <i class="fa-solid fa-ban" @click="removeFile(index)"></i>
+            <i class="fa-solid fa-xmark" @click="removeFile(index)"></i>
           </template>
           <template v-else-if="file.status === 'error'">
             <i class="fa-solid fa-triangle-exclamation"></i>
             <i class="fa-solid fa-rotate-right" @click="retryUpload(index)"></i>
-            <i class="fa-solid fa-ban" @click="removeFile(index)"></i>
+            <i class="fa-solid fa-xmark" @click="removeFile(index)"></i>
           </template>
           <i v-else class="fa-solid fa-spinner"></i>
         </div>

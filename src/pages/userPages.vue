@@ -1,6 +1,7 @@
 <script setup>
 import HomeHeader from "../components/Home/HomeHeader.vue";
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 </script>
 
 <template>
@@ -11,7 +12,10 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
       <div class="profile-header">
         <div class="profile-main">
           <div class="avatar-section">
-            <img class="avatar" src="@/assets/image/a1.png" />
+            <img
+              class="avatar"
+              src="https://kiripet.tos-cn-beijing.volces.com/image/a1.png"
+            />
           </div>
           <div class="profile-info">
             <h1 class="profile-name">
@@ -53,7 +57,9 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
             <div class="profile-id">uid: k11111111</div>
             <div class="profile-tag"><span>简介：</span>资深宠物爱好者</div>
             <div class="action-buttons">
-              <button class="btn btn-primary">编辑资料</button>
+              <button class="btn btn-primary" @click="router.push('/userinfo')">
+                编辑资料
+              </button>
               <button class="btn btn-secondary">分享主页</button>
             </div>
           </div>
@@ -74,7 +80,10 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
           <!-- 动态项目 -->
           <div class="moment-item">
             <div class="moment-header">
-              <img class="moment-avatar" src="@/assets/image/a1.png" />
+              <img
+                class="moment-avatar"
+                src="https://kiripet.tos-cn-beijing.volces.com/image/a1.png"
+              />
               <div class="moment-info">
                 <div class="moment-name">鬼塚夏美</div>
                 <div class="moment-time">2小时前</div>
@@ -85,15 +94,42 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
               <div class="moment-tag">#布偶猫 #可爱猫咪</div>
             </div>
             <div class="moment-images">
-              <img class="moment-image" src="@/assets/image/cat-1.jpg" />
-              <img class="moment-image" src="@/assets/image/cat-10.jpg" />
-              <img class="moment-image" src="@/assets/image/cat-11.jpg" />
-              <img class="moment-image" src="@/assets/image/cat-1.jpg" />
-              <img class="moment-image" src="@/assets/image/cat-10.jpg" />
-              <img class="moment-image" src="@/assets/image/cat-11.jpg" />
-              <img class="moment-image" src="@/assets/image/cat-1.jpg" />
-              <img class="moment-image" src="@/assets/image/cat-10.jpg" />
-              <img class="moment-image" src="@/assets/image/cat-11.jpg" />
+              <img
+                class="moment-image"
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-1.jpg"
+              />
+              <img
+                class="moment-image"
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-10.jpg"
+              />
+              <img
+                class="moment-image"
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-11.jpg"
+              />
+              <img
+                class="moment-image"
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-1.jpg"
+              />
+              <img
+                class="moment-image"
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-10.jpg"
+              />
+              <img
+                class="moment-image"
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-11.jpg"
+              />
+              <img
+                class="moment-image"
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-1.jpg"
+              />
+              <img
+                class="moment-image"
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-10.jpg"
+              />
+              <img
+                class="moment-image"
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-11.jpg"
+              />
             </div>
             <div class="moment-actions">
               <div class="action-item">
@@ -116,7 +152,7 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
             <div class="moment-header">
               <img
                 class="moment-avatar"
-                src="@/assets/image/a1.png"
+                src="https://kiripet.tos-cn-beijing.volces.com/image/a1.png"
                 alt="头像"
               />
               <div class="moment-info">
@@ -155,9 +191,68 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
         </div>
       </div>
     </div>
+
     <div class="sidebar-container">
-      <div style="background-color: aqua"></div>
-      <div></div>
+      <div class="siderbar-top">
+        <div class="container">
+          <div class="coffee-header">
+            <div class="coffee-header__buttons coffee-header__button-one"></div>
+            <div class="coffee-header__buttons coffee-header__button-two"></div>
+            <div class="coffee-header__display"></div>
+            <div class="coffee-header__details"></div>
+          </div>
+          <div class="coffee-medium">
+            <div class="coffe-medium__exit"></div>
+            <div class="coffee-medium__arm"></div>
+            <div class="coffee-medium__liquid"></div>
+            <div class="coffee-medium__smoke coffee-medium__smoke-one"></div>
+            <div class="coffee-medium__smoke coffee-medium__smoke-two"></div>
+            <div class="coffee-medium__smoke coffee-medium__smoke-three"></div>
+            <div class="coffee-medium__smoke coffee-medium__smoke-for"></div>
+            <div class="coffee-medium__cup"></div>
+          </div>
+          <div class="coffee-footer"></div>
+        </div>
+      </div>
+      <div class="siderbar-sub">
+        <div class="sidersub-header">
+          <h2>注意事项</h2>
+          <span class="material-icons-sharp"> notifications_none </span>
+        </div>
+
+        <div class="notification">
+          <div class="icon">
+            <span class="material-icons-sharp"> volume_up </span>
+          </div>
+          <div class="content">
+            <div class="info">
+              <h3>给王美丽回电话</h3>
+              <small class="text_muted"> 09:00 AM</small>
+            </div>
+            <span class="material-icons-sharp"> more_vert </span>
+          </div>
+        </div>
+
+        <div class="notification deactive">
+          <div class="icon">
+            <span class="material-icons-sharp"> edit </span>
+          </div>
+          <div class="content">
+            <div class="info">
+              <h3>增删改查</h3>
+              <small class="text_muted"> 08:00 AM - 12:00 PM </small>
+            </div>
+            <span class="material-icons-sharp"> more_vert </span>
+          </div>
+        </div>
+
+        <div class="notification add-reminder">
+          <div>
+            <span class="material-icons-sharp"> add </span>
+            <h3>新增事项</h3>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -167,11 +262,11 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
   width: 76%;
   margin: 0 auto;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .main-container {
-  width: 55%;
+  width: 60%;
 }
 
 .profile-header {
@@ -329,7 +424,10 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
 
 .moment-item {
   padding: 20px;
-  border-bottom: 1px solid #c5a8a8;
+  /* border-bottom: 1px solid #c5a8a8; */
+  border-radius: var(--radius-8);
+  box-shadow: 0 1px 1px #bdc2c9;
+  margin-bottom: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -414,10 +512,379 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
 }
 
 .sidebar-container {
-  width: 40%;
+  width: 30%;
+  height: 100vh;
   display: grid;
-  grid-column: 2;
-  background-color: #4cc912;
+  grid-template-rows: 1fr 2fr;
+  gap: 10px;
+}
+
+.siderbar-top {
+  /* background-color: #6c9bcf; */
+  box-shadow: var(--shadow-2);
+  border-radius: var(--radius-10);
+  position: relative;
+}
+
+.container {
+  width: 300px;
+  height: 280px;
+  position: absolute;
+  top: calc(50% - 140px);
+  left: calc(50% - 150px);
+}
+
+.coffee-header {
+  width: 100%;
+  height: 80px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #ddcfcc;
+  border-radius: 10px;
+}
+
+.coffee-header__buttons {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  top: 25px;
+  background-color: #282323;
+  border-radius: 50%;
+}
+
+.coffee-header__buttons::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  bottom: -8px;
+  left: calc(50% - 4px);
+  background-color: #615e5e;
+}
+
+.coffee-header__button-one {
+  left: 15px;
+}
+
+.coffee-header__button-two {
+  left: 50px;
+}
+
+.coffee-header__display {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: calc(50% - 25px);
+  left: calc(50% - 25px);
+  border-radius: 50%;
+  background-color: #9acfc5;
+  border: 5px solid #43beae;
+  box-sizing: border-box;
+}
+
+.coffee-header__details {
+  width: 8px;
+  height: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #9b9091;
+  box-shadow: -12px 0 0 #9b9091, -24px 0 0 #9b9091;
+}
+
+.coffee-medium {
+  width: 90%;
+  height: 160px;
+  position: absolute;
+  top: 80px;
+  left: calc(50% - 45%);
+  background-color: #bcb0af;
+}
+
+.coffee-medium:before {
+  content: "";
+  width: 90%;
+  height: 100px;
+  background-color: #776f6e;
+  position: absolute;
+  bottom: 0;
+  left: calc(50% - 45%);
+  border-radius: 20px 20px 0 0;
+}
+
+.coffe-medium__exit {
+  width: 60px;
+  height: 20px;
+  position: absolute;
+  top: 0;
+  left: calc(50% - 30px);
+  background-color: #231f20;
+}
+
+.coffe-medium__exit::before {
+  content: "";
+  width: 50px;
+  height: 20px;
+  border-radius: 0 0 50% 50%;
+  position: absolute;
+  bottom: -20px;
+  left: calc(50% - 25px);
+  background-color: #231f20;
+}
+
+.coffe-medium__exit::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  bottom: -30px;
+  left: calc(50% - 5px);
+  background-color: #231f20;
+}
+
+.coffee-medium__arm {
+  width: 70px;
+  height: 20px;
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  background-color: #231f20;
+}
+
+.coffee-medium__arm::before {
+  content: "";
+  width: 15px;
+  height: 5px;
+  position: absolute;
+  top: 7px;
+  left: -15px;
+  background-color: #9e9495;
+}
+
+.coffee-medium__cup {
+  width: 80px;
+  height: 47px;
+  position: absolute;
+  bottom: 0;
+  left: calc(50% - 40px);
+  background-color: #fff;
+  border-radius: 0 0 70px 70px / 0 0 110px 110px;
+}
+
+.coffee-medium__cup::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 6px;
+  right: -13px;
+  border: 5px solid #fff;
+  border-radius: 50%;
+}
+
+@keyframes liquid {
+  0% {
+    height: 0px;
+    opacity: 1;
+  }
+  5% {
+    height: 0px;
+    opacity: 1;
+  }
+  20% {
+    height: 62px;
+    opacity: 1;
+  }
+  95% {
+    height: 62px;
+    opacity: 1;
+  }
+  100% {
+    height: 62px;
+    opacity: 0;
+  }
+}
+
+.coffee-medium__liquid {
+  width: 6px;
+  height: 63px;
+  opacity: 0;
+  position: absolute;
+  top: 50px;
+  left: calc(50% - 3px);
+  background-color: #74372b;
+  animation: liquid 4s 4s linear infinite;
+}
+
+.coffee-medium__smoke {
+  width: 8px;
+  height: 20px;
+  position: absolute;
+  border-radius: 5px;
+  background-color: #b3aeae;
+}
+
+@keyframes smokeOne {
+  0% {
+    bottom: 20px;
+    opacity: 0;
+  }
+  40% {
+    bottom: 50px;
+    opacity: 0.5;
+  }
+  80% {
+    bottom: 80px;
+    opacity: 0.3;
+  }
+  100% {
+    bottom: 80px;
+    opacity: 0;
+  }
+}
+
+@keyframes smokeTwo {
+  0% {
+    bottom: 40px;
+    opacity: 0;
+  }
+  40% {
+    bottom: 70px;
+    opacity: 0.5;
+  }
+  80% {
+    bottom: 80px;
+    opacity: 0.3;
+  }
+  100% {
+    bottom: 80px;
+    opacity: 0;
+  }
+}
+
+.coffee-medium__smoke-one {
+  opacity: 0;
+  bottom: 50px;
+  left: 102px;
+  animation: smokeOne 3s 4s linear infinite;
+}
+
+.coffee-medium__smoke-two {
+  opacity: 0;
+  bottom: 70px;
+  left: 118px;
+  animation: smokeTwo 3s 5s linear infinite;
+}
+
+.coffee-medium__smoke-three {
+  opacity: 0;
+  bottom: 65px;
+  right: 118px;
+  animation: smokeTwo 3s 6s linear infinite;
+}
+
+.coffee-medium__smoke-for {
+  opacity: 0;
+  bottom: 50px;
+  right: 102px;
+  animation: smokeOne 3s 5s linear infinite;
+}
+
+.coffee-footer {
+  width: 95%;
+  height: 15px;
+  position: absolute;
+  bottom: 25px;
+  left: calc(50% - 47.5%);
+  background-color: #41bdad;
+  border-radius: 10px;
+}
+
+.coffee-footer::after {
+  content: "";
+  width: 106%;
+  height: 26px;
+  position: absolute;
+  bottom: -25px;
+  left: -8px;
+  background-color: #000;
+}
+
+.siderbar-sub {
+  box-shadow: var(--shadow-2);
+  padding: 15px;
+  border-radius: var(--radius-10);
+}
+
+.siderbar-sub .sidersub-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.sidersub-header span {
+  padding: 10px;
+  box-shadow: var(--shadow-1);
+  border-radius: 50%;
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 11px;
+  padding: 22px 25px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.notification:hover {
+  box-shadow: none;
+}
+
+.notification .content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  width: 100%;
+}
+
+.notification .icon {
+  padding: 10px;
+  color: #ffff;
+  background-color: var(--success);
+  border-radius: 20%;
+  display: flex;
+}
+
+.notification.deactive .icon {
+  background-color: var(--danger);
+}
+
+.add-reminder {
+  background-color: #fff;
+  border: 2px dashed var(--youth-blue-purple);
+  color: var(--youth-blue-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.add-reminder:hover {
+  background-color: #6c9bcf;
+  color: white;
+}
+
+.add-reminder div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 @media (max-width: 768px) {

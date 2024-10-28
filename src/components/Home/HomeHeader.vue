@@ -8,8 +8,12 @@ const router = useRouter();
 const route = useRoute();
 const userStore = useUserStore();
 
+// 测试时用
+const show = ref(true);
+
 // 退出登录的业务逻辑
 const confirm = () => {
+  show.value = false;
   // 1.清除用户信息
   userStore.clearUserInfo();
   // 2.跳转到登录页
@@ -57,9 +61,7 @@ onMounted(getCurrentMenuId);
   <div class="home-header">
     <div class="home-header-left">
       <div class="logo">
-        <img
-          src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png"
-        />
+        <img src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png" />
         <h2>KiriPet</h2>
       </div>
     </div>
@@ -100,7 +102,8 @@ onMounted(getCurrentMenuId);
           </li>
           <!-- 多模板渲染 用于区分登录状态和未登录状态 -->
           <!--! 记得改成userStore.userInfo.token -->
-          <template v-if="userStore.userInfo.token">
+          <!-- v-if="userStore.userInfo.token" -->
+          <template v-if="show">
             <li>
               <span @click="router.push('/user')"
                 ><img

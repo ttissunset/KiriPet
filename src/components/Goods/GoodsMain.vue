@@ -112,7 +112,7 @@
   font-size: var(--fs-16);
   letter-spacing: 2px;
   color: #fff;
-  background-color: var(--deongaree-or);
+  background-color: var(--deongaree);
 }
 
 .add-to-cart button:hover {

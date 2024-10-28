@@ -117,7 +117,7 @@ watch([elementX, elementY, isOutside], () => {
   width: 600px;
   height: 600px;
   background: #f5f5f5;
-  border: 1px solid var(--deongaree-or);
+  border: 1px solid var(--deongaree);
 }
 
 .large {
@@ -158,10 +158,10 @@ watch([elementX, elementY, isOutside], () => {
 }
 
 .small img:hover {
-  border: 1px solid var(--deongaree-or);
+  border: 1px solid var(--deongaree);
 }
 
 .active img {
-  border: 1px solid var(--deongaree-or);
+  border: 1px solid var(--deongaree);
 }
 </style>
