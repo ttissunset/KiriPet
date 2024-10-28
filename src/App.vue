@@ -15,6 +15,19 @@
   word-break: break-all;
 }
 
+/* 滚动条样式 */
+
+::-webkit-scrollbar {
+  width: 13px;
+  height: 13px;
+}
+::-webkit-scrollbar-track {
+  background-color: #e4e4e4;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgb(162, 170, 211);
+}
+
 body {
   scroll-behavior: smooth;
 }

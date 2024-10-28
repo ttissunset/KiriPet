@@ -1480,7 +1480,9 @@ onUnmounted(() => {
           v-model="newMessage"
           @keypress.enter.prevent="sendMessage"
         />
-        <button @click="sendMessage">发送</button>
+        <button @click="sendMessage">
+          发送<i class="fa-regular fa-paper-plane"></i>
+        </button>
       </div>
     </div>
 
@@ -1497,7 +1499,120 @@ onUnmounted(() => {
         <div class="detail-subtitle">私立結ヶ丘女子高等学校 1年级</div>
       </div>
       <div class="detail-area-main">
-
+        <div class="chatOpt">
+          <div class="chatOpt-btn">
+            <button><i class="fa-solid fa-phone"></i>语音聊天</button>
+          </div>
+          <div class="chatOpt-btn">
+            <button><i class="fa-solid fa-video"></i>视频聊天</button>
+          </div>
+        </div>
+        <div class="user-info">
+          <div class="info-item">
+            <span>备注</span>
+            <p>可可爱爱小夏美</p>
+          </div>
+          <div class="info-item">
+            <span>生日</span>
+            <p>2003/11/20</p>
+          </div>
+          <div class="info-item">
+            <span>电话</span>
+            <p>198xxxxxxxx</p>
+          </div>
+          <div class="info-item">
+            <span>地址</span>
+            <p>xx省xx市xx区xxxxxxxxx</p>
+          </div>
+          <div class="info-item">
+            <span>个性签名</span>
+            <p>
+              優しくて正しい人はいつも生きにくい。この世界は優しくも正しくもないからだ。
+            </p>
+          </div>
+        </div>
+        <div class="shared-photos">
+          <div class="shared-header">
+            <div><i class="fa-regular fa-images"></i>分享记录</div>
+          </div>
+          <div class="photos">
+            <div>
+              <img
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-1.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <img
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-2.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <img
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-3.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <img
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-4.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <img
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-5.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <img
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-6.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <img
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-7.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <img
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-8.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <img
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-9.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <img
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-10.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <img
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-11.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <img
+                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-12.jpg"
+                alt=""
+              />
+            </div>
+          </div>
+          <div class="more">
+            <span class="more-txt">查看更多</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1607,8 +1722,8 @@ onUnmounted(() => {
 }
 
 .owner .chat-msg-text {
-  background-color: #39df55ab;
-  color: #080808;
+  background-color: var(--youth-green);
+  color: #fff;
   border-radius: 20px 20px 0 20px;
 }
 
@@ -1625,7 +1740,6 @@ onUnmounted(() => {
 
 .chat-area-footer i {
   width: 20px;
-  flex-shrink: 0;
   cursor: pointer;
   margin-right: 12px;
 }
@@ -1641,7 +1755,7 @@ onUnmounted(() => {
   border-radius: 6px;
   font-size: 15px;
   margin: 0 12px;
-  width: 100%;
+  width: 80%;
 }
 
 .chat-area-footer input::placeholder {
@@ -1649,17 +1763,21 @@ onUnmounted(() => {
 }
 
 .chat-area-footer button {
-  width: 100px;
+  width: 8%;
   height: 100%;
   letter-spacing: 2px;
-  border-radius: 5px;
+  border-radius: var(--radius-6);
+}
+
+.chat-area-footer button i {
+  margin-right: -10px;
 }
 
 .chat-area-footer button:hover {
-  background-color: rgb(14, 224, 154);
+  background-color: var(--youth-green);
   color: #fff;
   cursor: pointer;
-  transition: var(--transition-1);
+  transition: var(--transition-2);
 }
 
 .detail-area {
@@ -1695,6 +1813,94 @@ onUnmounted(() => {
   font-size: 12px;
   font-weight: 600;
   color: var(--dark-variant);
+}
+
+.chatOpt {
+  display: flex;
+  justify-content: space-around;
+}
+
+.chatOpt-btn i {
+  margin-right: 5px;
+}
+
+.chatOpt-btn button {
+  margin-top: 25px;
+  width: 150px;
+  height: 40px;
+  color: #fff;
+  background-color: var(--deongaree);
+  border-radius: var(--radius-6);
+  letter-spacing: 2px;
+}
+
+.chatOpt-btn button:hover {
+  background-color: var(--youth-green);
+  transition: var(--transition-2);
+}
+
+.user-info {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.info-item {
+  margin: 10px 0;
+  border-bottom: 1px solid var(--light);
+  padding-bottom: 5px;
+  padding-left: 10px;
+}
+
+.info-item span {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.info-item p {
+  font-size: 13px;
+  font-weight: 600;
+  color: #949393;
+}
+
+.shared-header {
+  margin-left: 10px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.shared-header i {
+  margin-right: 10px;
+}
+
+.photos {
+  display: grid;
+  margin-top: 10px;
+  margin-left: 10px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.photos img {
+  width: 70px;
+  height: 70px;
+  border-radius: var(--radius-6);
+  /* border: 1px solid #409eff; */
+}
+
+.more{
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 2px;
+  cursor: pointer;
+  color: var(--deongaree);
+}
+
+.more span:hover{
+  color: var(--youth-green);
 }
 
 /* emoji表情 */
