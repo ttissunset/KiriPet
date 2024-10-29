@@ -42,6 +42,12 @@ onMounted(test);
         </div>
       </div>
     </div>
+    <div class="pet-info">
+      <div class="pet-info-title">养宠知识</div>
+      <div class="pet-info-main">
+        
+      </div>
+    </div>
   </div>
 </template>
 
@@ -226,4 +232,30 @@ onMounted(test);
 }
 
 /* 狗狗百科 End */
+
+.pet-info {
+  width: 100%;
+  height: 800px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.pet-info .pet-info-title {
+  height: 8%;
+  font-size: var(--fs-40);
+  text-align: center;
+  font-weight: var(--fw-600);
+  font-family: var(--ff-llt);
+}
+
+.pet-info .pet-info-main {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
 </style>

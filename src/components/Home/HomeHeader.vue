@@ -60,7 +60,7 @@ onMounted(getCurrentMenuId);
 <template>
   <div class="home-header">
     <div class="home-header-left">
-      <div class="logo">
+      <div class="logo" @click="router.push('/home')">
         <img src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png" />
         <h2>KiriPet</h2>
       </div>
@@ -87,7 +87,7 @@ onMounted(getCurrentMenuId);
           type="text"
           name="text"
           class="input-search"
-          placeholder="Start searching OwO~"
+          placeholder="搜些什么吧 ε٩(๑> ₃ <)۶з"
         />
       </div>
       <!-- 搜索框 End -->
@@ -141,6 +141,7 @@ onMounted(getCurrentMenuId);
   gap: 0.5rem;
   font-size: var(--fs-20);
   font-family: var(--ff-hymhtw);
+  cursor: pointer;
 }
 .home-header-left .logo img {
   width: 30px;

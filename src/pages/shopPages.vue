@@ -6,7 +6,6 @@ import notification from "@/components/Notify/notification.vue";
 
 <template>
   <HomeHeader></HomeHeader>
-  <notification></notification>
 </template>
 
 <style scoped></style>

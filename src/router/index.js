@@ -38,7 +38,7 @@ const routes = [
   },
   {
     path: "/severe",
-    component: () => import("../pages/shopPages.vue"),
+    component: () => import("../pages/severePages.vue"),
   },
   {
     path: "/userinfo",

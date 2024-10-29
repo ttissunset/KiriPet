@@ -1,5 +1,6 @@
 <script setup>
 import HomeHeader from "../components/Home/HomeHeader.vue";
+import HomeFooter from "@/components/Home/HomeFooter.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 </script>
@@ -255,6 +256,7 @@ const router = useRouter();
       </div>
     </div>
   </div>
+  <HomeFooter></HomeFooter>
 </template>
 
 <style scoped>
@@ -263,6 +265,7 @@ const router = useRouter();
   margin: 0 auto;
   display: flex;
   justify-content: space-evenly;
+  margin-bottom: 20px;
 }
 
 .main-container {

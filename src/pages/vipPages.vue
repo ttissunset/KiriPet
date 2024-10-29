@@ -20,6 +20,6 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
   width: 76%;
   margin: 0 auto;
   border-top: 1px solid violet;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 </style>

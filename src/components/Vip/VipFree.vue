@@ -2,13 +2,12 @@
 
 <template>
   <div class="free-container">
-    1231233
-    </div>
+    
+  </div>
 </template>
 
 <style scoped>
 .free-container {
   width: 76%;
 }
-
 </style>

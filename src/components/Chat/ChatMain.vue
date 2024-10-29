@@ -1880,17 +1880,22 @@ onUnmounted(() => {
   margin-left: 10px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
-  gap: 10px;
+  gap: 5px;
 }
 
 .photos img {
-  width: 70px;
-  height: 70px;
+  width: 75px;
+  height: 75px;
   border-radius: var(--radius-6);
   /* border: 1px solid #409eff; */
 }
 
-.more{
+.photos img:hover{
+  transform: scale(1.1);
+  transition: var(--transition-2);
+}
+
+.more {
   margin-top: 15px;
   text-align: center;
   font-weight: 600;
@@ -1899,7 +1904,7 @@ onUnmounted(() => {
   color: var(--deongaree);
 }
 
-.more span:hover{
+.more span:hover {
   color: var(--youth-green);
 }
 

@@ -88,13 +88,40 @@ const friends = [
   },
 ];
 
+const applys = [
+  {
+    id: "2",
+    name: "桜小路きな子",
+    des: "[夢へ踏み出す第一歩]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3908.png",
+    status: "0",
+  },
+  {
+    id: "3",
+    name: "葉月恋",
+    des: "[止まらない胸の高鳴り]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3907.png",
+    status: "1",
+  },
+  {
+    id: "4",
+    name: "唐可可",
+    des: "[スカートの揺らめき]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3904.png",
+    status: "1",
+  },
+];
+
 const list = ref(null);
 const apply = ref(null);
+
+const show = ref(1);
 
 // 切换选中对象
 const toggleSelectd = () => {
   list.value.classList.toggle("selected");
   apply.value.classList.toggle("selected");
+  show.value = !show.value;
 };
 </script>
 
@@ -104,7 +131,7 @@ const toggleSelectd = () => {
       <span ref="list" class="selected"> 好友列表 </span>
       <span ref="apply"> 好友申请 </span>
     </div>
-    <div class="friend-list">
+    <div class="friend-list" v-if="show">
       <div
         class="friend"
         v-for="(item, index) in friends"
@@ -118,6 +145,18 @@ const toggleSelectd = () => {
         </div>
       </div>
     </div>
+    <div class="apply-list" v-else>
+      <div class="apply" v-for="(item, index) in applys" :key="index">
+        <img class="apply-profile" :src="item.imgUrl" />
+        <div class="apply-detail">
+          <div class="apply-username">{{ item.name }}</div>
+          <div class="apply-choose">
+            <i class="fa-solid fa-check"></i>
+            <i class="fa-solid fa-xmark"></i>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -126,7 +165,8 @@ const toggleSelectd = () => {
   width: 15%;
   flex-shrink: 0;
   overflow-y: auto;
-  margin: 0 10px;
+  padding: 0 10px;
+  border-right: 1px solid #e1e4e7;
 }
 
 .friend-bar {
@@ -154,7 +194,12 @@ const toggleSelectd = () => {
   width: 100%;
 }
 
-.friend-list .friend-profile {
+.apply-list {
+  width: 100%;
+}
+
+.apply-profile,
+.friend-profile {
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -162,7 +207,8 @@ const toggleSelectd = () => {
   margin-right: 15px;
 }
 
-.friend-list .friend {
+.apply,
+.friend {
   display: flex;
   align-items: center;
   padding: 20px;
@@ -171,7 +217,8 @@ const toggleSelectd = () => {
   position: relative;
 }
 
-.friend-list .friend:hover {
+.apply:hover,
+.friend:hover {
   background-color: rgba(202, 209, 212, 0.4);
 }
 
@@ -200,14 +247,34 @@ const toggleSelectd = () => {
   overflow: hidden;
 }
 
+.apply-detail {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.apply-username,
 .friend-username {
   font-weight: var(--fw-600);
   font-size: var(--fs-15);
 }
 
+.apply-userdes,
 .friend-userdes {
   font-weight: var(--fw-500);
   font-size: var(--fs-12);
   color: var(--dark);
+}
+
+.apply-choose {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  gap: 15px;
+}
+
+.apply-choose i:hover {
+  color: var(--success);
 }
 </style>
