@@ -282,6 +282,491 @@ onMounted(retScroll);
   </div>
   <!-- 宠物百科 End -->
 
+  <!-- 宠物服务 Start -->
+  <div class="home-petSevere">
+    <section class="severe-section">
+      <div class="severe-section-content-wrapper">
+        <div class="severe-section-heading">宠物服务</div>
+        <div class="severe-section-subHeading">
+          多样化的宠物服务选项，只为给您提供最好的用户体验
+        </div>
+      </div>
+      <div class="severe-section-main">
+        <div class="severe-gird-item">
+          <div class="severe-gird-item-main">
+            <div class="title">宠物医疗</div>
+            <div class="info">
+              执业兽医师，专业的医疗团队，为宠物健康保驾护航
+            </div>
+            <ul class="gird-item-describe">
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span><strong>200+</strong>专业兽医师</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>每年超<strong>2000+</strong>服务案例</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span><strong>10+</strong>宠物门诊</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>专业医疗设施</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>更多...</span>
+              </li>
+            </ul>
+            <div class="action">
+              <button>立即前往</button>
+            </div>
+          </div>
+        </div>
+        <div class="severe-gird-item">
+          <div class="severe-gird-item-main">
+            <div class="title">宠物领养</div>
+            <div class="info">
+              选择领养，用心去爱，让每一个毛孩子都能拥有幸福的归宿
+            </div>
+            <ul class="gird-item-describe">
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>近<strong>50+</strong>宠物类型可供领养</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span><strong>免费</strong>申请 急速审核</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>提供三针<strong>免费疫苗</strong></span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>所有宠物均已驱虫</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>更多....</span>
+              </li>
+            </ul>
+            <div class="action">
+              <button>立即前往</button>
+            </div>
+          </div>
+        </div>
+        <div class="severe-gird-item">
+          <div class="severe-gird-item-main">
+            <div class="title">宠物托运</div>
+            <div class="info">
+              提供专业宠物托运出行服务 。宠物出行更 轻松，一键下单，跨城无忧
+            </div>
+            <ul class="gird-item-describe">
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span><strong>300+</strong>专用托运车</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>全国<strong>800+</strong>托运点</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>覆盖全国<strong>45</strong>省</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>累计托运<strong>10000+</strong>深受好评</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>更多...</span>
+              </li>
+            </ul>
+            <div class="action">
+              <button>立即前往</button>
+            </div>
+          </div>
+        </div>
+        <div class="severe-gird-item">
+          <div class="severe-gird-item-main">
+            <div class="title">线下门店</div>
+            <div class="info">到店咨询，到店体验，提供更适宜的服务</div>
+            <ul class="gird-item-describe">
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>全国<strong>120+</strong>门店</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>专业的服务培训</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>提供免费咨询</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>提供免费咨询 先咨询再付费</span>
+              </li>
+              <li>
+                <span class="icon">
+                  <svg
+                    t="1726210282944"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="2728"
+                    width="18"
+                    height="18"
+                  >
+                    <path
+                      d="M512 1024C229.239467 1024 0 794.760533 0 512 0 229.239467 229.239467 0 512 0c282.760533 0 512 229.239467 512 512 0 282.760533-229.239467 512-512 512z m245.521067-707.413333l-298.939734 275.387733-169.984-147.421867-38.263466 39.662934 208.145066 230.6048 331.229867-365.226667-32.187733-33.006933z"
+                      fill="#8B98E4"
+                      p-id="2729"
+                    ></path>
+                  </svg>
+                </span>
+                <span>更多...</span>
+              </li>
+            </ul>
+            <div class="action">
+              <button>立即前往</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- 宠物服务 ENd -->
+
   <!-- 宠物商店 Start -->
   <div class="home-petShop">
     <section class="shop-section">
@@ -673,12 +1158,145 @@ onMounted(retScroll);
   color: var(--deongaree);
   transition: var(--transition-4);
 }
-/* 宠物百科部分End */
+/* 宠物百科部分 End */
+
+/* 宠物服务Start */
+.home-petSevere {
+  width: 76%;
+  margin: 0 auto;
+}
+
+.severe-section {
+  padding: 64px 0;
+}
+
+.severe-section-content-wrapper {
+  width: 80%;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.severe-section-heading {
+  font-size: var(--fs-36);
+  font-weight: var(--fw-600);
+  letter-spacing: 15px;
+  font-family: var(--ff-llt);
+}
+
+.severe-section-subHeading {
+  color: var(--dark-gray);
+  font-size: var(--fs-20);
+  margin-top: 28px;
+  letter-spacing: 15px;
+  position: relative;
+}
+
+.severe-section-main {
+  display: grid;
+  margin-top: 50px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.severe-gird-item {
+  border-radius: 16px;
+  box-shadow: 0 30px 30px -25px rgba(0, 38, 255, 0.205);
+  padding: 10px;
+  background-color: #fff;
+  color: #697e91;
+  max-width: 300px;
+}
+
+.severe-gird-item strong {
+  font-weight: 600;
+  color: #425275;
+}
+
+.severe-gird-item .severe-gird-item-main {
+  align-items: center;
+  padding: 20px;
+  padding-top: 40px;
+  background-color: #f1f3fae0;
+  border-radius: 12px;
+  position: relative;
+}
+
+.severe-gird-item .title {
+  font-weight: 600;
+  font-size: var(--fs-20);
+  color: #425675;
+}
+
+.severe-gird-item .title + * {
+  margin-top: 15px;
+}
+
+.severe-gird-item .info + * {
+  margin-top: 20px;
+}
+
+.severe-gird-item .gird-item-describe {
+  display: flex;
+  flex-direction: column;
+}
+
+.severe-gird-item .gird-item-describe li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.severe-gird-item .gird-item-describe li + * {
+  margin-top: 0.75rem;
+}
+
+.severe-gird-item .gird-item-describe .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
+
+.severe-gird-item .gird-item-describe .icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.severe-gird-item .gird-item-describe + * {
+  margin-top: 1.25rem;
+}
+
+.severe-gird-item .action {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.severe-gird-item button {
+  width: 120px;
+  height: 40px;
+  font-weight: var(--fw-600);
+  border-radius: var(--radius-8);
+  color: var(--light-white);
+  background-color: var(--deongaree);
+}
+
+.severe-gird-item button:hover {
+  background-color: var(--light-white);
+  border: 2px solid var(--deongaree);
+  color: var(--deongaree);
+  transition: var(--transition-4);
+}
+/* 宠物服务 End */
 
 /* 宠物商店部分 Start */
 .home-petShop {
   width: 76%;
-  height: 800px;
+  height: 750px;
   margin: 0 auto;
   margin-bottom: 50px;
 }
@@ -755,7 +1373,7 @@ onMounted(retScroll);
   justify-content: center;
   align-items: center;
   border-radius: var(--radius-10);
-  background-color: rgba(241, 243, 250, 0.88);
+  background-color: #f1f3fae0;
 }
 
 .gird-main:hover {
@@ -906,7 +1524,7 @@ onMounted(retScroll);
   width: 76%;
   height: 800px;
   margin: 0 auto;
-  margin-top: 80px;
+  margin-top: 50px;
   margin-bottom: 50px;
 }
 

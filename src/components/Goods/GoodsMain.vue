@@ -64,7 +64,7 @@
   display: flex;
   width: 100%;
   height: 68vh;
-  border-bottom: 1px dashed #b6b2b2;
+  /* border-bottom: 1px dashed #b6b2b2; */
 }
 
 .descrip-img {
@@ -79,7 +79,7 @@
 }
 
 .goods-description .goods-description-top {
-  border-bottom: 1px solid #b6b2b2;
+  border-bottom: 2px dashed #b6b2b2;
   font-family: var(--ff-llt);
   margin-top: 30px;
 }
@@ -93,10 +93,11 @@
   font-size: var(--fs-30);
   margin: 20px 0;
   font-weight: var(--fw-500);
+  color: var(--danger);
 }
 
 .goods-description-sub {
-  height: 33vh;
+  height: 35vh;
   font-size: var(--fs-18);
   font-family: var(--ff-llt);
   color: var(--dark-gray);

@@ -44,9 +44,7 @@ onMounted(test);
     </div>
     <div class="pet-info">
       <div class="pet-info-title">养宠知识</div>
-      <div class="pet-info-main">
-        
-      </div>
+      <div class="pet-info-main"></div>
     </div>
   </div>
 </template>
@@ -72,7 +70,7 @@ onMounted(test);
 
 .cat-info .cat-info-title {
   height: 8%;
-  font-size: var(--fs-40);
+  font-size: var(--fs-36);
   text-align: center;
   font-weight: var(--fw-600);
   font-family: var(--ff-llt);
@@ -158,7 +156,7 @@ onMounted(test);
 
 .dog-info .dog-info-title {
   height: 8%;
-  font-size: var(--fs-40);
+  font-size: var(--fs-36);
   text-align: center;
   font-weight: var(--fw-600);
   font-family: var(--ff-llt);
@@ -244,7 +242,7 @@ onMounted(test);
 
 .pet-info .pet-info-title {
   height: 8%;
-  font-size: var(--fs-40);
+  font-size: var(--fs-36);
   text-align: center;
   font-weight: var(--fw-600);
   font-family: var(--ff-llt);
@@ -257,5 +255,4 @@ onMounted(test);
   grid-template-rows: 1fr 1fr 1fr;
   gap: 20px;
 }
-
 </style>

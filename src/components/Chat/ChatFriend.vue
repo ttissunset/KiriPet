@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
-const friends = [
+const friends = ref([
   {
     id: "1",
     name: "鬼塚夏美",
@@ -86,9 +88,9 @@ const friends = [
     imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3896.png",
     status: "0",
   },
-];
+]);
 
-const applys = [
+const applyList = ref([
   {
     id: "2",
     name: "桜小路きな子",
@@ -110,11 +112,10 @@ const applys = [
     imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3904.png",
     status: "1",
   },
-];
+]);
 
 const list = ref(null);
 const apply = ref(null);
-
 const show = ref(1);
 
 // 切换选中对象
@@ -122,6 +123,19 @@ const toggleSelectd = () => {
   list.value.classList.toggle("selected");
   apply.value.classList.toggle("selected");
   show.value = !show.value;
+};
+
+// 拒绝申请
+const choose_cancle = (index) => {
+  applyList.value.splice(index, 1);
+};
+
+// 同意申请
+const choose_agree = (index) => {
+  applyList.value.splice(index, 1);
+  // const friendinfo = applyList.value[index - 1];
+  // friends.value.push(friendinfo);
+  // 重新获取 friends 的数据并渲染
 };
 </script>
 
@@ -146,13 +160,13 @@ const toggleSelectd = () => {
       </div>
     </div>
     <div class="apply-list" v-else>
-      <div class="apply" v-for="(item, index) in applys" :key="index">
+      <div class="apply" v-for="(item, index) in applyList" :key="index">
         <img class="apply-profile" :src="item.imgUrl" />
         <div class="apply-detail">
           <div class="apply-username">{{ item.name }}</div>
           <div class="apply-choose">
-            <i class="fa-solid fa-check"></i>
-            <i class="fa-solid fa-xmark"></i>
+            <i class="fa-solid fa-check" @click="choose_agree(index)"></i>
+            <i class="fa-solid fa-xmark" @click="choose_cancle(index)"></i>
           </div>
         </div>
       </div>
@@ -275,6 +289,6 @@ const toggleSelectd = () => {
 }
 
 .apply-choose i:hover {
-  color: var(--success);
+  color: var(--red);
 }
 </style>

@@ -193,6 +193,7 @@ const router = useRouter();
       </div>
     </div>
 
+    <!-- 侧边栏 -->
     <div class="sidebar-container">
       <div class="siderbar-top">
         <div class="container">
@@ -248,7 +249,7 @@ const router = useRouter();
         </div>
 
         <div class="notification add-reminder">
-          <div>
+          <div class="add">
             <span class="material-icons-sharp"> add </span>
             <h3>新增事项</h3>
           </div>
@@ -376,7 +377,7 @@ const router = useRouter();
 .btn-secondary {
   background: transparent;
   border: 1px solid #e6e6e6;
-  color: var(--deongaree);
+  color: #fff;
 }
 
 .btn:hover {
@@ -429,7 +430,7 @@ const router = useRouter();
   padding: 20px;
   /* border-bottom: 1px solid #c5a8a8; */
   border-radius: var(--radius-8);
-  box-shadow: 0 1px 1px #bdc2c9;
+  box-shadow: 0 1px 1px #e8eaec;
   margin-bottom: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -511,7 +512,7 @@ const router = useRouter();
 }
 
 .action-item:hover {
-  color: var(--dark-pink);
+  color: var(--danger);
 }
 
 .sidebar-container {
@@ -825,12 +826,47 @@ const router = useRouter();
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
+  cursor: pointer;
 }
 
 .sidersub-header span {
   padding: 10px;
   box-shadow: var(--shadow-1);
   border-radius: 50%;
+}
+
+.sidersub-header span:hover {
+  color: #fff;
+  background-color: var(--danger);
+  animation: bellRing 0.9s both;
+}
+
+/* 摇晃动画 */
+@keyframes bellRing {
+  0%,
+  100% {
+    transform-origin: top;
+  }
+
+  15% {
+    transform: rotateZ(10deg);
+  }
+
+  30% {
+    transform: rotateZ(-10deg);
+  }
+
+  45% {
+    transform: rotateZ(5deg);
+  }
+
+  60% {
+    transform: rotateZ(-5deg);
+  }
+
+  75% {
+    transform: rotateZ(2deg);
+  }
 }
 
 .notification {
@@ -869,6 +905,10 @@ const router = useRouter();
   background-color: var(--danger);
 }
 
+.notification .content span:hover {
+  color: var(--info-dark);
+}
+
 .add-reminder {
   background-color: #fff;
   border: 2px dashed var(--youth-blue-purple);
@@ -882,9 +922,10 @@ const router = useRouter();
 .add-reminder:hover {
   background-color: #6c9bcf;
   color: white;
+  border: none;
 }
 
-.add-reminder div {
+.add-reminder .add {
   display: flex;
   align-items: center;
   gap: 10px;

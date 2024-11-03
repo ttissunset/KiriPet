@@ -24,6 +24,7 @@ const activeIndex = ref(0);
 const enterhandler = (i) => {
   activeIndex.value = i;
 };
+
 // 2.获取鼠标相对位置
 const target = ref(null);
 const { elementX, elementY, isOutside } = useMouseInElement(target);
@@ -35,6 +36,7 @@ const top = ref(0);
 const positionX = ref(0);
 const positionY = ref(0);
 
+// 监听鼠标是否在有效范围内
 watch([elementX, elementY, isOutside], () => {
   // 如果鼠标没有进入盒子中，不执行后面的逻辑
   if (isOutside.value) return;
@@ -117,7 +119,7 @@ watch([elementX, elementY, isOutside], () => {
   width: 600px;
   height: 600px;
   background: #f5f5f5;
-  border: 1px solid var(--deongaree);
+  border: 1px solid #dad5d5;
 }
 
 .large {
@@ -158,10 +160,10 @@ watch([elementX, elementY, isOutside], () => {
 }
 
 .small img:hover {
-  border: 1px solid var(--deongaree);
+  border: 2px solid var(--deongaree);
 }
 
 .active img {
-  border: 1px solid var(--deongaree);
+  border: 2px solid var(--deongaree);
 }
 </style>

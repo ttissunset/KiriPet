@@ -1,5 +1,6 @@
 <script setup>
 import HomeHeader from "../components/Home/HomeHeader.vue";
+import HomeFooter from "@/components/Home/HomeFooter.vue";
 </script>
 
 <template>
@@ -26,9 +27,6 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
             <div class="info-card-main">
               医护团队以“精益求精、奉献毕生”的职人精神要求自己，以持续提高接诊率和治愈率为目标，忠实地履行着“提升动物福利"的使命...
             </div>
-            <div class="info-card-btn">
-              <button>立即查看</button>
-            </div>
           </div>
           <div class="doctor-img">
             <img src="../assets/image/doctor-2.jpg" />
@@ -41,9 +39,6 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
             <div class="info-card-main">
               kiripet宠物平台所有商品均从正规渠道采购，享有正品保障及价格优势...
             </div>
-            <div class="info-card-btn">
-              <button>立即查看</button>
-            </div>
           </div>
           <div class="doctor-img">
             <img src="../assets/image/doctor-3.png" />
@@ -55,9 +50,6 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
             <div class="info-card-header">医疗技术</div>
             <div class="info-card-main">
               年接诊逾2000+病例，在宠物骨科、眼科、肿瘤、牙科、皮肤科、心肺科、中兽医等专科领域，引领着国内宠物专科的发展方向.
-            </div>
-            <div class="info-card-btn">
-              <button>立即查看</button>
             </div>
           </div>
         </div>
@@ -169,10 +161,10 @@ import HomeHeader from "../components/Home/HomeHeader.vue";
     </div>
     <!-- 线下 ENd -->
   </div>
+  <HomeFooter></HomeFooter>
 </template>
 
 <style scoped>
-
 button {
   width: 120px;
   height: 40px;
@@ -191,7 +183,6 @@ button:hover {
 }
 .severe-container {
   width: 76%;
-  height: 90vh;
   margin: 0 auto;
 }
 
@@ -261,11 +252,6 @@ button:hover {
   font-size: var(--fs-14);
   margin-top: 20px;
   color: #6e6d6d;
-}
-
-.info-card-btn {
-  display: flex;
-  justify-content: end;
 }
 /* 宠物医生 End */
 
@@ -399,4 +385,26 @@ button:hover {
   align-items: center;
 }
 /* 宠物领养 End */
+
+/* 宠物托运 Start */
+.severe-tuoyun {
+  width: 100%;
+  height: 850px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+/* 宠物托运 End  */
+
+/* 宠物线下 Start */
+.severe-xianxia {
+  width: 100%;
+  height: 850px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+/* 宠物线下 End */
 </style>
