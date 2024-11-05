@@ -1287,12 +1287,13 @@ const handleClickOutside = (event) => {
 
 // 超出显示范围自动发送消息的处理方法
 const sendMessage = async () => {
-  messages.value.push({
-    id: "1",
-    content: newMessage.value,
-  }); // 将新消息添加到 messages 数组
-
   if (newMessage.value.trim() !== "") {
+    // 当消息不为空字符串时 才进行操作
+    messages.value.push({
+      id: "1",
+      content: newMessage.value,
+    }); // 将新消息添加到 messages 数组
+
     chatAPI(newMessage.value)
       .then((result) => {
         const { data } = result;
@@ -1454,7 +1455,6 @@ onUnmounted(() => {
 
       <!-- 信息发送区 -->
       <div class="chat-area-footer">
-        <i class="fa-brands fa-whatsapp"></i>
         <i class="fa-regular fa-image"></i>
         <i
           class="fa-regular fa-face-smile emoji-button"
@@ -1533,7 +1533,7 @@ onUnmounted(() => {
         </div>
         <div class="shared-photos">
           <div class="shared-header">
-            <div><i class="fa-regular fa-images"></i>分享记录</div>
+            <div><i class="fa-regular fa-images"></i>分享历史</div>
           </div>
           <div class="photos">
             <div>
@@ -1890,7 +1890,7 @@ onUnmounted(() => {
   /* border: 1px solid #409eff; */
 }
 
-.photos img:hover{
+.photos img:hover {
   transform: scale(1.1);
   transition: var(--transition-2);
 }
@@ -1898,9 +1898,9 @@ onUnmounted(() => {
 .more {
   margin-top: 15px;
   text-align: center;
-  font-weight: 600;
-  letter-spacing: 2px;
+  font-weight: 500;
   cursor: pointer;
+  font-size: var(--fs-14);
   color: var(--deongaree);
 }
 

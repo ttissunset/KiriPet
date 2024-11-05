@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-const router = useRouter();
+// import { useRouter } from "vue-router";
+// const router = useRouter();
 
 const friends = ref([
   {
@@ -112,6 +112,70 @@ const applyList = ref([
     imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3904.png",
     status: "1",
   },
+  {
+    id: "2",
+    name: "桜小路きな子",
+    des: "[夢へ踏み出す第一歩]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3908.png",
+    status: "0",
+  },
+  {
+    id: "3",
+    name: "葉月恋",
+    des: "[止まらない胸の高鳴り]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3907.png",
+    status: "1",
+  },
+  {
+    id: "4",
+    name: "唐可可",
+    des: "[スカートの揺らめき]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3904.png",
+    status: "1",
+  },
+  {
+    id: "2",
+    name: "桜小路きな子",
+    des: "[夢へ踏み出す第一歩]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3908.png",
+    status: "0",
+  },
+  {
+    id: "3",
+    name: "葉月恋",
+    des: "[止まらない胸の高鳴り]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3907.png",
+    status: "1",
+  },
+  {
+    id: "4",
+    name: "唐可可",
+    des: "[スカートの揺らめき]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3904.png",
+    status: "1",
+  },
+  {
+    id: "2",
+    name: "桜小路きな子",
+    des: "[夢へ踏み出す第一歩]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3908.png",
+    status: "0",
+  },
+  {
+    id: "3",
+    name: "葉月恋",
+    des: "[止まらない胸の高鳴り]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3907.png",
+    status: "1",
+  },
+  {
+    id: "4",
+    name: "唐可可",
+    des: "[スカートの揺らめき]",
+    imgUrl: "https://kiripet.tos-cn-beijing.volces.com/image/3904.png",
+    status: "1",
+  },
+  
 ]);
 
 const list = ref(null);
@@ -141,10 +205,13 @@ const choose_agree = (index) => {
 
 <template>
   <div class="friend-container">
+    <!-- 切换栏 -->
     <div class="friend-bar" @click="toggleSelectd">
       <span ref="list" class="selected"> 好友列表 </span>
       <span ref="apply"> 好友申请 </span>
     </div>
+
+    <!-- 好友列表 -->
     <div class="friend-list" v-if="show">
       <div
         class="friend"
@@ -159,6 +226,8 @@ const choose_agree = (index) => {
         </div>
       </div>
     </div>
+
+    <!-- 好友申请 -->
     <div class="apply-list" v-else>
       <div class="apply" v-for="(item, index) in applyList" :key="index">
         <img class="apply-profile" :src="item.imgUrl" />

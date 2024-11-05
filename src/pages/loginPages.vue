@@ -1,5 +1,4 @@
 <script setup>
-import notification from "@/components/Notify/notification.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 import { log } from "@/directives/logger";

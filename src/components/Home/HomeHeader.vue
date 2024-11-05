@@ -7,6 +7,7 @@ import { useUserStore } from "../../stores/useStore";
 const router = useRouter();
 const route = useRoute();
 const userStore = useUserStore();
+const search = ref("");
 
 // 测试时用
 const show = ref(true);
@@ -87,6 +88,7 @@ onMounted(getCurrentMenuId);
           type="text"
           name="text"
           class="input-search"
+          v-model="search"
           placeholder="搜些什么吧 ε٩(๑> ₃ <)۶з"
         />
       </div>
