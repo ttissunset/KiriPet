@@ -1,6 +1,9 @@
 <script setup>
+import { useRouter } from "vue-router";
 import HomeHeader from "../components/Home/HomeHeader.vue";
 import HomeFooter from "@/components/Home/HomeFooter.vue";
+
+const router = useRouter();
 </script>
 
 <template>
@@ -53,8 +56,11 @@ import HomeFooter from "@/components/Home/HomeFooter.vue";
             </div>
           </div>
         </div>
-        <div>
-          1111
+        <div class="doctor-btn">
+          <h3 class="btn-content">专业的宠物医疗服务，让您安心</h3>
+          <div class="btn-button">
+            <button>前往查看</button>
+          </div>
         </div>
       </div>
     </div>
@@ -184,6 +190,7 @@ button:hover {
   color: var(--deongaree);
   transition: var(--transition-4);
 }
+
 .severe-container {
   width: 76%;
   margin: 0 auto;
@@ -256,15 +263,32 @@ button:hover {
   margin-top: 20px;
   color: #6e6d6d;
 }
+
+.doctor-btn {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.btn-content {
+  margin-right: 20px;
+}
+
+.btn-button button {
+  align-content: center;
+  margin-top: 0px;
+}
 /* 宠物医生 End */
 
 /* 宠物领养 Starrt */
 .severe-petAdopt {
   width: 100%;
-  height: 800px;
+  height: 750px;
   display: flex;
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 100px;
   justify-content: center;
 }
 

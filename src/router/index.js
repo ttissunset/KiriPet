@@ -29,8 +29,24 @@ const routes = [
     component: () => import("../pages/infoPages.vue"),
   },
   {
-    path: "/fun",
+    path: "/chatpage",
     component: () => import("../pages/chatPages.vue"),
+    children: [
+      {
+        path: "",
+        redirect: "/chat",
+      },
+      {
+        path: "/chat",
+        name: "ChatMain",
+        component: () => import("../components/Chat/ChatMain.vue"),
+      },
+      {
+        path: "/chat/:id",
+        name: "ChatRoom",
+        component: () => import("../components/Chat/ChatRoom.vue"),
+      },
+    ],
   },
   {
     path: "/shop",

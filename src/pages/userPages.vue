@@ -55,7 +55,7 @@ const router = useRouter();
                 </div>
               </div>
             </div>
-            <div class="profile-id">uid: k11111111</div>
+            <div class="profile-id">uid: 11111111</div>
             <div class="profile-tag"><span>简介：</span>资深宠物爱好者</div>
             <div class="action-buttons">
               <button class="btn btn-primary" @click="router.push('/userinfo')">

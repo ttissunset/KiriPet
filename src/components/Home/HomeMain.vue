@@ -1342,7 +1342,6 @@ onMounted(retScroll);
   height: 750px;
   margin: 0 auto;
   margin-top: 100px;
-  margin-bottom: 50px;
 }
 
 .shop-section-content-wrapper {
@@ -1634,7 +1633,7 @@ onMounted(retScroll);
   padding: 30px;
   border-radius: var(--radius-20);
   overflow: hidden;
-  box-shadow: var(--box-shadow);
+  box-shadow: var(--shadow-1);
 }
 
 .vip-section-tab-content {

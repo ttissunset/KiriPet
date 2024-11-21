@@ -4,7 +4,7 @@ const router = useRouter();
 import { log } from "@/directives/logger";
 
 import { ref } from "vue";
-import { useUserStore } from "@/stores/useStore";
+import { useUserStore } from "@/stores/userStore";
 
 const user_name = ref("");
 const password = ref("");

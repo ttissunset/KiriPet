@@ -1,15 +1,14 @@
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
 
-// 常量定义
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-
-// refs
+// 文件ref
 const fileInputRef = ref(null);
 const fileList = ref([]);
 const previewVisible = ref(false);
 const currentPreview = ref("");
+
+// 文件最大容量 10MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 // 触发文件选择
 const triggerFileInput = () => {
@@ -49,7 +48,7 @@ const handleFileChange = async (event) => {
     fileList.value.push(fileItem);
 
     // 上传文件
-    // uploadFile(fileItem, fileList.value.length - 1);
+    uploadFile(fileItem, fileList.value.length - 1);
   });
 
   event.target.value = "";
@@ -62,6 +61,24 @@ const createPreview = (fileItem) => {
     fileItem.previewUrl = e.target.result;
   };
   reader.readAsDataURL(fileItem.file);
+};
+
+// 上传文件
+const uploadFile = async (fileItem, index) => {
+  const formData = new FormData();
+  formData.append("file", fileItem.file);
+
+  try {
+    // const result = await uploadAPI(formData);
+    setTimeout(() => {
+      fileList.value[index].status = "success";
+      // fileList.value[index].url = response.data.url;
+    }, 3000);
+  } catch (error) {
+    fileList.value[index].status = "error";
+    fileList.value[index].error = "上传失败，请重试";
+    console.error("File upload failed:", error);
+  }
 };
 
 // 预览文件
@@ -77,30 +94,6 @@ const closePreview = () => {
   previewVisible.value = false;
   currentPreview.value = "";
 };
-
-// 上传文件
-// const uploadFile = async (fileItem, index) => {
-//   const formData = new FormData();
-//   formData.append("file", fileItem.file);
-
-//   try {
-//     const response = await axios.post("/api/upload", formData, {
-//       onUploadProgress: (progressEvent) => {
-//         const progress = Math.round(
-//           (progressEvent.loaded * 100) / progressEvent.total
-//         );
-//         fileList.value[index].progress = progress;
-//       },
-//     });
-
-//     fileList.value[index].status = "success";
-//     fileList.value[index].url = response.data.url;
-//   } catch (error) {
-//     fileList.value[index].status = "error";
-//     fileList.value[index].error = "上传失败，请重试";
-//     console.error("File upload failed:", error);
-//   }
-// };
 
 // 重试上传
 const retryUpload = (index) => {
@@ -125,10 +118,7 @@ const getFileIcon = (fileName) => {
     docx: "fa-regular fa-file-word",
     xls: "fa-regular fa-file-excel",
     xlsx: "fa-regular fa-file-excel",
-    jpg: "fa-regular fa-image",
-    jpeg: "fa-regular fa-image",
-    png: "fa-regular fa-image",
-    gif: "fa-regular fa-image",
+
   };
   return iconMap[extension] || "fa-regular fa-file";
 };
@@ -142,6 +132,7 @@ const formatFileSize = (bytes) => {
   return (bytes / Math.pow(k, i)).toFixed(2) + " " + sizes[i];
 };
 </script>
+
 <template>
   <div class="upload-container">
     <!-- 上传按钮区域 -->
