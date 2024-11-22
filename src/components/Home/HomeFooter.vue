@@ -1,169 +1,140 @@
-<script setup></script>
-
 <template>
-  <div class="home-footer">
-    <div class="home-footer-container">
-      <div class="home-footer-left">
-        <div class="home-footer-left-logo">
-          <img
-            src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png"
-          />
-          <h2>KiriPet</h2>
-        </div>
-        <div class="home-footer-left-list">
-          <div class="home-footer-left-list-title">专业的宠物服务平台</div>
-          <div class="home-footer-left-list-social">
-            <div class="home-footer-left-list-social-icon">
-              <img
-                src="https://kiripet.tos-cn-beijing.volces.com/image/facebook.png"
-              />
-            </div>
-            <div class="home-footer-left-list-social-icon">
-              <img
-                src="https://kiripet.tos-cn-beijing.volces.com/image/telegram.png"
-              />
-            </div>
-          </div>
-        </div>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>宠物百科</h4>
+        <ul>
+          <li>猫咪百科</li>
+          <li>狗狗百科</li>
+        </ul>
       </div>
-      <div class="home-footer-right">
-        <div class="home-footer-right-list">
-          <div class="home-footer-right-list-item">
-            <div class="home-footer-right-list-item-title">宠物百科</div>
-            <div class="home-footer-right-list-item-sub">
-              <div class="home-footer-right-list-item-subTi">猫科</div>
-              <div class="home-footer-right-list-item-subTi">犬科</div>
-            </div>
-          </div>
-          <div class="home-footer-right-list-item">
-            <div class="home-footer-right-list-item-title">宠物服务</div>
-            <div class="home-footer-right-list-item-sub">
-              <div class="home-footer-right-list-item-subTi">预约体检</div>
-              <div class="home-footer-right-list-item-subTi">领养宠物</div>
-            </div>
-          </div>
-          <div class="home-footer-right-list-item">
-            <div class="home-footer-right-list-item-title">宠物商城</div>
-            <div class="home-footer-right-list-item-sub">
-              <div class="home-footer-right-list-item-subTi">宠物食物</div>
-              <div class="home-footer-right-list-item-subTi">宠物用品</div>
-            </div>
-          </div>
-          <div class="home-footer-right-list-item">
-            <div class="home-footer-right-list-item-title">宠物乐园</div>
-            <div class="home-footer-right-list-item-sub">
-              <div class="home-footer-right-list-item-subTi">宠物分享</div>
-              <div class="home-footer-right-list-item-subTi">动态</div>
-            </div>
-          </div>
-        </div>
+
+      <div class="footer-section">
+        <h4>宠物商城</h4>
+        <ul>
+          <li>宠物食品</li>
+          <li>宠物玩具</li>
+          <li>宠物服装</li>
+          <li>宠物用品</li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>宠物服务</h4>
+        <ul>
+          <li>宠物医疗</li>
+          <li>宠物领养</li>
+          <li>宠物托管</li>
+          <li>宠物托运</li>
+          <li>线下门店</li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>公司</h4>
+        <ul>
+          <li>关于我们</li>
+          <li>工作机会</li>
+          <li>联系我们</li>
+        </ul>
       </div>
     </div>
-  </div>
+
+    <div class="footer-bottom">
+      <div class="social-links">
+        <i class="fab fa-twitter"></i>
+        <i class="fab fa-linkedin"></i>
+        <i class="fab fa-facebook"></i>
+        <i class="fab fa-youtube"></i>
+      </div>
+      <div class="legal-links"><span>隐私政策</span> <span>服务条款</span></div>
+      <p class="copyright">
+        © 2024 &nbsp; KiriPet &nbsp; <span>赣ICP备2024047770号-1</span>
+      </p>
+    </div>
+  </footer>
 </template>
 
-<style scoped>
-.home-footer {
-  width: 100%;
-  height: 15vh;
-  font-family: var(--ff-almm);
-  background-color: var(--deongaree);
-}
+<style lang="scss" scoped>
+.footer {
+  background-color: #f8f9fad3;
+  padding: 4rem 2rem 2rem;
+  margin-top: 2rem;
 
-.home-footer-container {
-  width: 56%;
-  height: 100%;
-  display: flex;
-  margin: 0 auto;
-}
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+    margin-bottom: 2rem;
+  }
 
-.home-footer-left {
-  width: 40%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  margin-left: 100px;
-  flex-direction: column;
-}
+  .footer-section {
+    h4 {
+      color: #1b1b1b;
+      margin-bottom: 1.5rem;
+      font-size: 20px;
+    }
 
-.home-footer-left .home-footer-left-logo {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--light-white);
-  font-size: var(--fs-20);
-  font-family: var(--ff-hymhtw);
-}
-.home-footer-left .home-footer-left-logo img {
-  width: 30px;
-  height: 30px;
-}
+    ul {
+      list-style: none;
 
-.home-footer-left-list {
-  display: flex;
-  flex-direction: column;
-}
+      li {
+        margin-bottom: 0.8rem;
+        color: #666;
+        text-decoration: none;
+        transition: color 0.3s;
+        font-size: 16px;
 
-.home-footer-left-list-title {
-  font-size: var(--fs-14);
-  margin: 10px 0;
-  color: var(--light-white);
-  letter-spacing: 1px;
-  font-family: var(--ff-llt);
-}
+        &:hover {
+          color: #565bef;
+        }
+      }
+    }
+  }
 
-.home-footer-left-list-social {
-  display: flex;
-}
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid #ddd;
+    text-align: center;
 
-.home-footer-left-list-social img {
-  width: 30px;
-  height: 30px;
-}
+    .social-links {
+      margin-bottom: 1.5rem;
 
-.home-footer-left-list-social-icon {
-  margin-right: 10px;
-}
+      i {
+        color: #666;
+        font-size: 1.5rem;
+        margin: 0 1rem;
+        transition: color 0.3s;
 
-.home-footer-left-list-social-icon:hover {
-  transform: translateY(-5px);
-  cursor: pointer;
-  transition: var(--transition-3);
-}
+        &:hover {
+          color: #565bef;
+        }
+      }
+    }
 
-.home-footer-container .home-footer-right {
-  width: 60%;
-  height: 100%;
-}
+    .legal-links {
+      margin-bottom: 1rem;
 
-.home-footer-right-list {
-  display: flex;
-  height: 100%;
-  color: var(--light-white);
-  font-family: var(--ff-llt);
-  justify-content: end;
-  align-items: center;
-}
+      span {
+        color: #666;
+        text-decoration: none;
+        margin: 0 1rem;
+        font-size: 0.9rem;
 
-.home-footer-right-list-item {
-  width: 150px;
-  display: flex;
-  flex-direction: column;
-  text-align: start;
-}
+        &:hover {
+          color: #565bef;
+        }
+      }
+    }
 
-.home-footer-right-list-item-title {
-  margin: 10px 0;
-  font-size: var(--fs-18);
-}
-
-.home-footer-right-list-item-subTi {
-  font-size: var(--fs-14);
-}
-
-.home-footer-right-list-item-subTi:hover {
-  color: var(--danger);
-  transition: var(--transition-3);
+    .copyright {
+      color: #999;
+      font-size: 0.9rem;
+    }
+  }
 }
 </style>

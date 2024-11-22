@@ -72,20 +72,8 @@ body {
   --fw-300: 300;
 
   /* font-family */
-  --ff-almm: "almm-bold", almm-bold;
-  --ff-albb-semibold: "albb-semiBold", albb-semibold;
-  --ff-albb-light: "albb-light", albb-light;
-
-  --ff-yqjyt: "yqjyt", yqjyt;
-  --ff-syht: "syht", syht;
-  --ff-hycjzjw: "hycjzjw", hycjzjw;
-  --ff-txwzchjt: "txwzchjt", txwzchjt;
-  --ff-rzzytmfsy: "rzzytmfsy", rzzytmfsy;
-  --ff-alhyznht: "alhyznht", alhyznht;
-
   --ff-hymhtw: "hymhtw", hymhtw;
-  --ff-hyxrtw: "hyxrtw", hyxrtw;
-  --ff-hydytj: "hydytj", hydytj;
+  --ff-albb-light: "albb-light", albb-light;
   --ff-llt: "llt", llt;
 
   /*spacing*/
@@ -200,64 +188,8 @@ body {
 }
 
 @font-face {
-  font-family: "yqjyt";
-  src: url("./assets/fonts/义启简圆体.ttf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "syht";
-  src: url("./assets/fonts/思源黑体 CN Heavy.otf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "hycjzjw";
-  src: url("./assets/fonts/汉仪超级战甲W.ttf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "txwzchjt";
-  src: url("./assets/fonts/碳纤维正粗黑简体.ttf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "rzzytmfsy";
-  src: url("./assets/fonts/锐字真言体免费商用.ttf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "alhyznht";
-  src: url("./assets/fonts/阿里汉仪智能黑体.ttf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
   font-family: "hymhtw";
-  src: url("./assets/fonts/汉仪喵魂体W.ttf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "hyxrtw";
-  src: url("./assets/fonts/汉仪夏日体W.ttf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "hydytj";
-  src: url("./assets/fonts/汉仪蝶语体简.ttf");
+  src: url("./assets//fonts/汉仪喵魂体W.ttf");
   font-weight: normal;
   font-style: normal;
 }
@@ -267,14 +199,6 @@ body {
   src: url("./assets/fonts/萝莉体 第二版.ttc");
   font-weight: normal;
   font-style: normal;
-}
-
-@font-face {
-  font-family: "Material Icons Sharp";
-  font-style: normal;
-  font-weight: 400;
-  src: url(https://fonts.gstatic.com/s/materialiconssharp/v109/oPWQ_lt5nv4pWNJpghLP75WiFR4kLh3kvmvR.woff2)
-    format("woff2");
 }
 
 .material-icons-sharp {

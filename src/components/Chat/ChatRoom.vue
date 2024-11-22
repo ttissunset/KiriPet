@@ -1929,7 +1929,7 @@ onUnmounted(() => {
 /* emoji表情 */
 .emoji-picker {
   position: absolute;
-  left: 300px;
+  left: 318px;
   bottom: 61px;
   z-index: 1000;
   width: 350px;

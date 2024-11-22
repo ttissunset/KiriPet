@@ -25,8 +25,24 @@ const routes = [
     component: () => import("../pages/regPages.vue"),
   },
   {
-    path: "/info",
-    component: () => import("../pages/infoPages.vue"),
+    path: "/wiki",
+    component: () => import("../pages/wikiPages.vue"),
+    children: [
+      {
+        path: "",
+        redirect: "/wiki/cats",
+      },
+      {
+        path: "cats",
+        name: "Cats",
+        component: () => import("../components/Wiki/CatWiki.vue"),
+      },
+      {
+        path: "dogs",
+        name: "Dogs",
+        component: () => import("../components/Wiki/DogWiki.vue"),
+      },
+    ],
   },
   {
     path: "/chatpage",

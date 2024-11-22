@@ -23,7 +23,7 @@ const confirm = () => {
 
 const menuList = [
   { id: 0, name: "首页", path: "/home" },
-  { id: 1, name: "宠物百科", path: "/info" },
+  { id: 1, name: "宠物百科", path: "/wiki" },
   { id: 2, name: "宠物商店", path: "/goods" },
   { id: 3, name: "宠物服务", path: "/severe" },
   { id: 4, name: "宠物乐园", path: "/chatpage" },
@@ -68,7 +68,7 @@ onMounted(getCurrentMenuId);
     </div>
     <div class="home-header-right">
       <!-- 搜索框 Start -->
-      <div class="input-container">
+      <!-- <div class="input-container">
         <button class="input-button">
           <svg
             fill="none"
@@ -91,7 +91,7 @@ onMounted(getCurrentMenuId);
           v-model="search"
           placeholder="搜些什么吧 ε٩(๑> ₃ <)۶з"
         />
-      </div>
+      </div> -->
       <!-- 搜索框 End -->
 
       <!-- 导航列表 Start -->
@@ -128,12 +128,13 @@ onMounted(getCurrentMenuId);
 
 <style scoped>
 .home-header {
-  width: 76%;
   height: 100px;
   display: flex;
   margin: 0 auto;
+  padding: 0 15rem;
   justify-content: space-between;
   align-items: center;
+  background-color: #f8f9fad3;
 }
 
 .home-header-left .logo {
@@ -142,9 +143,10 @@ onMounted(getCurrentMenuId);
   align-items: center;
   gap: 0.5rem;
   font-size: var(--fs-20);
-  font-family: var(--ff-hymhtw);
+    font-family: var(--ff-hymhtw);
   cursor: pointer;
 }
+
 .home-header-left .logo img {
   width: 30px;
   height: 30px;
