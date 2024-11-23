@@ -1,8 +1,11 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 const searchQuery = ref("");
 const selectedTags = ref([]);
+const selectedDog = ref(null);
+const page = ref(1);
+const loading = ref(false);
 const filterTags = ["小型犬", "中型犬", "大型犬", "家庭犬", "工作犬", "运动犬"];
 
 const dogs = ref([
@@ -210,6 +213,7 @@ const dogs = ref([
   },
 ]);
 
+// 关键词搜索
 const filteredDogs = computed(() => {
   let result = dogs.value;
 
@@ -231,6 +235,7 @@ const filteredDogs = computed(() => {
   return result;
 });
 
+// 根据 tag 筛选
 const toggleTag = (tag) => {
   const index = selectedTags.value.indexOf(tag);
   if (index === -1) {
@@ -240,9 +245,62 @@ const toggleTag = (tag) => {
   }
 };
 
+// 显示详情
 const showDetail = (dog) => {
   selectedDog.value = dog;
 };
+
+// 模拟加载更多数据
+const loadMorePets = async () => {
+  if (loading.value) return;
+  loading.value = true;
+
+  // 模拟API请求延迟 -- 调用接口获取宠物数据
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  const newDogs = [
+    {
+      id: 1,
+      name: "金毛寻回犬",
+      image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=800",
+      description: "金毛寻回犬智商很高，性格温顺，非常适合作为家庭犬和导盲犬。",
+      stats: {
+        size: 80,
+        exercise: 85,
+        friendly: 95,
+      },
+      tags: ["大型犬", "家庭犬"],
+      characteristics: {
+        体重: "25-34kg",
+        肩高: "51-61cm",
+        寿命: "10-12年",
+        毛发: "双层被毛，防水",
+      },
+      personality:
+        "金毛寻回犬性格温顺友善，智商很高，特别适合作为家庭犬和导盲犬。",
+      traits: ["聪明", "温顺", "忠诚", "亲人", "易训练"],
+    },
+  ];
+
+  dogs.value.push(...newDogs);
+  page.value++;
+  loading.value = false;
+};
+
+// 监听滚动加载更多
+const handleScroll = () => {
+  const scrollHeight = document.documentElement.scrollHeight;
+  const scrollTop = document.documentElement.scrollTop;
+  const clientHeight = document.documentElement.clientHeight;
+
+  if (scrollHeight - scrollTop - clientHeight < 200 && !loading.value) {
+    loadMorePets();
+  }
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
 </script>
 
 <template>
@@ -254,7 +312,7 @@ const showDetail = (dog) => {
           type="text"
           v-model="searchQuery"
           class="wiki-search__input"
-          placeholder="搜索狗狗品种..."
+          placeholder="搜些什么吧 ε٩(๑> ₃ <)۶з"
         />
       </div>
 
@@ -324,48 +382,56 @@ const showDetail = (dog) => {
       </article>
     </div>
 
-    <div v-if="selectedDog" class="dog-modal" @click.self="selectedDog = null">
-      <div class="dog-modal__content">
-        <button class="dog-modal__close" @click="selectedDog = null">
-          <font-awesome-icon icon="times" />
-        </button>
+    <!-- 加载更多指示器 -->
+    <div v-if="loading" class="loading-indicator">
+      <div class="loader"></div>
+      <span>狗狗正在赶来的路上...</span>
+    </div>
 
-        <div class="dog-modal__header">
-          <img :src="selectedDog.image" :alt="selectedDog.name" />
-          <h2>{{ selectedDog.name }}</h2>
-        </div>
+    <!-- 详情弹窗 -->
+    <teleport to="body">
+      <div v-if="selectedDog" class="wiki-modal">
+        <div class="wiki-modal__backdrop" @click="selectedDog = null"></div>
+        <div class="wiki-modal__content">
+          <button class="wiki-modal__close" @click="selectedDog = null">
+            <i class="fas fa-times"></i>
+          </button>
 
-        <div class="dog-modal__body">
-          <div class="dog-modal__section">
-            <h3>基本特征</h3>
-            <div class="characteristics-grid">
-              <div
-                v-for="(value, key) in selectedDog.characteristics"
-                :key="key"
-                class="characteristic"
-              >
-                <span class="characteristic__label">{{ key }}</span>
-                <span class="characteristic__value">{{ value }}</span>
-              </div>
-            </div>
+          <div class="wiki-modal__header">
+            <img :src="selectedDog.image" :alt="selectedDog.name" />
+            <h2>{{ selectedDog.name }}</h2>
           </div>
 
-          <div class="dog-modal__section">
-            <h3>性格特点</h3>
-            <p>{{ selectedDog.personality }}</p>
-            <div class="traits-list">
-              <span
-                v-for="trait in selectedDog.traits"
-                :key="trait"
-                class="trait-tag"
-              >
-                {{ trait }}
-              </span>
+          <div class="wiki-modal__body">
+            <div class="wiki-modal__section">
+              <h3>宠物信息</h3>
+              <p>{{ selectedDog.description }}</p>
+            </div>
+
+            <div class="wiki-modal__section">
+              <h3>性格特点</h3>
+              <ul>
+                <li v-for="trait in selectedDog.traits" :key="trait">
+                  {{ trait }}
+                </li>
+              </ul>
+            </div>
+
+            <div class="wiki-modal__section">
+              <h3>宠物特征</h3>
+              <ul>
+                <li
+                  v-for="characteristic in selectedDog.characteristics"
+                  :key="characteristic"
+                >
+                  {{ characteristic }}
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </teleport>
   </div>
 </template>
 
@@ -388,7 +454,7 @@ const showDetail = (dog) => {
     padding: 1rem 1rem 1rem 3rem;
     border: 1px solid #e2e8f0;
     border-radius: 0.5rem;
-    font-size: 1rem;
+    font-size: 14px;
     transition: all 0.3s ease;
 
     &:focus {
@@ -526,49 +592,64 @@ const showDetail = (dog) => {
   }
 }
 
-.dog-modal {
+// 详情样式
+.wiki-modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  z-index: 1000;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
 
   &__content {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    max-height: 90vh;
     background: white;
     border-radius: 1rem;
-    width: 100%;
-    max-width: 800px;
-    max-height: 90vh;
     overflow-y: auto;
-    position: relative;
   }
 
   &__close {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    width: 40px;
-    height: 40px;
+    border: none;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    color: #000;
     cursor: pointer;
     transition: all 0.3s ease;
 
     &:hover {
-      background: #e2e8f0;
+      transform: rotate(90deg);
+      align-self: center;
+      justify-self: center;
+      background: rgba(0, 0, 0, 0.4);
+
+      i {
+        color: #fff;
+      }
     }
   }
 
   &__header {
     img {
       width: 100%;
-      height: 300px;
+      height: 400px;
       object-fit: cover;
     }
 
@@ -576,6 +657,7 @@ const showDetail = (dog) => {
       padding: 1.5rem;
       font-size: 2rem;
       font-weight: 700;
+      font-family: var(--ff-llt);
     }
   }
 
@@ -590,60 +672,64 @@ const showDetail = (dog) => {
       font-size: 1.25rem;
       font-weight: 600;
       margin-bottom: 1rem;
+      color: #1e293b;
+    }
+
+    p {
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: #64748b;
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0.5rem;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #3b82f6;
+        }
+      }
     }
   }
 }
 
-.characteristics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
-}
-
-.characteristic {
-  background: var(--neutral-50);
-  padding: 1rem;
-  border-radius: 0.5rem;
-
-  &__label {
-    display: block;
-    font-size: 0.875rem;
-    color: var(--neutral-500);
-    margin-bottom: 0.25rem;
-  }
-
-  &__value {
-    font-weight: 500;
-    color: #1e293b;
-  }
-}
-
-.traits-list {
+// 加载动画
+.loading-indicator {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  color: #718096;
 }
 
-.trait-tag {
-  padding: 0.5rem 1rem;
-  background: #eff6ff;
-  color: #2563eb;
-  border-radius: 9999px;
-  font-size: 0.875rem;
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--deongaree);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 1rem 0;
 }
 
-@media (max-width: 768px) {
-  .wiki-dogs {
-    padding: 1rem;
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
   }
-
-  .wiki-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .dog-modal {
-    padding: 1rem;
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>

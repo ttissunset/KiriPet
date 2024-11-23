@@ -1408,6 +1408,7 @@ onUnmounted(() => {
 
       <!-- 错误提示消息 -->
       <div v-if="error" class="error-message">
+        <i class="fa-solid fa-triangle-exclamation"></i>
         {{ error }}
         <button @click="error = null">关闭</button>
       </div>
@@ -1682,7 +1683,10 @@ onUnmounted(() => {
   font-weight: 600;
   cursor: pointer;
 
-  i{
+  &:hover{
+    color: #8b98e4;
+  }
+  i {
     font-size: 16px;
     margin-left: 10px;
   }

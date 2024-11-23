@@ -134,6 +134,7 @@ const goToStory = (index) => {
     <div class="shape circle"></div>
     <div class="shape square"></div>
     <div class="shape circle"></div>
+    <div class="shape circle"></div>
   </div>
 
   <!-- 添加光效 -->
@@ -302,109 +303,53 @@ const goToStory = (index) => {
           <div class="all-services-icon">
             <i class="fas fa-laptop-code"></i>
           </div>
-          <h3>工程团队</h3>
-          <p>代码审查、技术文档和问题演示</p>
+          <h3>宠物百科</h3>
+          <p>专业的宠物知识库，解答您的所有疑惑</p>
           <ul>
-            <li>异步代码审查</li>
-            <li>技术文档录制</li>
-            <li>Bug 复现演示</li>
+            <li>宠物信息</li>
+            <li>宠物特征</li>
+            <li>.....</li>
           </ul>
         </div>
         <div class="all-services-item">
           <div class="all-services-icon">
-            <i class="fas fa-chalkboard-teacher"></i>
+            <i class="fa-solid fa-store"></i>
           </div>
-          <h3>产品团队</h3>
-          <p>产品演示、用户反馈和功能说明</p>
+          <h3>宠物商城</h3>
+          <p>严选优质商品，为爱宠提供更好的生活</p>
           <ul>
-            <li>产品更新说明</li>
-            <li>用户研究反馈</li>
-            <li>功能使用指南</li>
-          </ul>
-        </div>
-        <div class="all-services-item">
-          <div class="all-services-icon">
-            <i class="fas fa-users"></i>
-          </div>
-          <h3>人力资源</h3>
-          <p>员工培训、入职指导和团队沟通</p>
-          <ul>
-            <li>新员工入职培训</li>
-            <li>工作流程说明</li>
-            <li>团队公告发布</li>
+            <li>宠物食品</li>
+            <li>宠物玩具</li>
+            <li>.....</li>
           </ul>
         </div>
         <div class="all-services-item">
           <div class="all-services-icon">
             <i class="fas fa-users"></i>
           </div>
-          <h3>人力资源</h3>
-          <p>员工培训、入职指导和团队沟通</p>
+          <h3>宠物服务</h3>
+          <p>专业的服务，值得您的信赖</p>
           <ul>
-            <li>新员工入职培训</li>
-            <li>工作流程说明</li>
-            <li>团队公告发布</li>
+            <li>宠物医疗</li>
+            <li>宠物寄养</li>
+            <li>.....</li>
+          </ul>
+        </div>
+        <div class="all-services-item">
+          <div class="all-services-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>宠物乐园</h3>
+          <p>与志同道合的人一起</p>
+          <ul>
+            <li>分享生活</li>
+            <li>答疑解惑</li>
+            <li>.....</li>
           </ul>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Customer Stories Start-->
-  <div class="customer-stories">
-    <div class="container">
-      <div class="stories-header">
-        <h2>客户故事</h2>
-        <div class="story-nav">
-          <button class="prev" @click="prevStory">
-            <i class="fas fa-arrow-left"></i>
-          </button>
-          <button class="next" @click="nextStory">
-            <i class="fas fa-arrow-right"></i>
-          </button>
-        </div>
-      </div>
-      <div class="stories-slider">
-        <transition-group name="story-slide">
-          <div
-            class="story-card"
-            v-for="(story, index) in stories"
-            :key="story.id"
-            v-show="currentStory === index"
-          >
-            <div class="story-video">
-              <img :src="story.image" :alt="story.title" />
-              <button class="play-button">
-                <i class="fas fa-play"></i>
-              </button>
-            </div>
-            <div class="story-content">
-              <div class="customer-logo">
-                <img :src="story.logo" :alt="story.company" />
-              </div>
-              <p class="quote">{{ story.quote }}</p>
-              <div class="author">
-                <img :src="story.authorImage" :alt="story.authorName" />
-                <div>
-                  <h4>{{ story.authorName }}</h4>
-                  <p>{{ story.authorTitle }} @ {{ story.company }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </transition-group>
-        <div class="story-indicators">
-          <span
-            v-for="(_, index) in stories"
-            :key="index"
-            :class="{ active: currentStory === index }"
-            @click="goToStory(index)"
-          ></span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Customer Stories End-->
 
   <!-- Brands Start -->
   <div class="brands">
@@ -496,51 +441,59 @@ const goToStory = (index) => {
   </div>
   <!-- Brands End -->
 
-  <!-- Workflow Start -->
-  <div class="workflow">
+  <!-- Customer Stories Start-->
+  <div class="customer-stories">
     <div class="container">
-      <div class="section-header">
-        <h2>简化您的工作流程</h2>
-        <p>从录制到分享，只需几秒钟</p>
+      <div class="stories-header">
+        <h2>客户故事</h2>
+        <div class="story-nav">
+          <button class="prev" @click="prevStory">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <button class="next" @click="nextStory">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
       </div>
-      <div class="workflow-steps">
-        <div class="step">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>一键录制</h3>
-            <p>点击浏览器扩展或桌面应用即可开始录制</p>
-            <img
-              src="https://images.unsplash.com/photo-1611162617474-5b21e879e113"
-              alt="录制步骤"
-            />
+      <div class="stories-slider">
+        <div
+          class="story-card"
+          v-for="(story, index) in stories"
+          :key="story.id"
+          v-show="currentStory === index"
+        >
+          <div class="story-video">
+            <img :src="story.image" :alt="story.title" />
+            <button class="play-button">
+              <i class="fas fa-play"></i>
+            </button>
+          </div>
+          <div class="story-content">
+            <div class="customer-logo">
+              <img :src="story.logo" :alt="story.company" />
+            </div>
+            <p class="quote">{{ story.quote }}</p>
+            <div class="author">
+              <img :src="story.authorImage" :alt="story.authorName" />
+              <div>
+                <h4>{{ story.authorName }}</h4>
+                <p>{{ story.authorTitle }} @ {{ story.company }}</p>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="step">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>编辑优化</h3>
-            <p>修剪视频、添加字幕、插入标注</p>
-            <img
-              src="https://images.unsplash.com/photo-1542744094-24638eff58bb"
-              alt="编辑步骤"
-            />
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>实时分享</h3>
-            <p>生成链接一键分享，支持嵌入和下载</p>
-            <img
-              src="https://images.unsplash.com/photo-1552581234-26160f608093"
-              alt="分享步骤"
-            />
-          </div>
+        <div class="story-indicators">
+          <span
+            v-for="(_, index) in stories"
+            :key="index"
+            :class="{ active: currentStory === index }"
+            @click="goToStory(index)"
+          ></span>
         </div>
       </div>
     </div>
   </div>
-  <!-- Workflow End -->
+  <!-- Customer Stories End-->
 
   <!-- Use Cases Start -->
   <div class="use-cases">
@@ -1436,11 +1389,11 @@ const goToStory = (index) => {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 999;
+  // z-index: 999;
 
   .shape {
     position: absolute;
-    opacity: 0.03;
+    opacity: 0.06;
 
     &.circle {
       border-radius: 50%;
@@ -1465,7 +1418,7 @@ const goToStory = (index) => {
       height: 200px;
       top: 60%;
       right: -100px;
-      animation: float 15s ease-in-out infinite reverse;
+      animation: spin 15s ease-in-out infinite reverse;
     }
 
     &:nth-child(3) {
@@ -1473,6 +1426,15 @@ const goToStory = (index) => {
       height: 150px;
       bottom: 10%;
       left: 20%;
+      background: #ff5c5c;
+      animation: float 18s ease-in-out infinite;
+    }
+
+    &:nth-child(4) {
+      width: 180px;
+      height: 180px;
+      top: 30%;
+      right: 20%;
       animation: float 18s ease-in-out infinite;
     }
   }
@@ -1533,9 +1495,9 @@ const goToStory = (index) => {
 }
 
 .home-main-left .main-box-startBtn {
-  width: 200px;
+  width: 150px;
   height: 60px;
-  font-size: var(--fs-24);
+  font-size: var(--fs-20);
   white-space: 2px;
   font-weight: var(--fw-600);
   background-color: var(--deongaree);
@@ -1655,7 +1617,7 @@ const goToStory = (index) => {
       padding: 32px;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      transition: all 0.3s ease;
+      transition: var(--transition-2);
 
       &:hover {
         transform: translateY(-8px);
@@ -1663,8 +1625,11 @@ const goToStory = (index) => {
 
         .all-services-icon {
           background: #565bef;
-          color: white;
           transform: scale(1.1);
+
+          i {
+            color: white;
+          }
         }
       }
 
@@ -1726,6 +1691,7 @@ const goToStory = (index) => {
   padding: 100px 0;
   margin: 0 auto;
   background: rgba(255, 255, 255, 0.493);
+  transition: all 0.1s ease-in-out;
 
   .stories-header {
     display: flex;
@@ -1778,7 +1744,7 @@ const goToStory = (index) => {
 
   .stories-slider {
     position: relative;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
 
     .story-card {
@@ -1914,6 +1880,7 @@ const goToStory = (index) => {
   padding: 80px 0;
   background: #f9fafb;
   overflow: hidden;
+  margin-top: 100px;
 
   h2 {
     text-align: center;
@@ -2012,108 +1979,10 @@ const goToStory = (index) => {
   }
 }
 
-// Workflow Styles
-.workflow {
-  width: 76%;
-  margin: 0 auto;
-  margin-top: 150px;
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%235661ef' fill-opacity='0.03'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'/%3E%3C/g%3E%3C/svg%3E");
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: 48px;
-
-    h2 {
-      font-size: var(--fs-36);
-      font-weight: var(--fw-600);
-      letter-spacing: 15px;
-      font-family: var(--ff-llt);
-      margin-bottom: 28px;
-    }
-
-    p {
-      color: var(--dark-gray);
-      font-size: var(--fs-20);
-      letter-spacing: 15px;
-    }
-  }
-
-  .workflow-steps {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-    margin-top: 60px;
-
-    .step {
-      text-align: center;
-      position: relative;
-
-      &:not(:last-child)::after {
-        content: "";
-        position: absolute;
-        top: 40px;
-        right: -20px;
-        width: 40px;
-        height: 2px;
-        background: #e5e7eb;
-      }
-
-      .step-number {
-        width: 48px;
-        height: 48px;
-        background: #f3f4f6;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 24px;
-        font-size: 20px;
-        font-weight: 600;
-        color: var(--deongaree);
-      }
-
-      .step-content {
-        h3 {
-          font-size: 24px;
-          color: #1b1b1b;
-          margin-bottom: 16px;
-        }
-
-        p {
-          color: #6b7280;
-          margin-bottom: 24px;
-        }
-
-        img {
-          width: 100%;
-          border-radius: 12px;
-          box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-          transition: transform 0.3s ease;
-
-          &:hover {
-            transform: translateY(-8px);
-          }
-        }
-      }
-    }
-  }
-}
-
 // Use Cases Styles
 .use-cases {
   width: 76%;
   margin: 0 auto;
-  margin-top: 150px;
   position: relative;
 
   &::before {
@@ -3043,4 +2912,45 @@ const goToStory = (index) => {
   transition: var(--transition-3);
 }
 /* vip部分End */
+
+// 动画
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scrollIntegrations {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-50% - 16px));
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+
+  50% {
+    transform: translateY(-40px) rotate(5deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 0.8;
+  }
+}
 </style>

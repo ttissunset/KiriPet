@@ -158,6 +158,42 @@ const router = useRouter();
           提供专业宠物托运出行服务的平台。宠物出行更 轻松，一键下单，跨城无忧
         </p>
       </div>
+      <!-- Workflow Start -->
+      <div class="workflow">
+        <div class="container">
+          <!-- <div class="section-header">
+            <h2>简化您的工作流程</h2>
+            <p>从录制到分享，只需几秒钟</p>
+          </div> -->
+          <div class="workflow-steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h3>平台下单</h3>
+                <p>进入托运详情页选择需要的服务下单</p>
+                <img src="https://picsum.photos/600/600?random=1" />
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h3>平台审核</h3>
+                <p>修剪视频、添加字幕、插入标注</p>
+                <img src="https://picsum.photos/600/500?random=2" />
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h3>寄出宠物</h3>
+                <p>生成链接一键分享，支持嵌入和下载</p>
+                <img src="https://picsum.photos/600/500?random=3" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Workflow End -->
     </div>
     <!-- 托运 End -->
 
@@ -173,7 +209,7 @@ const router = useRouter();
   <HomeFooter></HomeFooter>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 button {
   width: 120px;
   height: 40px;
@@ -192,8 +228,9 @@ button:hover {
 }
 
 .severe-container {
-  width: 76%;
+  width: 74%;
   margin: 0 auto;
+  // background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%235661ef' fill-opacity='0.03'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 .content-wrapper {
@@ -318,7 +355,6 @@ button:hover {
 .circle-1 {
   width: 500px;
   height: 450px;
-  margin-left: 50px;
 }
 
 .adopt-section-main-right {
@@ -421,6 +457,101 @@ button:hover {
   flex-direction: column;
   margin: 0 auto;
   margin-top: 50px;
+}
+
+// Workflow Styles
+.workflow {
+  width: 76%;
+  margin: 0 auto;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .section-header {
+    text-align: center;
+    margin: 48px 0;
+
+    h2 {
+      font-size: var(--fs-36);
+      font-weight: var(--fw-600);
+      letter-spacing: 15px;
+      font-family: var(--ff-llt);
+      margin-bottom: 28px;
+    }
+
+    p {
+      color: var(--dark-gray);
+      font-size: var(--fs-20);
+      letter-spacing: 15px;
+    }
+  }
+
+  .workflow-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-top: 60px;
+
+    .step {
+      text-align: center;
+      position: relative;
+
+      &:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 20px;
+        right: -20px;
+        width: 40px;
+        height: 2px;
+        background: #bfc0c4;
+      }
+
+      .step-number {
+        width: 48px;
+        height: 48px;
+        background: #f3f4f6;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--deongaree);
+      }
+
+      .step-content {
+        h3 {
+          font-size: 24px;
+          color: #1b1b1b;
+          margin-bottom: 16px;
+        }
+
+        p {
+          color: #6b7280;
+          margin-bottom: 24px;
+        }
+
+        img {
+          width: 100%;
+          border-radius: 12px;
+          box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease;
+
+          &:hover {
+            transform: translateY(-8px);
+          }
+        }
+      }
+    }
+  }
 }
 /* 宠物托运 End  */
 

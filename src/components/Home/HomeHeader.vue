@@ -143,7 +143,7 @@ onMounted(getCurrentMenuId);
   align-items: center;
   gap: 0.5rem;
   font-size: var(--fs-20);
-    font-family: var(--ff-hymhtw);
+  font-family: var(--ff-hymhtw);
   cursor: pointer;
 }
 
@@ -191,7 +191,6 @@ onMounted(getCurrentMenuId);
 .home-header-right .input-container .input-search {
   width: 100%;
   border-radius: var(--radius-20);
-  /* background: var(--youth-blue-2); */
   outline: none;
   border: none;
   padding: 8px;

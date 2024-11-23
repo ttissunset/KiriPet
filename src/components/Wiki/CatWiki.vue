@@ -1,9 +1,12 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 const searchQuery = ref("");
 const selectedCat = ref(null);
+const page = ref(1);
+const loading = ref(false);
 
+// 存放宠物数据
 const cats = ref([
   {
     id: 1,
@@ -95,6 +98,7 @@ const cats = ref([
   },
 ]);
 
+// 关键词搜索
 const filteredCats = computed(() => {
   if (!searchQuery.value) return cats.value;
   const query = searchQuery.value.toLowerCase();
@@ -105,23 +109,68 @@ const filteredCats = computed(() => {
   );
 });
 
+// 显示详情
 const showDetail = (cat) => {
   selectedCat.value = cat;
 };
+
+// 模拟加载更多数据
+const loadMorePets = async () => {
+  if (loading.value) return;
+  loading.value = true;
+
+  // 模拟API请求延迟 -- 调用接口获取宠物数据
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  const newCats = [
+    {
+      id: 8,
+      name: "布偶猫",
+      image: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=800",
+      shortDesc: "“温顺如布偶”",
+      description:
+        "布偶猫（英文名：Ragdoll Cat），是一种体格较大的宠物猫， 体长可达1米（包含尾巴），雄性体重约为6.8-9.0千克，雌性体重约为4.5-6.8千克。 面部较宽，双颊线条平顺，耳朵中等大小，眼睛蓝色。 有六种毛色，分别为海豹色、蓝色、巧克力色、丁香色、浅红色和白色根据毛色和图案分布的不同，国际猫协会（The International Cat Association，TICA）将布偶猫分为重点色、手套色和双色三种类型。布偶猫因其温顺的性格和被抱起时放松的姿态而得名，如同柔软的布偶一般。 该品种由美国加利福尼亚州的育种专家安·贝克（Ann Baker）在20世纪 60年代培育出来。 1993年，猫爱好者协会（CFA）注册了布偶猫， 2000年2月布偶猫获得了CFA的冠军。 布偶猫生长速度缓慢，2岁时毛色趋于稳定，3-4岁时身体发育完全。 布偶猫是一种可爱、安静、温和大方的猫， 对儿童宽容，喜欢玩耍，它们友善聪明，乐于和人类互动，是较为理想的室内伴侣。",
+      tags: ["大型", "粘人", "长毛"],
+      traits: ["性格超温顺", "非常粘人", "适合家庭", "智商较高"],
+      tips: ["每日梳理毛发", "保持运动量", "注意饮食均衡", "定期健康检查"],
+    },
+  ];
+
+  cats.value.push(...newCats);
+  page.value++;
+  loading.value = false;
+};
+
+// 监听滚动加载更多
+const handleScroll = () => {
+  const scrollHeight = document.documentElement.scrollHeight;
+  const scrollTop = document.documentElement.scrollTop;
+  const clientHeight = document.documentElement.clientHeight;
+
+  if (scrollHeight - scrollTop - clientHeight < 200 && !loading.value) {
+    loadMorePets();
+  }
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
 </script>
 
 <template>
   <div class="wiki-cats">
+    <!-- 搜索框 -->
     <div class="wiki-search">
       <i class="fa-solid fa-magnifying-glass"></i>
       <input
         type="text"
         v-model="searchQuery"
         class="wiki-search__input"
-        placeholder="搜索猫咪品种..."
+        placeholder="搜些什么吧 ε٩(๑> ₃ <)۶з"
       />
     </div>
 
+    <!-- wiki 表格 -->
     <div class="wiki-grid">
       <article
         v-for="cat in filteredCats"
@@ -144,13 +193,19 @@ const showDetail = (cat) => {
       </article>
     </div>
 
+    <!-- 加载更多指示器 -->
+    <div v-if="loading" class="loading-indicator">
+      <div class="loader"></div>
+      <span>猫咪正在赶来的路上...</span>
+    </div>
+
     <!-- 详情弹窗 -->
     <teleport to="body">
       <div v-if="selectedCat" class="wiki-modal">
         <div class="wiki-modal__backdrop" @click="selectedCat = null"></div>
         <div class="wiki-modal__content">
           <button class="wiki-modal__close" @click="selectedCat = null">
-            <i class="fa-solid fa-xmark"></i>
+            <i class="fas fa-times"></i>
           </button>
 
           <div class="wiki-modal__header">
@@ -160,7 +215,7 @@ const showDetail = (cat) => {
 
           <div class="wiki-modal__body">
             <div class="wiki-modal__section">
-              <h3>品种特征</h3>
+              <h3>宠物信息</h3>
               <p>{{ selectedCat.description }}</p>
             </div>
 
@@ -195,6 +250,7 @@ const showDetail = (cat) => {
   box-sizing: border-box;
 }
 
+// 搜索框
 .wiki-search {
   position: relative;
   margin-bottom: 2rem;
@@ -204,12 +260,12 @@ const showDetail = (cat) => {
     padding: 1rem 1rem 1rem 3rem;
     border: 1px solid #e2e8f0;
     border-radius: 0.5rem;
-    font-size: 1rem;
+    font-size: 14px;
     transition: all 0.3s ease;
 
     &:focus {
       outline: none;
-      border-color: #3b82f6;
+      border-color: var(--deongaree);
       box-shadow: 0 0 0 2px #dbeafe;
     }
   }
@@ -229,6 +285,7 @@ const showDetail = (cat) => {
   gap: 2rem;
 }
 
+// 卡片样式
 .wiki-card {
   background: white;
   border-radius: 1rem;
@@ -289,6 +346,7 @@ const showDetail = (cat) => {
   }
 }
 
+// 详情样式
 .wiki-modal {
   position: fixed;
   inset: 0;
@@ -319,18 +377,25 @@ const showDetail = (cat) => {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    width: 40px;
-    height: 40px;
+    border: none;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background: white;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #000;
+    cursor: pointer;
     transition: all 0.3s ease;
 
     &:hover {
-      .fa-xmark {
-        color: red;
+      transform: rotate(90deg);
+      align-self: center;
+      justify-self: center;
+      background: rgba(0, 0, 0, 0.4);
+
+      i {
+        color: #fff;
       }
     }
   }
@@ -346,6 +411,7 @@ const showDetail = (cat) => {
       padding: 1.5rem;
       font-size: 2rem;
       font-weight: 700;
+      font-family: var(--ff-llt);
     }
   }
 
@@ -391,6 +457,25 @@ const showDetail = (cat) => {
       }
     }
   }
+}
+
+// 加载动画
+.loading-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  color: #718096;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--deongaree);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 1rem 0;
 }
 
 @keyframes spin {
