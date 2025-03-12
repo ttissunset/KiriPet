@@ -45,15 +45,15 @@ const routes = [
     ],
   },
   {
-    path: "/chatpage",
+    path: "/chat",
     component: () => import("../pages/chatPages.vue"),
     children: [
       {
         path: "",
-        redirect: "/chat",
+        redirect: "/chat/user",
       },
       {
-        path: "/chat",
+        path: "user",
         name: "ChatMain",
         component: () => import("../components/Chat/ChatMain.vue"),
       },
@@ -96,8 +96,23 @@ const routes = [
   },
   {
     path: "/social",
-    name: "social",
     component: () => import("../pages/socialPages.vue"),
+    children: [
+      {
+        path: "",
+        redirect: "/social/foru",
+      },
+      {
+        path: "foru",
+        name: "Foru",
+        component: () => import("../components/Social/ForYou.vue"),
+      },
+      {
+        path: "trending",
+        name: "Trending",
+        component: () => import("../components/Social/Trending.vue"),
+      },
+    ],
   },
   {
     path: "/upload",
@@ -106,21 +121,8 @@ const routes = [
   },
   {
     path: "/vip",
+    name: "vip",
     component: () => import("../pages/vipPages.vue"),
-    children: [
-      {
-        path: "/vip-0",
-        component: () => import("../components/Vip/VipFree.vue"),
-      },
-      {
-        path: "/vip-1",
-        component: () => import("../components/Vip/VipMonth.vue"),
-      },
-      {
-        path: "/vip-2",
-        component: () => import("../components/Vip/VipPermanent.vue"),
-      },
-    ],
   },
 ];
 
