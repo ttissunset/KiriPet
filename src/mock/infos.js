@@ -1,7 +1,7 @@
 const infos = [
   {
     id: 1,
-    imageUrl: "https://kiripet.tos-cn-beijing.volces.com/image/cat-1.jpg",
+    imageUrl: "http://catid.net//upload_files/cat_news_/118/41_20230407200416_a7iiq.jpg",
     petName: "布偶猫",
     miniDes: "“温顺如同布偶”",
     details: {
@@ -11,7 +11,7 @@ const infos = [
   {
     id: 2,
     imageUrl:
-      "https://kiripet.tos-cn-beijing.volces.com/image/cat-2.jpg",
+      "http://catid.net//upload_files/cat_news_/119/41_20230330090353_r8p35.jpg",
     petName: "内伯龙根",
     miniDes: "“雾中的生物”",
     details: {
@@ -22,7 +22,7 @@ const infos = [
   {
     id: 3,
     imageUrl:
-      "https://kiripet.tos-cn-beijing.volces.com/image/cat-3.jpg",
+      "http://catid.net//upload_files/cat_news_/110/41_20230304220330_yohm0.jpg",
     petName: "孟加拉猫",
     miniDes: "“拥有玫瑰花结的家猫”",
     details: {

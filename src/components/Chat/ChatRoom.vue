@@ -171,6 +171,8 @@ const handleImageUpload = async (event) => {
 // 下载文件
 const downloadFile = (url) => {
   // 实现文件下载逻辑
+  console.log(url);
+  
   window.open(url);
 };
 
@@ -1387,6 +1389,7 @@ const handleClickOutside = (event) => {
 // 生命周期钩子
 onMounted(() => {
   document.addEventListener("click", handleClickOutside);
+  scrollToBottom();
 });
 
 onUnmounted(() => {

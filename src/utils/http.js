@@ -3,7 +3,7 @@ import axios from "axios";
 // 创建axios实例
 const http = axios.create({
   // 设置根地址
-  baseURL: "http://localhost:3000",
+  baseURL: "https://api.kirii.site",
   // 设置响应时间
   timeout: 5000000,
   headers: {

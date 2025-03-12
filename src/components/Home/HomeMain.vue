@@ -133,17 +133,20 @@ const goToStory = (index) => {
   <div class="floating-shapes">
     <div class="shape circle"></div>
     <div class="shape square"></div>
-    <div class="shape circle"></div>
+    <div class="shape square"></div>
     <div class="shape circle"></div>
   </div>
 
   <!-- 添加光效 -->
   <div class="light-effect"></div>
+
   <div class="home-main">
     <div class="home-main-left">
       <div class="mian-box" ref="main"></div>
       <div class="main-box-text">
-        <span style="color: var(--deongaree)">KiriPet</span>提供优质的宠物知识
+        <span style="color: var(--deongaree); font-family: var(--ff-hymhtw)"
+          >KiriPet</span
+        >提供优质的宠物知识
       </div>
       <div class="main-box-text">宠物改变了我们的生活 让我们 离“他”更近</div>
       <div class="main-box-subText">
@@ -351,98 +354,8 @@ const goToStory = (index) => {
     </div>
   </div>
 
-  <!-- Brands Start -->
-  <div class="brands">
-    <div class="container">
-      <h2>全球顶尖企业的选择</h2>
-    </div>
-    <div class="brands-container">
-      <div class="brands-grid">
-        <div class="brand-group">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
-            alt="Netflix"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Atlassian-logo.svg"
-            alt="Atlassian"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-            alt="Spotify"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
-            alt="IBM"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
-            alt="Amazon"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
-            alt="Google"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/3/32/Microsoft_365_logo.svg"
-            alt="Microsoft"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/07/ByteDance_logo_English.svg"
-            alt="ByteDance"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/4/41/Alibaba_en_logo.svg"
-            alt="Alibaba"
-          />
-        </div>
-        <!-- 复制一组用于无滚动 -->
-        <div class="brand-group">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
-            alt="Netflix"
-          />
-
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Atlassian-logo.svg"
-            alt="Atlassian"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-            alt="Spotify"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
-            alt="IBM"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
-            alt="Amazon"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
-            alt="Google"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/3/32/Microsoft_365_logo.svg"
-            alt="Microsoft"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/07/ByteDance_logo_English.svg"
-            alt="ByteDance"
-          />
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/4/41/Alibaba_en_logo.svg"
-            alt="Alibaba"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Brands End -->
-
   <!-- Customer Stories Start-->
-  <div class="customer-stories">
+  <!-- <div class="customer-stories">
     <div class="container">
       <div class="stories-header">
         <h2>客户故事</h2>
@@ -492,63 +405,59 @@ const goToStory = (index) => {
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- Customer Stories End-->
 
   <!-- Use Cases Start -->
   <div class="use-cases">
     <div class="container">
       <div class="section-header">
-        <h2>适用于各种场景</h2>
-        <p>无论是远程工还是异步协作，Loom 都能满足您的需求</p>
+        <h2>关于宠物，我们是专业的</h2>
+        <p>无论是宠物知识还是宠物服务，我们都能满足您的需求</p>
       </div>
       <div class="cases-grid">
         <div class="case-card">
           <img
             src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0"
-            alt="销售演示"
           />
           <h3>销售演示</h3>
           <p>通过个性化视频展示产品价值</p>
-          <a href="#" class="learn-more"
+          <span class="learn-more"
             >了解更多 <i class="fas fa-arrow-right"></i
-          ></a>
+          ></span>
         </div>
         <div class="case-card">
           <img
             src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf"
-            alt="团队���训"
           />
           <h3>团队培训</h3>
-          <p>创建可重复使用的培训内容</p>
-          <a href="#" class="learn-more"
+          <p>提供有保障的专业服务</p>
+          <span class="learn-more"
             >了解更多 <i class="fas fa-arrow-right"></i
-          ></a>
+          ></span>
         </div>
         <div class="case-card">
           <img
             src="https://images.unsplash.com/photo-1553877522-43269d4ea984"
-            alt="客户支持"
           />
           <h3>客户支持</h3>
           <p>提供清晰直观的问题解答</p>
-          <a href="#" class="learn-more"
+          <span class="learn-more"
             >了解更多 <i class="fas fa-arrow-right"></i
-          ></a>
+          ></span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Testimonials Section -->
-  <div class="testimonials">
+  <!-- Testimonials Start -->
+  <!-- <div class="testimonials">
     <div class="container">
       <div class="section-header">
         <h2>用户反馈</h2>
         <p>来自全球用户的真实评价</p>
       </div>
       <div class="testimonials-grid">
-        <!-- 第一列 -->
         <div class="testimonial-column">
           <div class="testimonial-card">
             <div class="testimonial-content">
@@ -599,7 +508,6 @@ const goToStory = (index) => {
           </div>
         </div>
 
-        <!-- 第二列 -->
         <div class="testimonial-column">
           <div class="testimonial-card">
             <div class="testimonial-content">
@@ -650,7 +558,6 @@ const goToStory = (index) => {
           </div>
         </div>
 
-        <!-- 第三列 -->
         <div class="testimonial-column">
           <div class="testimonial-card">
             <div class="testimonial-content">
@@ -702,7 +609,8 @@ const goToStory = (index) => {
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
+  <!-- Testimonials End -->
 
   <!-- 宠物百科 Start -->
   <div class="home-petInfo">
@@ -1418,7 +1326,7 @@ const goToStory = (index) => {
       height: 200px;
       top: 60%;
       right: -100px;
-      animation: spin 15s ease-in-out infinite reverse;
+      animation: float 15s ease-in-out infinite reverse;
     }
 
     &:nth-child(3) {
@@ -1426,7 +1334,7 @@ const goToStory = (index) => {
       height: 150px;
       bottom: 10%;
       left: 20%;
-      background: #ff5c5c;
+      background: var(--deongaree);
       animation: float 18s ease-in-out infinite;
     }
 
@@ -1486,6 +1394,7 @@ const goToStory = (index) => {
   margin-top: 5px;
   font-family: var(--ff-llt);
 }
+
 .home-main-left .main-box-subText {
   color: var(--info-dark);
   font-size: var(--fs-20);
@@ -1624,7 +1533,7 @@ const goToStory = (index) => {
         box-shadow: 0 24px 48px rgba(0, 0, 0, 0.1);
 
         .all-services-icon {
-          background: #565bef;
+          background: var(--deongaree);
           transform: scale(1.1);
 
           i {
@@ -1646,7 +1555,7 @@ const goToStory = (index) => {
 
         i {
           font-size: 24px;
-          color: #565bef;
+          color: var(--deongaree);
         }
       }
 
@@ -1875,115 +1784,12 @@ const goToStory = (index) => {
   }
 }
 
-// Brands Styles
-.brands {
-  padding: 80px 0;
-  background: #f9fafb;
-  overflow: hidden;
-  margin-top: 100px;
-
-  h2 {
-    text-align: center;
-    font-size: var(--fs-36);
-    font-weight: var(--fw-600);
-    letter-spacing: 15px;
-    font-family: var(--ff-llt);
-    margin-bottom: 28px;
-  }
-
-  .brands-container {
-    position: relative;
-    overflow: hidden;
-
-    &::before,
-    &::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      width: 200px;
-      height: 100%;
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    &::before {
-      left: 0;
-      background: linear-gradient(to right, #f9fafb 0%, transparent 100%);
-    }
-
-    &::after {
-      right: 0;
-      background: linear-gradient(to left, #f9fafb 0%, transparent 100%);
-    }
-
-    .brands-grid {
-      display: flex;
-      gap: 48px;
-      padding: 20px 0;
-      animation: scrollBrands 30s linear infinite;
-      width: max-content;
-
-      .brand-group {
-        display: flex;
-        gap: 48px;
-        padding: 0 24px;
-
-        img {
-          height: 32px;
-          opacity: 0.6;
-          transition: all 0.3s ease;
-          filter: grayscale(100%);
-          object-fit: contain;
-
-          &:hover {
-            opacity: 1;
-            filter: grayscale(0%);
-            transform: translateY(-2px);
-          }
-        }
-      }
-
-      &:hover {
-        animation-play-state: paused;
-      }
-    }
-  }
-}
-
-@keyframes scrollBrands {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(calc(-50% - 24px));
-  }
-}
-
-// 响应式调整
-@media (max-width: 768px) {
-  .brands {
-    .brands-container {
-      .brands-grid {
-        gap: 32px;
-
-        .brand-group {
-          gap: 32px;
-          padding: 0 16px;
-
-          img {
-            height: 24px;
-          }
-        }
-      }
-    }
-  }
-}
-
 // Use Cases Styles
 .use-cases {
   width: 76%;
   margin: 0 auto;
   position: relative;
+  margin-top: 50px;
 
   &::before {
     content: "";
@@ -1992,7 +1798,6 @@ const goToStory = (index) => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%235661ef' fill-opacity='0.03'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'/%3E%3C/g%3E%3C/svg%3E");
   }
 
   .section-header {
@@ -2028,6 +1833,7 @@ const goToStory = (index) => {
       overflow: hidden;
       transition: all 0.3s ease;
       position: relative;
+      box-shadow: var(--shadow-1);
 
       &:first-child {
         grid-row: span 2;

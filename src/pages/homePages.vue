@@ -7,7 +7,7 @@ import HomeFooter from "../components/Home/HomeFooter.vue";
 <template>
   <div class="container">
     <HomeHeader></HomeHeader>
-    <HomeMain></HomeMain>
+    <HomeMain></HomeMain> 
     <HomeFooter></HomeFooter>
   </div>
 </template>

@@ -25,8 +25,8 @@ const menuList = [
   { id: 0, name: "首页", path: "/home" },
   { id: 1, name: "宠物百科", path: "/wiki" },
   { id: 2, name: "宠物商店", path: "/goods" },
-  { id: 3, name: "宠物服务", path: "/severe" },
-  { id: 4, name: "宠物乐园", path: "/chatpage" },
+  { id: 3, name: "宠物服务", path: "/serve" },
+  { id: 4, name: "宠物乐园", path: "/social" },
 ];
 const menu = ref(null);
 var currentId = 0;
@@ -60,81 +60,92 @@ onMounted(getCurrentMenuId);
 
 <template>
   <div class="home-header">
-    <div class="home-header-left">
-      <div class="logo" @click="router.push('/home')">
-        <img src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png" />
-        <h2>KiriPet</h2>
+    <div class="header-container">
+      <div class="home-header-left">
+        <div class="logo" @click="router.push('/home')">
+          <img src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png" />
+          <h2>KiriPet</h2>
+        </div>
       </div>
-    </div>
-    <div class="home-header-right">
-      <!-- 搜索框 Start -->
-      <!-- <div class="input-container">
-        <button class="input-button">
-          <svg
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            height="20px"
-            width="20px"
-          >
-            <path
-              d="M4 9a5 5 0 1110 0A5 5 0 014 9zm5-7a7 7 0 104.2 12.6.999.999 0 00.093.107l3 3a1 1 0 001.414-1.414l-3-3a.999.999 0 00-.107-.093A7 7 0 009 2z"
-              fill-rule="evenodd"
-              fill="#17202A"
-            ></path>
-          </svg>
-        </button>
-        <input
-          type="text"
-          name="text"
-          class="input-search"
-          v-model="search"
-          placeholder="搜些什么吧 ε٩(๑> ₃ <)۶з"
-        />
-      </div> -->
-      <!-- 搜索框 End -->
+      <div class="home-header-right">
+        <!-- 搜索框 Start -->
+        <div class="input-container">
+          <button class="input-button">
+            <svg
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              height="20px"
+              width="20px"
+            >
+              <path
+                d="M4 9a5 5 0 1110 0A5 5 0 014 9zm5-7a7 7 0 104.2 12.6.999.999 0 00.093.107l3 3a1 1 0 001.414-1.414l-3-3a.999.999 0 00-.107-.093A7 7 0 009 2z"
+                fill-rule="evenodd"
+                fill="#17202A"
+              ></path>
+            </svg>
+          </button>
+          <input
+            type="text"
+            name="text"
+            class="input-search"
+            v-model="search"
+            placeholder="搜些什么吧 ε٩(๑> ₃ <)۶з"
+          />
+        </div>
+        <!-- 搜索框 End -->
 
-      <!-- 导航列表 Start -->
-      <div class="header-nav">
-        <ul>
-          <li v-for="(item, index) in menuList" :key="index" ref="menu">
-            <span @click="changeMenuCurrent(item.path, item.id)">{{
-              item.name
-            }}</span>
-          </li>
-          <!-- 多模板渲染 用于区分登录状态和未登录状态 -->
-          <!--! 记得改成userStore.userInfo.token -->
-          <!-- v-if="userStore.userInfo.token" -->
-          <template v-if="show">
-            <li>
-              <span @click="router.push('/user')"
-                ><img
-                  src="https://kiripet.tos-cn-beijing.volces.com/image/a1.png"
-              /></span>
+        <!-- 导航列表 Start -->
+        <div class="header-nav">
+          <ul>
+            <li v-for="(item, index) in menuList" :key="index" ref="menu">
+              <span @click="changeMenuCurrent(item.path, item.id)">{{
+                item.name
+              }}</span>
             </li>
-            <button class="exitLoginBtn" @click="confirm">退出登录</button>
-          </template>
-          <template v-else>
-            <button @click="router.push('/login')" class="loginBtn">
-              登录
-            </button>
-          </template>
-        </ul>
+            <!-- 多模板渲染 用于区分登录状态和未登录状态 -->
+            <!--! 记得改成userStore.userInfo.token -->
+            <!-- v-if="userStore.userInfo.token" -->
+            <template v-if="show">
+              <li>
+                <span @click="router.push('/user')"
+                  ><img
+                    src="https://kiripet.tos-cn-beijing.volces.com/image/a1.png"
+                /></span>
+              </li>
+              <button class="exitLoginBtn" @click="confirm">退出登录</button>
+            </template>
+            <template v-else>
+              <button @click="router.push('/login')" class="loginBtn">
+                登录
+              </button>
+            </template>
+          </ul>
+        </div>
+        <!-- 导航列表 End -->
       </div>
-      <!-- 导航列表 End -->
     </div>
   </div>
 </template>
 
 <style scoped>
 .home-header {
-  height: 100px;
+  width: 100%;
+  padding: 10px 0;
+  border-bottom: 1px solid #ede7f3;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #fff;
+}
+
+.header-container {
+  width: 76%;
   display: flex;
   margin: 0 auto;
-  padding: 0 15rem;
+  padding: 0.75rem 2.5rem;
   justify-content: space-between;
   align-items: center;
-  background-color: #f8f9fad3;
 }
 
 .home-header-left .logo {
@@ -162,7 +173,7 @@ onMounted(getCurrentMenuId);
 .home-header-right .input-container {
   position: relative;
   /* background: var(--youth-blue-2); */
-  padding: 5px 10px;
+  padding: 2px 7px;
   display: flex;
   justify-content: center;
   align-items: center;

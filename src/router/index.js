@@ -1,4 +1,4 @@
-import { createWebHashHistory, createRouter } from "vue-router";
+import { createWebHistory, createRouter } from "vue-router";
 
 // 创建路由规则
 const routes = [
@@ -69,8 +69,8 @@ const routes = [
     component: () => import("../pages/shopPages.vue"),
   },
   {
-    path: "/severe",
-    component: () => import("../pages/severePages.vue"),
+    path: "/serve",
+    component: () => import("../pages/servePages.vue"),
   },
   {
     path: "/userinfo",
@@ -83,6 +83,26 @@ const routes = [
   {
     path: "/user",
     component: () => import("../pages/userPages.vue"),
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component: () => import("../pages/cartPages.vue"),
+  },
+  {
+    path: "/checkout",
+    name: "checkout",
+    component: () => import("../pages/checkoutPage.vue"),
+  },
+  {
+    path: "/social",
+    name: "social",
+    component: () => import("../pages/socialPages.vue"),
+  },
+  {
+    path: "/upload",
+    name: "upload",
+    component: () => import("../pages/uploadPages.vue"),
   },
   {
     path: "/vip",
@@ -107,7 +127,7 @@ const routes = [
 // 创建路由对象
 const router = createRouter({
   routes,
-  history: createWebHashHistory(),
+  history: createWebHistory(import.meta.env.VITE_BASE_URL),
 });
 
 // 导出路由对象

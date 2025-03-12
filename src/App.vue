@@ -5,7 +5,6 @@
 </template>
 
 <style lang="scss">
-
 * {
   margin: 0;
   padding: 0;
@@ -76,6 +75,7 @@ body {
   --ff-hymhtw: "hymhtw", hymhtw;
   --ff-albb-light: "albb-light", albb-light;
   --ff-llt: "llt", llt;
+  --ff-kai: "kai", kai;
 
   /*spacing*/
   --section-padding: 90px;
@@ -198,6 +198,13 @@ body {
 @font-face {
   font-family: "llt";
   src: url("./assets/fonts/萝莉体 第二版.ttc");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "kai";
+  src: url("./assets/fonts/gkai00mp.ttf");
   font-weight: normal;
   font-style: normal;
 }

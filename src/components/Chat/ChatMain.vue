@@ -8,8 +8,8 @@ const router = useRouter();
     <div class="welcome-message">
       <h2></h2>
       <p>请从左侧选择一个联系人开始聊天</p>
-      <div class="back" @click="router.push('/home')">
-        返回首页<i class="fa-solid fa-chevron-right"></i>
+      <div class="back" @click="router.push('/social')">
+        返回乐园<i class="fa-solid fa-chevron-right"></i>
       </div>
     </div>
   </div>

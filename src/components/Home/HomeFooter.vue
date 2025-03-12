@@ -31,7 +31,7 @@
       </div>
 
       <div class="footer-section">
-        <h4>公司</h4>
+        <h4>关于</h4>
         <ul>
           <li>关于我们</li>
           <li>工作机会</li>
@@ -49,7 +49,10 @@
       </div>
       <div class="legal-links"><span>隐私政策</span> <span>服务条款</span></div>
       <p class="copyright">
-        © 2024 &nbsp; KiriPet &nbsp; <span>赣ICP备2024047770号-1</span>
+        © 2024 &nbsp; KiriPet. All rights reserved. Made By Kiri&nbsp;
+        <a href="https://beian.miit.gov.cn" target="_blank"
+          >赣ICP备2024047770号-1</a
+        >
       </p>
     </div>
   </footer>
@@ -81,6 +84,7 @@
       list-style: none;
 
       li {
+        width: fit-content;
         margin-bottom: 0.8rem;
         color: #666;
         text-decoration: none;
@@ -108,7 +112,6 @@
         color: #666;
         font-size: 1.5rem;
         margin: 0 1rem;
-        transition: color 0.3s;
 
         &:hover {
           color: #565bef;
@@ -134,6 +137,15 @@
     .copyright {
       color: #999;
       font-size: 0.9rem;
+
+      a {
+        color: #999;
+        font-size: 0.9rem;
+
+        &:hover {
+          color: #565bef;
+        }
+      }
     }
   }
 }
