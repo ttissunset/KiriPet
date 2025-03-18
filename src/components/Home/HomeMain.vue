@@ -1,7 +1,8 @@
 <script setup>
 import ScrollReveal from "scrollreveal";
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
+// 改回直接导入，避免异步问题
 import vips from "../../mock/vips";
 import infos from "../../mock/infos";
 import shops from "../../mock/shops";
@@ -13,74 +14,120 @@ const router = useRouter();
 let isOpen = ref(0);
 // 在reactive()中声明scrollReveal组件
 const data = reactive({
-  scrollReveal: ScrollReveal(),
+  scrollReveal: null,
 });
+
+// 性能优化：延迟初始化ScrollReveal
+const initScrollReveal = () => {
+  if (!data.scrollReveal) {
+    data.scrollReveal = ScrollReveal({
+      distance: "60px",
+      duration: 1000,
+      delay: 100,
+      easing: "cubic-bezier(0.5, 0, 0, 1)",
+      reset: false,
+      useDelay: 'onload',
+      viewFactor: 0.1, // 元素需要在视口中可见10%才会触发动画
+      viewOffset: { top: 25, right: 0, bottom: 0, left: 0 }
+    });
+  }
+};
+
 // 设置scrollReveal的方法
 const retScroll = () => {
-  // reveal()的类名可以为id (#reveal-top) 也可以为class(.reveal-top) 名称随意 并且也支持并集class写法 注意必须设置类否则无法使用
-  data.scrollReveal.reveal(".main-box-text", {
-    // 动画的时长
-    duration: 1000,
-    // 延迟时间
-    delay: 200,
-    // 动画开始的位置，'bottom', 'left', 'top', 'right'
+  // 初始化ScrollReveal
+  initScrollReveal();
+  
+  // 使用批量配置来减少重复代码
+  const commonConfig = {
     origin: "top",
-    // 回滚的时候是否再次触发动画
     reset: false,
-    // 延时执行方式（always（一直延时执行），once（只延时执行一次），onload（只在加载时延时执行））
-    // 滚动的距离，单位可以用%，rem等
     distance: "100px",
-    // 执行速度 线性函数啥的
     easing: "cubic-bezier(0.5, 0, 0, 1)",
-  });
-  data.scrollReveal.reveal(".main-box-subText", {
-    // 动画的时长
+  };
+  
+  // 使用序列化动画来优化性能
+  data.scrollReveal.reveal(".main-box-text", {
+    ...commonConfig,
     duration: 1000,
-    // 延迟时间
-    delay: 150,
-    // 动画开始的位置，'bottom', 'left', 'top', 'right'
-    origin: "top",
-    // 回滚的时候是否再次触发动画
-    reset: false,
-    // 延时执行方式（always（一直延时执行），once（只延时执行一次），onload（只在加载时延时执行））
-    // 滚动的距离，单位可以用%，rem等
-    distance: "110px",
-    // 执行速度 线性函数啥的
-    easing: "cubic-bezier(0.5, 0, 0, 1)",
+    delay: 200,
   });
+  
+  data.scrollReveal.reveal(".main-box-subText", {
+    ...commonConfig,
+    duration: 1000,
+    delay: 300,
+  });
+  
   data.scrollReveal.reveal(".main-box-startBtn", {
-    // 动画的时长
+    ...commonConfig,
     duration: 800,
-    // 延迟时间
-    delay: 100,
-    // 动画开始的位置，'bottom', 'left', 'top', 'right'
-    origin: "top",
-    // 回滚的时候是否再次触发动画
-    reset: false,
-    // 延时执行方式（always（一直延时执行），once（只延时执行一次），onload（只在加载时延时执行））
-    // 滚动的距离，单位可以用%，rem等
-    distance: "110px",
-    // 执行速度 线性函数啥的
-    easing: "cubic-bezier(0.5, 0, 0, 1)",
+    delay: 400,
   });
+  
+
   data.scrollReveal.reveal(".img", {
-    // 动画的时长
-    duration: 800,
-    // 延迟时间
-    delay: 100,
-    // 动画开始的位置，'bottom', 'left', 'top', 'right'
+    ...commonConfig,
     origin: "right",
-    // 回滚的时候是否再次触发动画
-    reset: false,
-    // 延时执行方式（always（一直延时执行），once（只延时执行一次），onload（只在加载时延时执行））
-    // 滚动的距离，单位可以用%，rem等
-    distance: "110px",
-    // 执行速度 线性函数啥的
-    easing: "cubic-bezier(0.5, 0, 0, 1)",
+    duration: 800,
+    delay: 500,
+  });
+
+  // 其他元素的动画在用户滚动时触发
+  data.scrollReveal.reveal(".home-serve-right-list-item", {
+    ...commonConfig,
+    interval: 150, // 序列化显示时间间隔
+    origin: "bottom",
+  });
+
+  data.scrollReveal.reveal(".all-services-item", {
+    ...commonConfig,
+    interval: 100,
+    origin: "bottom",
   });
 };
 
-onMounted(retScroll);
+// 懒加载图片处理函数
+const lazyLoadImage = (entries, observer) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const img = entry.target;
+      const src = img.getAttribute("data-src");
+      if (src) {
+        img.setAttribute("src", src);
+        img.removeAttribute("data-src");
+        observer.unobserve(img);
+      }
+    }
+  });
+};
+
+onMounted(() => {
+  // 延迟非关键资源的加载
+  nextTick(() => {
+    // 初始化懒加载
+    if ("IntersectionObserver" in window) {
+      const imageObserver = new IntersectionObserver(lazyLoadImage, {
+        rootMargin: "50px 0px",
+        threshold: 0.01,
+      });
+
+      // 对所有带有data-src属性的图片应用懒加载
+      document.querySelectorAll("img[data-src]").forEach((img) => {
+        imageObserver.observe(img);
+      });
+    } else {
+      // 对不支持IntersectionObserver的浏览器使用兼容方案
+      document.querySelectorAll("img[data-src]").forEach((img) => {
+        img.setAttribute("src", img.getAttribute("data-src"));
+        img.removeAttribute("data-src");
+      });
+    }
+
+    // 延迟初始化动画
+    setTimeout(retScroll, 100);
+  });
+});
 
 const currentStory = ref(0);
 const stories = ref([
@@ -126,6 +173,14 @@ const prevStory = () => {
 const goToStory = (index) => {
   currentStory.value = index;
 };
+
+// 在script setup部分，添加处理动态图片懒加载的方法
+const getImageSrc = (url) => {
+  return {
+    src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23f0f0f0'/%3E%3C/svg%3E",
+    "data-src": url,
+  };
+};
 </script>
 
 <template>
@@ -148,7 +203,7 @@ const goToStory = (index) => {
           >KiriPet</span
         >提供优质的宠物知识
       </div>
-      <div class="main-box-text">宠物改变了我们的生活 让我们 离“他”更近</div>
+      <div class="main-box-text">宠物改变了我们的生活 让我们 离"他"更近</div>
       <div class="main-box-subText">
         探索毛茸茸朋友的奇妙世界 了解更多您所未知探索毛茸茸朋友的奇妙世界
         我们一起找到一种方法来利用爱的力量，使社区和宠物家庭更亲密、更强大。
@@ -162,6 +217,8 @@ const goToStory = (index) => {
       <img
         class="img"
         src="https://kiripet.tos-cn-beijing.volces.com/image/undraw_passing_by_0un9.svg"
+        loading="lazy"
+        alt="宠物主题图片"
       />
     </div>
   </div>
@@ -171,7 +228,8 @@ const goToStory = (index) => {
     <div class="home-serve-left">
       <img
         src="https://kiripet.tos-cn-beijing.volces.com/image/0111.jpg"
-        alt=""
+        loading="lazy"
+        alt="服务内容图片"
       />
     </div>
     <div class="home-serve-right">
@@ -292,123 +350,67 @@ const goToStory = (index) => {
         </div>
       </div>
       <div class="home-serve-right-btn">
-        <button @click="router.push('/fun')">前往乐园</button>
+        <button @click="router.push('/social')">前往乐园</button>
       </div>
     </div>
   </div>
   <!-- 服务内容 End -->
 
-  <!-- 全部服务 -->
+  <!-- 全部服务 Start-->
   <div class="all-services">
-    <div class="container">
-      <div class="all-services-grid">
-        <div class="all-services-item">
-          <div class="all-services-icon">
-            <i class="fas fa-laptop-code"></i>
-          </div>
-          <h3>宠物百科</h3>
-          <p>专业的宠物知识库，解答您的所有疑惑</p>
-          <ul>
-            <li>宠物信息</li>
-            <li>宠物特征</li>
-            <li>.....</li>
-          </ul>
+    <div class="all-services-grid">
+      <div class="all-services-item">
+        <div class="all-services-icon">
+          <i class="fas fa-laptop-code"></i>
         </div>
-        <div class="all-services-item">
-          <div class="all-services-icon">
-            <i class="fa-solid fa-store"></i>
-          </div>
-          <h3>宠物商城</h3>
-          <p>严选优质商品，为爱宠提供更好的生活</p>
-          <ul>
-            <li>宠物食品</li>
-            <li>宠物玩具</li>
-            <li>.....</li>
-          </ul>
+        <h3>宠物百科</h3>
+        <p>专业的宠物知识库，解答您的所有疑惑</p>
+        <ul>
+          <li>宠物信息</li>
+          <li>宠物特征</li>
+          <li>.....</li>
+        </ul>
+      </div>
+      <div class="all-services-item">
+        <div class="all-services-icon">
+          <i class="fa-solid fa-store"></i>
         </div>
-        <div class="all-services-item">
-          <div class="all-services-icon">
-            <i class="fas fa-users"></i>
-          </div>
-          <h3>宠物服务</h3>
-          <p>专业的服务，值得您的信赖</p>
-          <ul>
-            <li>宠物医疗</li>
-            <li>宠物寄养</li>
-            <li>.....</li>
-          </ul>
+        <h3>宠物商城</h3>
+        <p>严选优质商品，为爱宠提供更好的生活</p>
+        <ul>
+          <li>宠物食品</li>
+          <li>宠物玩具</li>
+          <li>.....</li>
+        </ul>
+      </div>
+      <div class="all-services-item">
+        <div class="all-services-icon">
+          <i class="fas fa-users"></i>
         </div>
-        <div class="all-services-item">
-          <div class="all-services-icon">
-            <i class="fas fa-users"></i>
-          </div>
-          <h3>宠物乐园</h3>
-          <p>与志同道合的人一起</p>
-          <ul>
-            <li>分享生活</li>
-            <li>答疑解惑</li>
-            <li>.....</li>
-          </ul>
+        <h3>宠物服务</h3>
+        <p>专业的服务，值得您的信赖</p>
+        <ul>
+          <li>宠物医疗</li>
+          <li>宠物寄养</li>
+          <li>.....</li>
+        </ul>
+      </div>
+      <div class="all-services-item">
+        <div class="all-services-icon">
+          <i class="fas fa-users"></i>
         </div>
+        <h3>宠物乐园</h3>
+        <p>与志同道合的人一起</p>
+        <ul>
+          <li>分享生活</li>
+          <li>答疑解惑</li>
+          <li>.....</li>
+        </ul>
       </div>
     </div>
   </div>
 
-  <!-- Customer Stories Start-->
-  <!-- <div class="customer-stories">
-    <div class="container">
-      <div class="stories-header">
-        <h2>客户故事</h2>
-        <div class="story-nav">
-          <button class="prev" @click="prevStory">
-            <i class="fas fa-arrow-left"></i>
-          </button>
-          <button class="next" @click="nextStory">
-            <i class="fas fa-arrow-right"></i>
-          </button>
-        </div>
-      </div>
-      <div class="stories-slider">
-        <div
-          class="story-card"
-          v-for="(story, index) in stories"
-          :key="story.id"
-          v-show="currentStory === index"
-        >
-          <div class="story-video">
-            <img :src="story.image" :alt="story.title" />
-            <button class="play-button">
-              <i class="fas fa-play"></i>
-            </button>
-          </div>
-          <div class="story-content">
-            <div class="customer-logo">
-              <img :src="story.logo" :alt="story.company" />
-            </div>
-            <p class="quote">{{ story.quote }}</p>
-            <div class="author">
-              <img :src="story.authorImage" :alt="story.authorName" />
-              <div>
-                <h4>{{ story.authorName }}</h4>
-                <p>{{ story.authorTitle }} @ {{ story.company }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="story-indicators">
-          <span
-            v-for="(_, index) in stories"
-            :key="index"
-            :class="{ active: currentStory === index }"
-            @click="goToStory(index)"
-          ></span>
-        </div>
-      </div>
-    </div>
-  </div> -->
-  <!-- Customer Stories End-->
-
-  <!-- Use Cases Start -->
+  <!-- 用户案例 Start -->
   <div class="use-cases">
     <div class="container">
       <div class="section-header">
@@ -450,168 +452,6 @@ const goToStory = (index) => {
     </div>
   </div>
 
-  <!-- Testimonials Start -->
-  <!-- <div class="testimonials">
-    <div class="container">
-      <div class="section-header">
-        <h2>用户反馈</h2>
-        <p>来自全球用户的真实评价</p>
-      </div>
-      <div class="testimonials-grid">
-        <div class="testimonial-column">
-          <div class="testimonial-card">
-            <div class="testimonial-content">
-              <div class="customer-logo">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
-                  alt="Netflix"
-                />
-              </div>
-              <p class="quote">
-                "Loom
-                帮助我们的团队提高了50%的沟通效率，大大减少了不必要的会议。"
-              </p>
-              <div class="testimonial-author">
-                <img
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
-                  alt="用户头像"
-                />
-                <div>
-                  <h4>David Chen</h4>
-                  <p>产品经理 @ Netflix</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="testimonial-card">
-            <div class="testimonial-content">
-              <div class="customer-logo">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
-                  alt="Google"
-                />
-              </div>
-              <p class="quote">
-                "视频消息让我们的远程团队协作变得更加顺畅，沟通更加清晰。"
-              </p>
-              <div class="testimonial-author">
-                <img
-                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80"
-                  alt="用户头像"
-                />
-                <div>
-                  <h4>Sarah Johnson</h4>
-                  <p>工程经理 @ Google</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-column">
-          <div class="testimonial-card">
-            <div class="testimonial-content">
-              <div class="customer-logo">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Atlassian-logo.svg"
-                  alt="Atlassian"
-                />
-              </div>
-              <p class="quote">
-                "使用 Loom 后，我们的产品文档制作效率提升了
-                200%，团队反馈非常积极。"
-              </p>
-              <div class="testimonial-author">
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d"
-                  alt="用户头像"
-                />
-                <div>
-                  <h4>Michael Zhang</h4>
-                  <p>技术主管 @ Atlassian</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="testimonial-card highlight">
-            <div class="testimonial-content">
-              <div class="customer-logo">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-                  alt="Spotify"
-                />
-              </div>
-              <p class="quote">
-                "Loom 彻底改变了我们的工作方式，异步沟通让团队协作更加高效。"
-              </p>
-              <div class="testimonial-author">
-                <img
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330"
-                  alt="用户头像"
-                />
-                <div>
-                  <h4>Emily Wilson</h4>
-                  <p>设计总监 @ Spotify</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-column">
-          <div class="testimonial-card">
-            <div class="testimonial-content">
-              <div class="customer-logo">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
-                  alt="IBM"
-                />
-              </div>
-              <p class="quote">
-                "客户支持团队使用 Loom 后，问题解决速度提升了
-                80%，客户满意度显著提高。"
-              </p>
-              <div class="testimonial-author">
-                <img
-                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e"
-                  alt="用户头像"
-                />
-                <div>
-                  <h4>Alex Thompson</h4>
-                  <p>客户成功主管 @ IBM</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="testimonial-card">
-            <div class="testimonial-content">
-              <div class="customer-logo">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
-                  alt="Amazon"
-                />
-              </div>
-              <p class="quote">
-                "Loom 让我们的全球团队沟通变得更加便捷，大大提高了工作效率。"
-              </p>
-              <div class="testimonial-author">
-                <img
-                  src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e"
-                  alt="用户头像"
-                />
-                <div>
-                  <h4>Linda Martinez</h4>
-                  <p>项目经理 @ Amazon</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-  <!-- Testimonials End -->
-
   <!-- 宠物百科 Start -->
   <div class="home-petInfo">
     <section class="info-section">
@@ -633,7 +473,7 @@ const goToStory = (index) => {
           class="info-section-card-item"
         >
           <div class="info-section-img-wrapper">
-            <img :src="info.imageUrl" />
+            <img :src="info.imageUrl" loading="lazy" />
           </div>
           <h3 class="info-section-item-petName">{{ info.petName }}</h3>
           <p class="info-section-item-description">{{ info.miniDes }}</p>
@@ -660,7 +500,7 @@ const goToStory = (index) => {
       <div class="shop-section-content-wrapper">
         <div class="shop-section-heading">宠物商店</div>
         <div class="shop-section-subHeading">
-          “人与宠物相互依偎陪伴” 精选的宠物用品 让宠物的陪伴更美好
+          "人与宠物相互依偎陪伴" 精选的宠物用品 让宠物的陪伴更美好
         </div>
       </div>
       <div class="shop-section-main">
@@ -674,7 +514,7 @@ const goToStory = (index) => {
             >
               <div class="gird-main">
                 <div class="gird-img">
-                  <img :src="item.imageUrl" />
+                  <img :src="item.imageUrl" loading="lazy" />
                 </div>
                 <div class="gird-title">{{ item.name }}</div>
               </div>
@@ -690,7 +530,7 @@ const goToStory = (index) => {
                 :key="index"
               >
                 <div class="main-item-img">
-                  <img :src="item.imageUrl" />
+                  <img :src="item.imageUrl" loading="lazy" />
                 </div>
                 <div class="main-item-info">
                   <div class="main-item-name">{{ item.name }}</div>
@@ -703,7 +543,7 @@ const goToStory = (index) => {
             </div>
             <div class="right-box-footer">
               <div class="right-box-footer-text">
-                <div>严格筛选 质量保障 只为给“他/她”最好的</div>
+                <div>严格筛选 质量保障 只为给"他/她"最好的</div>
               </div>
               <div class="right-box-footer-btn">
                 <button @click="router.push('/shop')">立即选购</button>
@@ -1254,7 +1094,8 @@ const goToStory = (index) => {
         <template v-for="vip in vips" :key="vip.id">
           <div v-show="isOpen === vip.id" class="vip-section-tab-content">
             <div class="vip-section-image-wrapper">
-              <img class="vip-section-image" :src="vip.details.imageUrl" />
+              <!-- 修改图片绑定方式，确保数据加载完成 -->
+              <img class="vip-section-image" :src="vip.details.imageUrl" loading="lazy" />
               <div class="vip-section-background-shape"></div>
             </div>
             <div class="vip-section-text-wrapper">
@@ -1289,232 +1130,446 @@ const goToStory = (index) => {
 </template>
 
 <style scoped lang="scss">
-// 添加浮动装饰元素
+// 添加content-visibility属性，优化渲染性能
+.home-serve,
+.all-services,
+.shop-section,
+.testimonials-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 1000px; // 预估尺寸，防止布局抖动
+}
+
+// 使用will-change优化transform动画
+.floating-shapes .shape,
+.main-box-startBtn:hover,
+.shop-section-card:hover {
+  will-change: transform;
+}
+
+// 使用GPU加速
+.img,
+.main-box-text,
+.main-box-subText,
+.main-box-startBtn {
+  transform: translateZ(0);
+}
+
+/* 浮动形状的样式 */
 .floating-shapes {
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: absolute;
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  // z-index: 999;
+  overflow: hidden;
+  z-index: -1;
+}
 
-  .shape {
-    position: absolute;
-    opacity: 0.06;
+.shape {
+  position: absolute;
+  background-color: rgba(139, 152, 228, 0.1);
+  animation: float 15s infinite ease-in-out;
+}
 
-    &.circle {
-      border-radius: 50%;
-      background: var(--deongaree);
-    }
+.circle {
+  border-radius: 50%;
+}
 
-    &.square {
-      background: #ff5c5c;
-      transform: rotate(45deg);
-    }
+.square {
+  border-radius: 15px;
+}
 
-    &:nth-child(1) {
-      width: 300px;
-      height: 300px;
-      top: 10%;
-      left: -150px;
-      animation: float 20s ease-in-out infinite;
-    }
+.shape:nth-child(1) {
+  width: 100px;
+  height: 100px;
+  top: 15%;
+  left: 10%;
+  animation-delay: 0s;
+}
 
-    &:nth-child(2) {
-      width: 200px;
-      height: 200px;
-      top: 60%;
-      right: -100px;
-      animation: float 15s ease-in-out infinite reverse;
-    }
+.shape:nth-child(2) {
+  width: 150px;
+  height: 150px;
+  top: 60%;
+  left: 20%;
+  animation-delay: 2s;
+}
 
-    &:nth-child(3) {
-      width: 150px;
-      height: 150px;
-      bottom: 10%;
-      left: 20%;
-      background: var(--deongaree);
-      animation: float 18s ease-in-out infinite;
-    }
+.shape:nth-child(3) {
+  width: 120px;
+  height: 120px;
+  top: 20%;
+  right: 15%;
+  animation-delay: 4s;
+}
 
-    &:nth-child(4) {
-      width: 180px;
-      height: 180px;
-      top: 30%;
-      right: 20%;
-      animation: float 18s ease-in-out infinite;
-    }
+.shape:nth-child(4) {
+  width: 80px;
+  height: 80px;
+  top: 70%;
+  right: 10%;
+  animation-delay: 6s;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
   }
 }
 
-// 添加光效
+/* 光效样式 */
 .light-effect {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: -1;
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  top: -350px;
+  left: -350px;
   background: radial-gradient(
-      circle at 20% 20%,
-      rgba(86, 91, 239, 0.05) 0%,
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 80% 80%,
-      rgba(255, 92, 92, 0.05) 0%,
-      transparent 40%
-    );
-  filter: blur(60px);
-  animation: pulse 10s ease-in-out infinite alternate;
+    circle,
+    rgba(139, 152, 228, 0.2) 0%,
+    rgba(139, 152, 228, 0) 70%
+  );
+  z-index: -1;
 }
 
+/* 主体部分 */
 .home-main {
-  width: 76%;
-  height: 80vh;
-  display: flex;
+  width: 85%;
   margin: 0 auto;
+  height: calc(100vh - 100px);
+  display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .home-main-left {
-  width: 45%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  z-index: 5;
+  width: 50%;
 }
 
 .home-main-left .main-box-text {
-  color: var(--dark);
-  font-size: var(--fs-48);
-  font-weight: var(--fw-600);
-  margin-top: 5px;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
   font-family: var(--ff-llt);
 }
 
 .home-main-left .main-box-subText {
-  color: var(--info-dark);
-  font-size: var(--fs-20);
-  font-weight: var(--fw-600);
-  line-height: 1.75rem;
-  margin-top: 30px;
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+  width: 80%;
+  line-height: 1.8;
 }
 
 .home-main-left .main-box-startBtn {
-  width: 150px;
-  height: 60px;
-  font-size: var(--fs-20);
-  white-space: 2px;
-  font-weight: var(--fw-600);
-  background-color: var(--deongaree);
+  background-color: var(--youth-blue);
+  padding: 0.8rem 2rem;
   color: var(--light-white);
-  border: none;
-  border-radius: var(--radius-10);
-  margin-top: 30px;
-  box-shadow: var(--box-shadow);
-  position: relative;
+  font-family: var(--ff-llt);
+  font-weight: 500;
+  font-size: 1rem;
+  border-radius: var(--radius-5);
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 2px solid var(--youth-blue);
 }
 
 .home-main-left .main-box-startBtn:hover {
-  background-color: var(----light-white);
-  border: 2px solid var(--deongaree);
-  color: var(--deongaree);
-  transition: var(--transition-4);
+  background-color: rgba(0, 0, 0, 0);
+  color: var(--youth-blue);
 }
 
-/* HomeServe Start */
-.home-serve {
-  width: 76%;
-  height: 450px;
+.home-mian-right {
+  width: 45%;
+  max-height: 600px;
   display: flex;
-  flex-direction: row;
-  margin: 50px auto;
+  justify-content: flex-end;
+  align-items: center;
 }
 
-.home-serve .home-serve-left {
+.home-mian-right .img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* 服务部分 */
+.home-serve {
+  width: 85%;
+  height: auto;
+  margin: 80px auto;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 60%;
-  height: 100%;
+  justify-content: space-between;
 }
 
-.home-serve .home-serve-left img {
-  width: 90%;
-  height: 100%;
-  border-radius: var(--radius-20);
+.home-serve-left {
+  width: 45%;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-.home-serve .home-serve-right {
-  width: 40%;
-  height: 100%;
-}
-
-.home-serve-right .home-serve-right-title {
+.home-serve-left img {
   width: 100%;
-  font-size: var(--fs-36);
-  font-weight: var(--fw-600);
-  letter-spacing: 1px;
+  height: auto;
+  object-fit: cover;
+  transition: all 0.5s;
+}
+
+.home-serve-left img:hover {
+  transform: scale(1.2);
+}
+
+.home-serve-right {
+  width: 50%;
+}
+
+.home-serve-right-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 2.5rem;
   font-family: var(--ff-llt);
 }
 
-.home-serve-right .home-serve-right-list {
-  margin-top: 50px;
-}
-
-.home-serve-right .home-serve-right-list-item {
-  width: 90%;
+.home-serve-right-list {
   display: flex;
-  margin: 15px 0;
-  margin-left: 0;
+  flex-direction: column;
 }
 
-.home-serve-right .home-serve-right-list-item-img {
-  margin: 10px;
+.home-serve-right-list-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
 }
 
-.home-serve-right .home-serve-right-list-item-text {
-  width: 80%;
-  font-size: var(--fs-16);
-  letter-spacing: 1px;
-  color: var(--dark-gray);
+.home-serve-right-list-item-img {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  margin-right: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.text-4 {
-  margin-top: 8px;
+.home-serve-right-list-item-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #666;
+  width: 90%;
 }
 
-.home-serve-right .home-serve-right-btn {
-  width: 78%;
+.home-serve-right-btn {
   display: flex;
   justify-content: end;
 }
 
-.home-serve-right .home-serve-right-btn button {
-  width: 120px;
-  height: 40px;
-  font-weight: var(--fw-600);
-  border-radius: var(--radius-8);
-  color: var(--light-white);
+.home-serve-right-btn button {
+  width: 180px;
+  height: 48px;
   background-color: var(--deongaree);
+  border-radius: var(--radius-10);
+  font-size: var(--fs-16);
+  font-weight: var(--fw-600);
+  color: var(--light-white);
 }
 
-.home-serve-right .home-serve-right-btn button:hover {
+.home-serve-right-btn button:hover {
   background-color: var(--light-white);
-  color: var(--deongaree);
   border: 2px solid var(--deongaree);
-  transform: translateY(-5px);
+  color: var(--deongaree);
   transition: var(--transition-4);
 }
-/* HomeServe End */
+
+/* 媒体查询 - 大屏幕 */
+@media screen and (max-width: 1200px) {
+  .home-main {
+    width: 90%;
+    height: auto;
+    padding: 4rem 0;
+  }
+
+  .home-main-left .main-box-text {
+    font-size: 2.2rem;
+  }
+
+  .home-main-left .main-box-subText {
+    width: 95%;
+  }
+
+  .home-serve {
+    width: 90%;
+    margin: 60px auto;
+  }
+
+  .home-serve-right-title {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+  }
+}
+
+/* 媒体查询 - 平板 */
+@media screen and (max-width: 992px) {
+  .home-main {
+    flex-direction: column;
+    padding: 4rem 0 2rem;
+  }
+
+  .home-main-left {
+    width: 90%;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .home-main-left .main-box-text {
+    font-size: 2rem;
+  }
+
+  .home-main-left .main-box-subText {
+    width: 100%;
+    margin: 0 auto 2rem;
+  }
+
+  .home-mian-right {
+    width: 80%;
+    justify-content: center;
+  }
+
+  .home-serve {
+    flex-direction: column;
+    margin: 40px auto;
+  }
+
+  .home-serve-left {
+    width: 80%;
+    margin-bottom: 3rem;
+  }
+
+  .home-serve-right {
+    width: 90%;
+  }
+
+  .home-serve-right-title {
+    text-align: center;
+    font-size: 1.6rem;
+  }
+}
+
+/* 媒体查询 - 手机 */
+@media screen and (max-width: 768px) {
+  .home-main {
+    padding: 3rem 0 1.5rem;
+  }
+
+  .home-main-left {
+    width: 100%;
+  }
+
+  .home-main-left .main-box-text {
+    font-size: 1.7rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .home-main-left .main-box-subText {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .home-main-left .main-box-startBtn {
+    padding: 0.7rem 1.8rem;
+    font-size: 0.9rem;
+  }
+
+  .home-mian-right {
+    width: 90%;
+  }
+
+  .home-serve-left {
+    width: 100%;
+  }
+
+  .home-serve-right {
+    width: 100%;
+  }
+
+  .home-serve-right-title {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .home-serve-right-list-item-text {
+    font-size: 0.9rem;
+  }
+
+  .shape {
+    display: none;
+  }
+}
+
+/* 媒体查询 - 小屏手机 */
+@media screen and (max-width: 576px) {
+  .home-main {
+    width: 95%;
+    padding: 2rem 0 1rem;
+  }
+
+  .home-main-left .main-box-text {
+    font-size: 1.4rem;
+  }
+
+  .home-main-left .main-box-subText {
+    font-size: 0.85rem;
+  }
+
+  .home-main-left .main-box-startBtn {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.85rem;
+  }
+
+  .home-mian-right {
+    width: 100%;
+  }
+
+  .home-serve {
+    width: 95%;
+    margin: 30px auto;
+  }
+
+  .home-serve-right-title {
+    font-size: 1.2rem;
+  }
+
+  .home-serve-right-list-item-img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .home-serve-right-list-item-text {
+    font-size: 0.85rem;
+    width: 100%;
+  }
+
+  .light-effect {
+    display: none;
+  }
+
+  .home-serve-right-btn button {
+    font-size: 14px;
+    width: 120px;
+    height: 40px;
+  }
+}
 
 // All Services  Styles
 .all-services {
   margin: 0 auto;
-  width: 76%;
+  height: fit-content;
+  width: 80%;
 
   .all-services-grid {
     display: grid;
@@ -1525,12 +1580,11 @@ const goToStory = (index) => {
       background: white;
       padding: 32px;
       border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
       transition: var(--transition-2);
 
       &:hover {
         transform: translateY(-8px);
-        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.1);
 
         .all-services-icon {
           background: var(--deongaree);
@@ -1594,193 +1648,58 @@ const goToStory = (index) => {
   }
 }
 
-// Customer Stories  Styles
-.customer-stories {
-  width: 76%;
-  padding: 100px 0;
-  margin: 0 auto;
-  background: rgba(255, 255, 255, 0.493);
-  transition: all 0.1s ease-in-out;
-
-  .stories-header {
-    display: flex;
-    width: 80%;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 auto;
-    margin-bottom: 48px;
-
-    h2 {
-      font-size: var(--fs-36);
-      font-weight: var(--fw-600);
-      letter-spacing: 15px;
-      font-family: var(--ff-llt);
-    }
-
-    .story-nav {
-      display: flex;
-      gap: 12px;
-
-      button {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        border: 2px solid #e5e7eb;
-        background: white;
-        color: #6b7280;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-
-        &:hover {
-          border-color: var(--deongaree);
-          color: var(--deongaree);
-        }
-
-        &:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        i {
-          font-size: 18px;
-        }
-      }
-    }
+/* 大屏设备媒体查询  */
+@media screen and (max-width: 1200px) {
+  /* all-services模块适配 */
+  .all-services {
+    width: 90%;
   }
 
-  .stories-slider {
-    position: relative;
-    max-width: 1200px;
-    margin: 0 auto;
+  .all-services-grid {
+    gap: 1.5rem;
+  }
+}
 
-    .story-card {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 40px;
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+/* 平板设备媒体查询 */
+@media screen and (max-width: 992px) {
+  /* all-services模块适配 */
+  .all-services {
+    width: 80%;
+  }
 
-      .story-video {
-        position: relative;
-        height: 100%;
-        min-height: 400px;
+  .all-services .all-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
 
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
+  .all-services .all-services-grid .all-services-item .all-services-icon {
+    width: 60px;
+    height: 60px;
+  }
 
-        .play-button {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 64px;
-          height: 64px;
-          background: rgba(86, 91, 239, 0.9);
-          border: none;
-          border-radius: 50%;
-          color: white;
-          cursor: pointer;
-          transition: all 0.3s ease;
+  .all-services .all-services-grid .all-services-item h3 {
+    font-size: 1.4rem;
+  }
 
-          &:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-            background: var(--deongaree);
-          }
+  .all-services .all-services-grid .all-services-item p {
+    font-size: 0.9rem;
+  }
+}
 
-          i {
-            font-size: 24px;
-          }
-        }
-      }
-    }
+@media screen and (max-width: 768px) {
+  .all-services .all-services-grid .all-services-item .all-services-icon {
+    width: 50px;
+    height: 50px;
+  }
 
-    .story-content {
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+  .all-services .all-services-grid .all-services-item h3 {
+    font-size: 1.2rem;
+  }
+}
 
-      .customer-logo {
-        height: 32px;
-        margin-bottom: 32px;
-
-        img {
-          height: 100%;
-          width: auto;
-          object-fit: contain;
-        }
-      }
-
-      .quote {
-        font-size: 24px;
-        line-height: 1.5;
-        color: #1b1b1b;
-        margin-bottom: 32px;
-        font-weight: 500;
-      }
-
-      .author {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-
-        img {
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          object-fit: cover;
-        }
-
-        div {
-          h4 {
-            font-size: 16px;
-            color: #1b1b1b;
-            margin-bottom: 4px;
-            font-weight: 600;
-          }
-
-          p {
-            font-size: 14px;
-            color: #6b7280;
-            margin: 0;
-          }
-        }
-      }
-    }
-
-    .story-indicators {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 24px;
-
-      span {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #e5e7eb;
-        cursor: pointer;
-        transition: all 0.3s ease;
-
-        &.active {
-          width: 24px;
-          border-radius: 4px;
-          background: var(--deongaree);
-        }
-
-        &:hover:not(.active) {
-          background: #d1d5db;
-        }
-      }
-    }
+@media screen and (max-width: 576px) {
+  .all-services .all-services-grid {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 
@@ -1809,7 +1728,7 @@ const goToStory = (index) => {
       font-weight: var(--fw-600);
       letter-spacing: 15px;
       font-family: var(--ff-llt);
-      margin-bottom: 28px;
+      margin-bottom: 18px;
     }
 
     p {
@@ -1823,7 +1742,6 @@ const goToStory = (index) => {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
     gap: 24px;
-    margin-top: 40px;
     max-width: 1200px;
     margin: 0 auto;
 
@@ -1850,12 +1768,12 @@ const goToStory = (index) => {
 
         p {
           font-size: 16px;
-          margin: 0 32px 24px;
+          margin: 0 32px 10px;
           line-height: 1.6;
         }
 
         .learn-more {
-          margin: 0 32px 32px;
+          margin: 0 32px 0;
           font-size: 16px;
         }
       }
@@ -1934,141 +1852,76 @@ const goToStory = (index) => {
   }
 }
 
-// Testimonials Styles
-.testimonials {
-  width: 76%;
-  margin: 0 auto;
-  margin-top: 100px;
-  padding: 30px 0;
-  position: relative;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+/* 大屏设备媒体查询  */
+@media screen and (max-width: 1200px) {
+  .use-cases {
+    width: 95%;
+  }
+}
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%235661ef' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+/* 平板设备媒体查询 */
+@media screen and (max-width: 992px) {
+  .use-cases .section-header h2 {
+    font-size: 30px;
   }
 
-  .section-header {
-    text-align: center;
-    margin-bottom: 64px;
-
-    h2 {
-      font-size: var(--fs-36);
-      font-weight: var(--fw-600);
-      letter-spacing: 15px;
-      font-family: var(--ff-llt);
-      margin-bottom: 28px;
-    }
-
-    p {
-      color: var(--dark-gray);
-      font-size: var(--fs-20);
-      letter-spacing: 15px;
-    }
+  .use-cases .section-header p {
+    font-size: 18px;
   }
 
-  .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-
-    .testimonial-column {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-
-      &:nth-child(2) {
-        margin-top: 48px;
-      }
-
-      &:nth-child(3) {
-        margin-top: 24px;
-      }
-    }
+  .use-cases .cases-grid .case-card:first-child h3 {
+    font-size: 20px;
   }
 
-  .testimonial-card {
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    overflow: hidden;
-    transition: all 0.3s ease;
+  .use-cases .cases-grid .case-card:first-child p {
+    font-size: 16px;
+  }
 
-    &:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    }
+  .use-cases .cases-grid .case-card:first-child .learn-more {
+    font-size: 14px;
+  }
 
-    &.highlight {
-      background: linear-gradient(145deg, #f6f5ff 0%, #ffffff 100%);
-      border: 2px solid rgba(86, 91, 239, 0.1);
-    }
+  .use-cases .cases-grid .case-card:not(:first-child) h3 {
+    font-size: 18px;
+  }
+}
 
-    .testimonial-content {
-      padding: 32px;
+@media screen and (max-width: 768px) {
+  .use-cases .section-header h2 {
+    font-size: 24px;
+  }
 
-      .customer-logo {
-        height: 32px;
-        margin-bottom: 24px;
+  .use-cases .section-header p {
+    font-size: 16px;
+  }
+  .use-cases .cases-grid {
+    grid-template-columns: 1fr;
+    max-width: 95%;
+  }
 
-        img {
-          height: 100%;
-          width: auto;
-          object-fit: contain;
-        }
-      }
+  .use-cases .cases-grid .case-card {
+    border-radius: 10px;
+  }
 
-      .quote {
-        font-size: 16px;
-        line-height: 1.6;
-        color: #1b1b1b;
-        margin-bottom: 24px;
-        font-style: italic;
-      }
+  .use-cases .cases-grid .case-card:not(:first-child) img {
+    object-fit: cover;
+  }
+}
 
-      .testimonial-author {
-        display: flex;
-        align-items: center;
-        gap: 16px;
+@media screen and (max-width: 576px) {
+  .use-cases .cases-grid .case-card:first-child {
+    height: 400px;
+  }
 
-        img {
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          object-fit: cover;
-        }
-
-        div {
-          h4 {
-            font-size: 16px;
-            color: #1b1b1b;
-            margin-bottom: 4px;
-            font-weight: 600;
-          }
-
-          p {
-            font-size: 14px;
-            color: #6b7280;
-            margin: 0;
-          }
-        }
-      }
-    }
+  .use-cases .cases-grid .case-card:first-child img {
+    height: 240px;
   }
 }
 
 /* 宠物百科部分Start */
 .home-petInfo {
   width: 76%;
-  height: 800px;
+  height: fit-content;
   display: flex;
   margin: 0 auto;
   margin-top: 50px;
@@ -2104,7 +1957,8 @@ const goToStory = (index) => {
 
 .home-petInfo .info-section-card {
   display: flex;
-  justify-content: space-between;
+  width: 100%;
+  justify-content: space-around;
   margin-top: 48px;
 }
 
@@ -2162,7 +2016,7 @@ const goToStory = (index) => {
 }
 
 .home-petInfo .info-section-dots-background {
-  margin: 28px 0;
+  margin: 18px 0;
 }
 
 .home-petInfo .info-section-dots {
@@ -2191,11 +2045,130 @@ const goToStory = (index) => {
   color: var(--deongaree);
   transition: var(--transition-4);
 }
+
+/* 大屏设备媒体查询  */
+@media screen and (max-width: 1200px) {
+  .home-petInfo {
+    width: 95%;
+    overflow: hidden;
+  }
+
+  .home-petInfo .info-section {
+    width: 100%;
+  }
+
+  .info-section-card-item {
+    height: fit-content;
+  }
+
+  .home-petInfo .info-section-card-item-left {
+    margin-bottom: 20px;
+  }
+
+  .home-petInfo .info-section-card-item-mid {
+    margin-top: 20px;
+  }
+
+  .home-petInfo .info-section-card-item-right {
+    margin-top: 40px;
+    margin-bottom: -20px;
+  }
+
+  .home-petInfo .info-section-img-wrapper {
+    margin-top: 24px;
+  }
+
+  .home-petInfo .info-section-img-wrapper img {
+    transform: scale(0.8);
+  }
+
+  .home-petInfo .info-section-item-petName {
+    font-size: 20px;
+    margin-top: 18px;
+  }
+
+  .home-petInfo .info-section-item-description {
+    font-size: 18px;
+  }
+
+  .home-petInfo .info-section-infoBtn {
+    transform: scale(0.8);
+  }
+}
+
+/* 平板设备媒体查询 */
+@media screen and (max-width: 992px) {
+  .home-petInfo {
+    width: 90%;
+  }
+
+  .home-petInfo .info-section-heading {
+    font-size: 30px;
+  }
+
+  .home-petInfo .info-section-subheading {
+    font-size: 16px;
+  }
+
+  .home-petInfo .info-section {
+    padding-top: 24px;
+  }
+
+  .home-petInfo .info-section-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .home-petInfo .info-section-img-wrapper img {
+    transform: scale(1);
+  }
+
+  .home-petInfo .info-section-card-item-right {
+    margin-top: 40px;
+    margin-bottom: -20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .home-petInfo .info-section-card-item {
+    width: 90%;
+  }
+
+  .home-petInfo .info-section-img-wrapper img {
+    transform: scale(0.8);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .home-petInfo .info-section-card {
+    grid-template-columns: 1fr;
+  }
+
+  .home-petInfo .info-section-card-item {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .home-petInfo .info-section-card-item-left,
+  .info-section-card-item-mid,
+  .info-section-card-item-right {
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+
+  .home-petInfo .info-section-card-item-right {
+    margin-top: 30px;
+  }
+
+  .home-petInfo .info-section-img-wrapper img {
+    transform: scale(1);
+  }
+}
 /* 宠物百科部分 End */
 
 /* 宠物服务Start */
 .home-petSevere {
-  width: 76%;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -2226,7 +2199,7 @@ const goToStory = (index) => {
 }
 
 .severe-main {
-  width: 85%;
+  width: 95%;
   margin: 0 auto;
   margin-top: 50px;
 }
@@ -2343,14 +2316,82 @@ const goToStory = (index) => {
   background-color: #c92b2b;
 }
 
+/* 大屏设备媒体查询  */
+@media screen and (max-width: 1200px) {
+  .home-petSevere {
+    width: 95%;
+  }
+
+  .item-left img {
+    transform: scale(0.9);
+  }
+}
+
+/* 平板设备媒体查询 */
+@media screen and (max-width: 992px) {
+  .severe-item {
+    height: 350px;
+  }
+
+  .item-left img {
+    height: 85%;
+  }
+
+  .home-petSevere .severe-section-heading {
+    font-size: 30px;
+  }
+
+  .home-petSevere .severe-section-subHeading {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .home-petSevere .severe-section-heading {
+    font-size: 24px;
+  }
+
+  .home-petSevere .severe-section-subHeading {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .severe-item {
+    flex-direction: column;
+    height: fit-content;
+  }
+
+  .item-left,
+  .item-right {
+    width: 100%;
+  }
+
+  .item-left img {
+    height: 250px;
+  }
+
+  .severe-gird-item .title {
+    font-size: 20px;
+  }
+
+  .severe-gird-item .info {
+    font-size: 14px;
+  }
+
+  .severe-gird-item .gird-item-describe li {
+    font-size: 14px;
+  }
+}
+
 /* 宠物服务 End */
 
 /* 宠物商店部分 Start */
 .home-petShop {
-  width: 76%;
-  height: 750px;
+  width: 80%;
+  height: fit-content;
   margin: 0 auto;
-  margin-top: 100px;
+  margin-top: 80px;
 }
 
 .shop-section-content-wrapper {
@@ -2565,12 +2606,18 @@ const goToStory = (index) => {
   color: var(--deongaree);
   transition: var(--transition-4);
 }
+
+/* 大屏设备媒体查询  */
+@media screen and (max-width: 1200px) {
+  .home-petShop {
+    display: none;
+  }
+}
 /* 宠物商店部分 End */
 
 /* vip部分Start */
 .home-petvip {
-  width: 76%;
-  height: 800px;
+  width: 85%;
   margin: 0 auto;
   margin-bottom: 50px;
 }
@@ -2639,7 +2686,7 @@ const goToStory = (index) => {
 
 .vip-section-tab-content-wrapper {
   margin-top: 30px;
-  padding: 30px;
+  padding: 30px 0;
   border-radius: var(--radius-20);
   overflow: hidden;
   box-shadow: var(--shadow-1);
@@ -2717,6 +2764,63 @@ const goToStory = (index) => {
   border: 2px solid var(--deongaree);
   transition: var(--transition-3);
 }
+
+/* 大屏设备媒体查询  */
+@media screen and (max-width: 1200px) {
+}
+
+/* 平板设备媒体查询 */
+@media screen and (max-width: 992px) {
+  .vip-section-tab-content-wrapper .vip-section-image {
+    transform: scale(0.8);
+  }
+
+  .vip-section-heading {
+    font-size: 30px;
+  }
+
+  .vip-section-subHeading {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .vip-section {
+    padding-top: 0;
+  }
+  .vip-section-heading {
+    font-size: 24px;
+  }
+  .vip-section-tab {
+    font-size: 20px;
+  }
+
+  .vip-section-subHeading {
+    font-size: 16px;
+  }
+  .vip-section-image-wrapper {
+    display: none;
+  }
+  .vip-section-tab-content-wrapper {
+    padding: 30px;
+  }
+
+  .vip-section-vip-name {
+    font-size: 20px;
+  }
+  .vip-section-vip-serve span {
+    font-size: 18px;
+  }
+  .vip-section-vip-description {
+    font-size: 16px;
+  }
+  .vip-section-vip-price {
+    font-size: 24px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+}
 /* vip部分End */
 
 // 动画
@@ -2758,5 +2862,29 @@ const goToStory = (index) => {
   100% {
     opacity: 0.8;
   }
+}
+
+// 添加content-visibility属性，优化渲染性能
+.home-serve,
+.all-services,
+.shop-section,
+.testimonials-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 1000px; // 预估尺寸，防止布局抖动
+}
+
+// 使用will-change优化transform动画
+.floating-shapes .shape,
+.main-box-startBtn:hover,
+.shop-section-card:hover {
+  will-change: transform;
+}
+
+// 使用GPU加速
+.img,
+.main-box-text,
+.main-box-subText,
+.main-box-startBtn {
+  transform: translateZ(0);
 }
 </style>

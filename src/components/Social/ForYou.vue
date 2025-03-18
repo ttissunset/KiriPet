@@ -166,7 +166,7 @@ const router = useRouter();
             }"
           ></div>
           <div class="event-details">
-            <p class="event-name">Dog Training Basics - Online Workshop</p>
+            <p class="event-name">狗狗训练基础课程 - 在线观看</p>
             <p class="event-date">Sun, Mar 27, 10:00 AM</p>
           </div>
         </div>
@@ -180,12 +180,12 @@ const router = useRouter();
           ></div>
           <div class="event-details">
             <p class="event-name">
-              Caring for Your Senior Cat - Online Q&amp;A
+              关注你的猫咪是否健康 - 在线问答
             </p>
             <p class="event-date">Sun, Mar 27, 3:00 PM</p>
           </div>
         </div>
-        <div class="event-item">
+        <!-- <div class="event-item">
           <div
             class="event-image"
             :style="{
@@ -197,7 +197,7 @@ const router = useRouter();
             <p class="event-name">Puppies 101 - In-Person Seminar</p>
             <p class="event-date">Sat, Apr 2, 2:00 PM</p>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

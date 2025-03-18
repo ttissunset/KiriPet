@@ -17,8 +17,8 @@ const formData = reactive({
           <div class="profile-section">
             <div class="profile-image-large"></div>
             <div class="profile-details">
-              <h1 class="profile-title">Let's get your profile ready!</h1>
-              <button class="primary-button">Add Profile Photo</button>
+              <h1 class="profile-title">准备好设置你的个人资料了吗？</h1>
+              <button class="primary-button">选择我的头像</button>
             </div>
           </div>
         </div>

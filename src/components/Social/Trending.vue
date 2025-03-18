@@ -34,7 +34,7 @@
               ></div>
               <div class="topic-info">
                 <h3>宠物保险</h3>
-                <p>5k followers</p>
+                <p>5k 关注</p>
               </div>
             </div>
 
@@ -47,7 +47,7 @@
               ></div>
               <div class="topic-info">
                 <h3>宠物疗愈</h3>
-                <p>2.3k followers</p>
+                <p>2.3k 关注</p>
               </div>
             </div>
 
@@ -60,7 +60,7 @@
               ></div>
               <div class="topic-info">
                 <h3>宠物友好旅行</h3>
-                <p>1.9k followers</p>
+                <p>1.9k 关注</p>
               </div>
             </div>
 
@@ -73,7 +73,7 @@
               ></div>
               <div class="topic-info">
                 <h3>宠物救助</h3>
-                <p>1.3k followers</p>
+                <p>1.3k 关注</p>
               </div>
             </div>
 
@@ -86,7 +86,7 @@
               ></div>
               <div class="topic-info">
                 <h3>狗狗训练</h3>
-                <p>1.1k followers</p>
+                <p>1.1k 关注</p>
               </div>
             </div>
 
@@ -99,7 +99,7 @@
               ></div>
               <div class="topic-info">
                 <h3>猫咪美容</h3>
-                <p>950 followers</p>
+                <p>950 关注</p>
               </div>
             </div>
 
@@ -112,7 +112,7 @@
               ></div>
               <div class="topic-info">
                 <h3>宠物领养</h3>
-                <p>500 followers</p>
+                <p>500 关注</p>
               </div>
             </div>
 
@@ -125,7 +125,7 @@
               ></div>
               <div class="topic-info">
                 <h3>宠物寄养</h3>
-                <p>200 followers</p>
+                <p>200 关注</p>
               </div>
             </div>
 
@@ -138,7 +138,7 @@
               ></div>
               <div class="topic-info">
                 <h3>宠物保姆</h3>
-                <p>100 followers</p>
+                <p>100 关注</p>
               </div>
             </div>
 
@@ -151,7 +151,7 @@
               ></div>
               <div class="topic-info">
                 <h3>宠物美容</h3>
-                <p>50 followers</p>
+                <p>50 关注</p>
               </div>
             </div>
           </div>

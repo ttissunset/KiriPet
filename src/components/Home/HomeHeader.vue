@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from "vue";
-import { inject, ref } from "vue";
+import { inject, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useUserStore } from "../../stores/userStore";
 
@@ -11,6 +11,42 @@ const search = ref("");
 
 // 测试时用
 const show = ref(true);
+
+// 添加控制折叠菜单和搜索框显示的状态
+const isMenuOpen = ref(false);
+const isSearchOpen = ref(true);
+const isMobileSearch = ref(false);
+
+// 根据窗口大小设置搜索框状态
+const updateSearchState = () => {
+  if (window.innerWidth <= 1200) {
+    // 移动设备下默认折叠搜索框
+    isSearchOpen.value = false;
+    isMobileSearch.value = true;
+  } else {
+    // 非移动设备下始终显示搜索框
+    isSearchOpen.value = true;
+    isMobileSearch.value = false;
+  }
+};
+
+// 切换菜单显示状态
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
+
+// 切换搜索框显示状态
+const toggleSearch = () => {
+  if (isMobileSearch.value) {
+    isSearchOpen.value = !isSearchOpen.value;
+  }
+};
+
+// 监听窗口大小变化
+onMounted(() => {
+  updateSearchState();
+  window.addEventListener("resize", updateSearchState);
+});
 
 // 退出登录的业务逻辑
 const confirm = () => {
@@ -53,6 +89,10 @@ const changeMenuCurrent = async (path, id) => {
   if (route.path !== path) {
     await router.push(path);
   }
+  // 在移动端点击菜单项后关闭菜单
+  if (window.innerWidth <= 768) {
+    isMenuOpen.value = false;
+  }
 };
 
 onMounted(getCurrentMenuId);
@@ -64,13 +104,19 @@ onMounted(getCurrentMenuId);
       <div class="home-header-left">
         <div class="logo" @click="router.push('/home')">
           <img src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png" />
-          <h2>KiriPet</h2>
+          <h2 class="logo-text">KiriPet</h2>
         </div>
       </div>
       <div class="home-header-right">
         <!-- 搜索框 Start -->
-        <div class="input-container">
-          <button class="input-button">
+        <div
+          class="input-container"
+          :class="{
+            'search-collapsed': !isSearchOpen,
+            'mobile-search': isMobileSearch,
+          }"
+        >
+          <button class="input-button" @click="toggleSearch">
             <svg
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -86,6 +132,7 @@ onMounted(getCurrentMenuId);
             </svg>
           </button>
           <input
+            v-if="isSearchOpen"
             type="text"
             name="text"
             class="input-search"
@@ -95,8 +142,18 @@ onMounted(getCurrentMenuId);
         </div>
         <!-- 搜索框 End -->
 
+        <!-- 移动端菜单按钮 Start -->
+        <div class="menu-toggle" @click="toggleMenu">
+          <div class="hamburger" :class="{ 'is-active': isMenuOpen }">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <!-- 移动端菜单按钮 End -->
+
         <!-- 导航列表 Start -->
-        <div class="header-nav">
+        <div class="header-nav" :class="{ 'menu-open': isMenuOpen }">
           <ul>
             <li v-for="(item, index) in menuList" :key="index" ref="menu">
               <span @click="changeMenuCurrent(item.path, item.id)">{{
@@ -163,6 +220,10 @@ onMounted(getCurrentMenuId);
   height: 30px;
 }
 
+.home-header-left .logo .logo-text {
+  margin: 0;
+}
+
 .home-header-right {
   display: flex;
   justify-content: center;
@@ -182,6 +243,7 @@ onMounted(getCurrentMenuId);
   border-radius: var(--radius-20);
   width: 300px;
   margin-right: 20px;
+  transition: all 0.3s ease;
 }
 
 .home-header-right .input-container .input-button {
@@ -193,6 +255,7 @@ onMounted(getCurrentMenuId);
   align-items: center;
   border-radius: 12px;
   padding: 5px;
+  z-index: 2;
 }
 
 .home-header-right .input-container .input-button:hover {
@@ -273,32 +336,129 @@ onMounted(getCurrentMenuId);
   transition: all 0.3s ease-in-out;
   cursor: pointer;
 }
+
+/* 汉堡菜单按钮样式 */
+.menu-toggle {
+  display: none;
+  cursor: pointer;
+}
+
+.hamburger {
+  width: 30px;
+  height: 25px;
+  position: relative;
+  margin-left: 10px;
+}
+
+.hamburger span {
+  display: block;
+  position: absolute;
+  height: 3px;
+  width: 100%;
+  background: var(--youth-green-2);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.hamburger span:nth-child(1) {
+  top: 0;
+}
+
+.hamburger span:nth-child(2) {
+  top: 10px;
+}
+
+.hamburger span:nth-child(3) {
+  top: 20px;
+}
+
+.hamburger.is-active span:nth-child(1) {
+  transform: rotate(45deg);
+  top: 10px;
+}
+
+.hamburger.is-active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.is-active span:nth-child(3) {
+  transform: rotate(-45deg);
+  top: 10px;
+}
+
+/* 响应式布局 */
+@media screen and (max-width: 1500px) {
+  .home-header-left .logo {
+    transform: scale(0.8);
+  }
+
+  .home-header-right .header-nav ul li {
+    margin-right: 15px;
+    font-size: var(--fs-16);
+  }
+
+  .home-header-right .input-container {
+    width: 220px;
+    margin-right: 15px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .header-container {
+    width: 90%;
+    padding: 0.75rem 1rem;
+  }
+
+  .home-header-right .input-container {
+    width: 240px;
+    margin-right: 15px;
+  }
+
+  .home-header-right .input-container.search-collapsed {
+    width: 40px;
+    border: none;
+    background: transparent;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .home-header-right .input-container {
+    width: 200px;
+    margin-right: 10px;
+  }
+
+  .home-header-right .header-nav ul {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 20px;
+  }
+
+  .home-header-right .header-nav ul li {
+    margin: 15px 0;
+    width: 100%;
+  }
+
+  .menu-toggle {
+    display: block;
+    z-index: 1010;
+  }
+
+  .home-header-right .header-nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    padding-top: 80px;
+  }
+
+  .home-header-right .header-nav.menu-open {
+    right: 0;
+  }
+}
+
 </style>
-
-<!-- // const light = ref(null);
-// const dark = ref(null);
-// 切换主题色
-// const toggleTheme = () => {
-//   // 切换主题色
-//   document.body.classList.toggle("dark-mode-variables");
-//   dark.value.classList.toggle("active");
-//   light.value.classList.toggle("active");
-// }; -->
-
-<!-- 切换暗黑模式 -->
-<!-- 
-    <div class="dark-mode" @click="toggleTheme">
-        <span ref="light" class="material-icons-sharp active">
-          light_mode
-        </span>
-        <span ref="dark" class="material-icons-sharp"> dark_mode </span>
-    </div>
--->
-
-/* 主题切换部分 */ /* .home-header-right .dark-mode { background-color:
-var(--light-gray); display: flex; align-items: center; height: 1.6rem; width:
-4.2rem; cursor: pointer; border-radius: var(--radius-10); } .home-header-right
-.dark-mode span { font-size: 1.2rem; width: 50%; height: 100%; display: flex;
-align-items: center; justify-content: center; } .home-header-right .dark-mode
-span.active { background-color: var(--youth-green-2); color: white;
-border-radius: var(--radius-10); } */

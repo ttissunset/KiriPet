@@ -1,7 +1,25 @@
-# Vue 3 + Vite
+# KiriPet宠物百科与服务平台
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+### 平台简介
 
-## Recommended IDE Setup
+KiriPet宠物百科与服务平台是一个面向宠物爱好者的综合性互联网服务平台，旨在为用户提供全方位的宠物相关服务和信息资源。我们致力于达成以下目标：
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+1. 提升宠物养护质量：通过提供科学的宠物百科内容，帮助宠物主人了解宠物的饮食、护理、健康管理等方面的知识，提高宠物养护质量，减少误区和错误养护方式。
+2. 多元化宠物服务：平台通过提供多种宠物服务，如宠物美容、洗护、寄养等，为宠物主人提供便捷、高质量的服务体验，解决传统宠物服务资源不足和服务质量参差不齐的问题。
+3. 一站式购物体验：通过宠物商城模块，整合各种宠物食品、玩具、日常用品等商品，提供一站式购物体验，方便宠物主人购买到优质且实用的宠物产品。
+4. 社会化与社区建设：为宠物主人提供社交平台，建立一个宠物爱好者社区，促进宠物主人之间的交流与合作
+
+### 技术栈与项目背景
+- 技术栈：` Vue3 + TypeScript + WebSocket + TensorFlow Lite `
+- 项目背景：如今，越来越多的人把宠物当作家人。每次看着朋友手忙脚乱地切换五六个APP——这边查宠物医院评价，那边找靠谱美容师，中间还要刷论坛学养护知识，甚至因为过时信息白跑一趟时，我都想：为什么不能有个像"宠物版大众点评+知乎+美团"的平台？于是我便着手打造自己的宠物资源整合平台，KiriPet由此诞生。
+
+### 待办事项
+1. 移动端适配
+2. 宠物商城模块开发
+3. 宠物百科模块ui修改
+4. 个人信息模块ui修改
+5. 宠物乐园模块完善
+6. 性能优化：【重点】
+   - 资源加载优化
+   - 针对性地优化高频重渲染组件
+   - 结合 Lighthouse 报告优化首屏加载性能
