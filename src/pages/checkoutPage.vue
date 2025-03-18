@@ -3,7 +3,18 @@ import { ref, computed, onUnmounted, onMounted } from "vue";
 import QrcodeVue from "qrcode.vue";
 import { useCartStore } from "../stores/cartStore";
 import { useRouter } from "vue-router";
-import debounce from "lodash/debounce";
+import _ from "lodash";
+
+// 创建一个简单的防抖函数
+function createDebounce(fn, delay = 300) {
+  let timer = null;
+  return function(...args) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+    }, delay);
+  };
+}
 
 const cartStore = useCartStore();
 const cartItems = computed(() => cartStore.items);
@@ -110,7 +121,7 @@ const isCompleteStep = ref(false);
 let timerInterval = null;
 
 // 防抖处理的提交订单函数
-const handleSubmit = debounce(async () => {
+const handleSubmit = createDebounce(async () => {
   if (!isFormValid.value) {
     if (!selectedAddress.value) {
       alert("请选择收货地址");

@@ -9,27 +9,26 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  /* 禁止复制 */
-  user-select: none;
   /* 自动换行 */
   word-break: break-all;
 }
 
 /* 滚动条样式 */
-
 ::-webkit-scrollbar {
-  width: 13px;
-  height: 13px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
   background-color: #e4e4e4;
 }
 ::-webkit-scrollbar-thumb {
   background-color: rgb(162, 170, 211);
+  border-radius: 5px;
 }
 
 body {
   scroll-behavior: smooth;
+  background-color: var(--white-a7);
 }
 
 /* 图片懒加载 */
@@ -190,9 +189,10 @@ body {
 
 @font-face {
   font-family: "hymhtw";
-  src: url("./assets//fonts/汉仪喵魂体W.ttf");
+  src: url("./assets/fonts/汉仪喵魂体W.ttf");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -200,6 +200,7 @@ body {
   src: url("./assets/fonts/萝莉体 第二版.ttc");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -207,6 +208,7 @@ body {
   src: url("./assets/fonts/gkai00mp.ttf");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 .material-icons-sharp {
@@ -230,10 +232,6 @@ body {
   color: var(--color-dark);
 } */
 
-body {
-  background-color: var(--white-a7);
-}
-
 a {
   color: var(--black);
   text-decoration: none;
@@ -242,7 +240,7 @@ a {
 
 button {
   border: none;
-  background-color: none;
+  background-color: transparent;
 }
 
 input {

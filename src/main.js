@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router/index";
-import VueSmoothScroll from "vue3-smooth-scroll";
+import * as VueSmoothScroll from "vue3-smooth-scroll";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
