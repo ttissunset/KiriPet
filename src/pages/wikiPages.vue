@@ -5,6 +5,7 @@ import HomeFooter from "../components/Home/HomeFooter.vue";
 const navItems = [
   { name: "猫咪百科", path: "/wiki/cats", icon: "icon-cat" },
   { name: "狗狗百科", path: "/wiki/dogs", icon: "icon-dog" },
+  { name: "宠物知识", path: "/wiki/knowledge", icon: "icon-dog" },
 ];
 </script>
 

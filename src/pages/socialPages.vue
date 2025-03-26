@@ -110,72 +110,6 @@ const FireIcon = defineComponent({
   },
 });
 
-const MusicNoteIcon = defineComponent({
-  name: "MusicNoteIcon",
-  setup() {
-    return () =>
-      h(
-        "div",
-        {
-          class: "icon",
-          "data-icon": "MusicNote",
-          "data-size": "24px",
-          "data-weight": "regular",
-        },
-        [
-          h(
-            "svg",
-            {
-              xmlns: "http://www.w3.org/2000/svg",
-              width: "24px",
-              height: "24px",
-              fill: "currentColor",
-              viewBox: "0 0 256 256",
-            },
-            [
-              h("path", {
-                d: "M210.3,56.34l-80-24A8,8,0,0,0,120,40V148.26A48,48,0,1,0,136,184V98.75l69.7,20.91A8,8,0,0,0,216,112V64A8,8,0,0,0,210.3,56.34ZM88,216a32,32,0,1,1,32-32A32,32,0,0,1,88,216ZM200,101.25l-64-19.2V50.75L200,70Z",
-              }),
-            ]
-          ),
-        ]
-      );
-  },
-});
-
-const GameControllerIcon = defineComponent({
-  name: "GameControllerIcon",
-  setup() {
-    return () =>
-      h(
-        "div",
-        {
-          class: "icon",
-          "data-icon": "GameController",
-          "data-size": "24px",
-          "data-weight": "regular",
-        },
-        [
-          h(
-            "svg",
-            {
-              xmlns: "http://www.w3.org/2000/svg",
-              width: "24px",
-              height: "24px",
-              fill: "currentColor",
-              viewBox: "0 0 256 256",
-            },
-            [
-              h("path", {
-                d: "M176,112H152a8,8,0,0,1,0-16h24a8,8,0,0,1,0,16ZM104,96H96V88a8,8,0,0,0-16,0v8H72a8,8,0,0,0,0,16h8v8a8,8,0,0,0,16,0v-8h8a8,8,0,0,0,0-16ZM241.48,200.65a36,36,0,0,1-54.94,4.81c-.12-.12-.24-.24-.35-.37L146.48,160h-37L69.81,205.09l-.35.37A36.08,36.08,0,0,1,44,216,36,36,0,0,1,8.56,173.75a.68.68,0,0,1,0-.14L24.93,89.52A59.88,59.88,0,0,1,83.89,40H172a60.08,60.08,0,0,1,59,49.25c0,.06,0,.12,0,.18l16.37,84.17a.68.68,0,0,1,0,.14A35.74,35.74,0,0,1,241.48,200.65ZM172,144a44,44,0,0,0,0-88H83.89A43.9,43.9,0,0,0,40.68,92.37l0,.13L24.3,176.59A20,20,0,0,0,58,194.3l41.92-47.59a8,8,0,0,1,6-2.71Zm59.7,32.59-8.74-45A60,60,0,0,1,172,160h-4.2L198,194.31a20.09,20.09,0,0,0,17.46,5.39,20,20,0,0,0,16.23-23.11Z",
-              }),
-            ]
-          ),
-        ]
-      );
-  },
-});
-
 const MegaphoneIcon = defineComponent({
   name: "MegaphoneIcon",
   setup() {
@@ -223,27 +157,19 @@ const MegaphoneIcon = defineComponent({
               @click="router.push('/social/foru')"
             >
               <StarIcon fill="fill" />
-              <p class="menu-item__text">For You</p>
+              <p class="menu-item__text">为你推荐</p>
             </div>
             <div class="menu-item">
               <HeartIcon />
-              <p class="menu-item__text">Following</p>
+              <p class="menu-item__text">您的订阅</p>
             </div>
             <div class="menu-item" @click="router.push('/social/trending')">
               <FireIcon />
-              <p class="menu-item__text">Trending</p>
+              <p class="menu-item__text">当前热门</p>
             </div>
-            <!-- <div class="menu-item">
-              <MusicNoteIcon />
-              <p class="menu-item__text">Music</p>
-            </div>
-            <div class="menu-item">
-              <GameControllerIcon />
-              <p class="menu-item__text">Gaming</p>
-            </div> -->
             <div class="menu-item">
               <MegaphoneIcon />
-              <p class="menu-item__text" @click="router.push('/chat')">Chat</p>
+              <p class="menu-item__text" @click="router.push('/chat')">聊天室</p>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
+import shopPages from '../pages/shopPages.vue'
 
 // 创建路由规则
 const routes = [
@@ -42,6 +43,11 @@ const routes = [
         name: "Dogs",
         component: () => import("../components/Wiki/DogWiki.vue"),
       },
+      {
+        path: ":type/:id",
+        name: "WikiPetDetail",
+        component: () => import("../pages/petDetailPage.vue"),
+      },
     ],
   },
   {
@@ -66,7 +72,8 @@ const routes = [
   },
   {
     path: "/shop",
-    component: () => import("../pages/shopPages.vue"),
+    name: "Shop",
+    component: shopPages
   },
   {
     path: "/serve",

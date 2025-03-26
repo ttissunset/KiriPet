@@ -1,117 +1,173 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useRouter } from "vue-router";
 
 const searchQuery = ref("");
+const selectedTags = ref([]);
 const selectedCat = ref(null);
 const page = ref(1);
 const loading = ref(false);
+const router = useRouter();
+const viewMode = ref("grid");
+const filterTags = ["温顺", "活泼", "短毛", "长毛", "聪明", "独立"];
 
 // 存放宠物数据
 const cats = ref([
   {
     id: 1,
     name: "英国短毛猫",
-    image: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=800",
-    shortDesc: "“性格温和的理想猫”",
+    breed: "英短",
+    image: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=800",
     description:
-      "英国短毛猫是食肉目猫科猫属的哺乳动物。身体中等到大型，胸、肩、臀均宽；肌肉发达；头宽、圆而大，满月脸颊，鼻子短，下巴坚固，和鼻子构成垂线；耳朵大小中等，眼睛大而圆，间距大；尾巴长度为身长的2/3，毛型短而密，质地暗。英国短毛猫是最善于捕猎的猫类之一，被英国人公认为是“捕鼠能手”。 英国短毛猫天生爱洁净，好奇心强烈，喜欢夜游，喜爱鸡肉和鱼肉，可选择真空包装的湿性食品或罐头食品饲喂。英国短毛猫举止端庄，任性，独立性较强；善与小孩和狗共同玩耍，是成年人的忠实伴侣；有良好的心理素质，能自如地应付不良环境的影响。英国短毛猫寿命14～20年。英国短毛猫是最古老的猫种之一， 家猫育种鼻祖哈里森·威尔单独一人将英国“无主跑街猫”培育成英国短毛猫。于17世纪20年代随移民船到达美国，成为美国短毛猫的培育基础。在19世纪末期，该猫是英国水晶宫猫展的宠儿，很受青睐。在刘易斯·卡罗尔的童话《爱丽丝漫游奇境》中登场的柴郡猫，便是以英国短毛猫为原型创作的，英国短毛猫也因此名声大噪。目前英国短毛猫已经成为英国第3大纯种猫族群，并且在世界上也广受欢迎。英国短毛猫叫声甜美，喜欢亲近主人，为一种可爱和理想的家庭宠物",
-    tags: ["温顺", "好养", "适合新手"],
-    traits: ["性格温和友善", "适应能力强", "不太粘人", "叫声较少"],
-    tips: ["定期梳理被毛", "控制饮食避免肥胖", "每年定期体检", "保持适度运动"],
+      "英国短毛猫性格温和友善，适合家庭饲养。圆圆的脸和大眼睛是其标志性特征。被毛短而密，易于护理，是受欢迎的家庭宠物。",
+    tags: ["温顺", "友好", "易护理"],
+    stats: {
+      size: 60,
+      activity: 50,
+      friendly: 90,
+    },
   },
   {
     id: 2,
     name: "美国短毛猫",
+    breed: "美短",
     image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800",
-    shortDesc: "“温和且适应性强”",
     description:
-      "美国短毛猫原产于美国。关于其起源有两种说法，一部分人认为该猫是美洲大陆土著猫，经长期选育而成，另一部分人认为它是17世纪从欧洲随移民带入美国后，经改良而育成。 美国短毛猫体格强壮，肌肉发达，脸呈圆形，眼睛大小适中；脊背平直，胸部浑圆；背毛柔而厚，毛色与波斯猫相似，并以银色条纹为珍贵， 雄性体型比雌性稍大。美国短毛猫又称短毛家猫。 美国短毛猫性格温顺，与人亲近，聪明，喜欢冒险，遗传了其祖先的健壮、勇敢和脾气好，性格温和，不会因为环境或心情的改变而改变。其充满耐性，和蔼可亲，不会乱发脾气，不喜欢乱吵乱叫，适合有小孩子的家庭饲养。另外，美国短毛猫抵抗力较强。美国短毛猫的体力很好，因此，家中需要有足够的空间让其尽情玩耍。 美国短毛猫每窝产4只仔猫，寿命可达15-20年。 美国短毛猫是美国的代表猫种。最初其并不是作为宠物，而是作为消灭老鼠和蛇的实用性动物被人们饲养。成为宠物后，美国短毛猫的人气也渐渐高涨。1906年美国短毛猫以“短毛家猫”的名字正式登记在册。1966年更名为美国短毛猫。 ",
+      "美国短毛猫温和且适应性强，是理想的家庭宠物。体格健壮，被毛短密，性格友善，与人和其他宠物相处融洽。寿命长，护理简单。",
     tags: ["活泼", "亲人", "耐心"],
-    traits: ["性格活泼开朗", "亲近人类", "智商较高", "适应能力强"],
-    tips: ["需要充足的玩耍时间", "注意营养均衡", "定期驱虫", "保持环境清洁"],
+    stats: {
+      size: 65,
+      activity: 55,
+      friendly: 85,
+    },
   },
   {
     id: 3,
     name: "波斯猫",
-    image: "https://images.unsplash.com/photo-1591429939960-b7d5add10b5c?w=800",
-    shortDesc: "“优雅的长毛猫”",
+    breed: "波斯",
+    image: "https://images.unsplash.com/photo-1616089966833-d61352757708?w=800",
     description:
-      "波斯猫（学名：Felis catus）又称长毛猫，是猫科猫属的哺乳动物 。其体重为3.5-5千克，体长40-50厘米，尾长25-30厘米，肩高30厘米，体型矮壮；头圆宽，脸颊丰满；耳小圆尖；鼻短，眼大圆，多为黄色，眼色因毛色而异；四肢粗短，脚爪大，尾短且毛蓬松。波斯猫被毛密集光泽，包括柔软蓬松的底毛和稍粗长的长毛，毛色及毛型多样。波斯猫原产于伊朗，自19世纪起在英国培育，目前分布于全球。其捕鼠能力不如普通家猫，主要依赖家庭投食，饮食包括动物内脏、鱼、虾和杂粮。波斯猫不耐热，因被毛厚而易中暑，性格喜静，不善运动 。公猫性成熟时间为10-14月龄，母猫为7-12月龄，属季节性发情动物，通常9月开始发情，周期14天，持续2-4天；妊娠期约63天，每窝产仔3-5只 。波斯猫是最常饲养的猫种之一，有“猫中王子”“猫中王妃”之称，观赏价值高。其性情温和，举止优雅，恋家、乐观，对人友好，适合作为伴侣动物。",
-    tags: ["优雅", "安静", "需要护理"],
-    traits: ["性格安静优雅", "喜欢安静环境", "较为依赖主人", "不太运动"],
-    tips: ["每日梳理毛发", "定期清洁面部", "保持室内适宜温度", "注意眼部护理"],
+      "波斯猫是长毛猫的代表，性格安静优雅。扁平的脸和长而密的被毛是其特色。性格温和，活动量低，适合室内饲养，需要定期梳理毛发。",
+    tags: ["优雅", "安静", "长毛"],
+    stats: {
+      size: 55,
+      activity: 30,
+      friendly: 70,
+    },
   },
   {
     id: 4,
     name: "暹罗猫",
-    image: "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=800",
-    shortDesc: "“聪明活泼的伴侣”",
+    breed: "暹罗",
+    image: "https://images.unsplash.com/photo-1576120634744-ee3e08b3be0d?w=800",
     description:
-      "暹（xiān）罗猫是世界著名的短毛猫，也是短毛猫的代表品种。种族原产于暹罗（今泰国），故名暹罗猫。在200多年前，这种珍贵的猫仅在泰国的皇宫和大寺院中饲养，是足不出户的贵族。暹罗猫能够较好适应主人当地的气候，且性格刚烈好动，机智灵活，好奇心特强，善解人意。",
-    tags: ["聪明", "粘人", "话多"],
-    traits: ["性格外向活泼", "非常粘人", "叫声多样", "智商很高"],
-    tips: ["需要大量互动", "适合有时间陪伴的家庭", "注意保暖", "需要智力游戏"],
+      "暹罗猫聪明活泼，性格外向。蓝眼睛和颜色对比强烈的四肢是其特征。声音响亮，善于交流，需要大量互动和陪伴。",
+    tags: ["聪明", "外向", "粘人"],
+    stats: {
+      size: 50,
+      activity: 80,
+      friendly: 75,
+    },
   },
   {
     id: 5,
     name: "缅因猫",
-    image: "https://images.unsplash.com/photo-1568152950566-c1bf43f4ab28?w=800",
-    shortDesc: "“温和巨人”",
+    breed: "缅因",
+    image: "https://images.unsplash.com/photo-1595752776689-aebef37b5d32?w=800",
     description:
-      "缅因猫是美国最大、最古老的猫种 。缅因猫体型较大，被毛厚密 ；头较小巧，面部较方，耳朵大而直，耳根较阔，眼睛较大，有绿色、金黄色和铜色；鼻子中长，形似狮子鼻；四肢又粗又圆，被毛细密的爪子强壮有力；尾巴根部粗壮，末端被毛较长，尖削 。缅因猫名字中的“coon”在英语中意为浣熊，或许人们给它取这个名字就是因为它那毛发浓密的尾巴很像小浣熊的尾巴 。缅因猫性情温顺，对人亲近，喜欢睡在偏僻、古怪的地方 ；喜欢独处 ，能忍受恶劣的天气，捕鼠技巧精湛 。缅因猫能发出像小鸟般唧唧的轻叫声，非常动听 。缅因猫较早熟，长到约5个月就开始发情，7个月可交配产仔。缅因猫寿命一般为16～18年，有的甚至更长 [15]。缅因猫和人友好相处，是良好的宠物 。缅因猫体格较大，因此还被人们亲切地称为“温柔的巨人” ，亦可作为看门猫 。缅因猫早在19世纪中期的农业展览会上就作为捕鼠能手参展，并迅速被认可为一个独立的品种。",
-    tags: ["大型", "温柔", "长毛"],
-    traits: ["体型巨大", "性格温和", "适应能力强", "喜欢玩水"],
-    tips: ["需要大空间", "定期梳理毛发", "提供攀爬设施", "注意关节健康"],
+      "缅因猫是最大的家猫品种之一，体型巨大，性格温和友善。毛发浓密且长，具有防水特性。适应性强，喜欢与人互动，但不过分粘人。",
+    tags: ["大型", "温和", "聪明"],
+    stats: {
+      size: 90,
+      activity: 60,
+      friendly: 85,
+    },
   },
   {
     id: 6,
     name: "苏格兰折耳猫",
-    image: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800",
-    shortDesc: "“耳朵向下的猫咪”",
+    breed: "折耳",
+    image: "https://images.unsplash.com/photo-1596854372407-baba7fef6e51?w=800",
     description:
-      "苏格兰折耳猫因其独特的向前折叠的耳朵而闻名，性格温顺亲人苏格兰猫原产于英国。苏格兰猫留恋家庭，依赖主人，性格平静、懒动，但遇到猎物时会迅速出击， 抗病力强，耐寒。苏格兰猫每窝平均产3-4仔，但其后代并不一定都是塌耳，幼猫出生时，两耳直立状，4周之后，耳才向前垂下，随着年龄的增长，耳朵越垂越低。",
-    tags: ["折耳", "温顺", "特殊护理"],
-    traits: ["耳朵独特", "性格安静", "亲近人类", "适应性强"],
-    tips: ["注意骨骼发育", "定期体检", "避免过度运动", "合理搭配营养"],
+      "苏格兰折耳猫以其特殊的耳朵形状而闻名。性格温顺，对人友善，适合家庭饲养。活动量适中，可以适应公寓生活。需要注意遗传性骨骼问题。",
+    tags: ["独特", "温顺", "可爱"],
+    stats: {
+      size: 55,
+      activity: 55,
+      friendly: 80,
+    },
   },
   {
     id: 7,
-    name: "俄罗斯蓝猫",
-    image: "https://images.unsplash.com/photo-1511275539165-cc46b1ee89bf?w=800",
-    shortDesc: "“拥有独特的绿眼睛”",
+    name: "孟加拉猫",
+    breed: "孟加拉",
+    image: "https://images.unsplash.com/photo-1638524222399-1a8607fa0daa?w=800",
     description:
-      "俄罗斯蓝猫（Russian Blue），历史上曾被称作阿契安吉蓝猫，曾有过三种不同的名字。最初是阿契安吉蓝猫，直到20世纪40年代才有俄罗斯蓝猫的名字，另外有段时间它则叫作马耳他猫。证据显示，这种猫确实原产于俄罗斯，因为已在俄罗斯寒带地区发现了同种的猫。俄罗斯蓝猫体型细长，大而直立的尖耳朵，脚掌小而圆，走路像是用脚尖在走。身上披着银蓝色光泽的短被毛，配上修长苗条的体型和轻盈的步态，尽显一派猫中的贵族风度。",
-    tags: ["优雅", "安静", "低过敏"],
-    traits: ["性格矜持", "对主人忠诚", "适合过敏人士", "不太喜欢陌生人"],
-    tips: ["保持安静环境", "定期梳理", "提供独处空间", "适量运动"],
+      "孟加拉猫是家猫与亚洲豹猫杂交的品种，外表像小型豹子。精力充沛，智商高，需要足够的活动空间。性格友善但独立，喜欢互动和玩耍。",
+    tags: ["豹纹", "活跃", "聪明"],
+    stats: {
+      size: 60,
+      activity: 90,
+      friendly: 70,
+    },
   },
   {
     id: 8,
-    name: "布偶猫",
-    image: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=800",
-    shortDesc: "“温顺如布偶”",
+    name: "挪威森林猫",
+    breed: "森林猫",
+    image: "https://images.unsplash.com/photo-1538488881038-e252a119ace7?w=800",
     description:
-      "布偶猫（英文名：Ragdoll Cat），是一种体格较大的宠物猫， 体长可达1米（包含尾巴），雄性体重约为6.8-9.0千克，雌性体重约为4.5-6.8千克。 面部较宽，双颊线条平顺，耳朵中等大小，眼睛蓝色。 有六种毛色，分别为海豹色、蓝色、巧克力色、丁香色、浅红色和白色根据毛色和图案分布的不同，国际猫协会（The International Cat Association，TICA）将布偶猫分为重点色、手套色和双色三种类型。布偶猫因其温顺的性格和被抱起时放松的姿态而得名，如同柔软的布偶一般。 该品种由美国加利福尼亚州的育种专家安·贝克（Ann Baker）在20世纪 60年代培育出来。 1993年，猫爱好者协会（CFA）注册了布偶猫， 2000年2月布偶猫获得了CFA的冠军。 布偶猫生长速度缓慢，2岁时毛色趋于稳定，3-4岁时身体发育完全。 布偶猫是一种可爱、安静、温和大方的猫， 对儿童宽容，喜欢玩耍，它们友善聪明，乐于和人类互动，是较为理想的室内伴侣。",
-    tags: ["大型", "粘人", "长毛"],
-    traits: ["性格超温顺", "非常粘人", "适合家庭", "智商较高"],
-    tips: ["每日梳理毛发", "保持运动量", "注意饮食均衡", "定期健康检查"],
+      "挪威森林猫体型大，毛发长且防水。适应能力强，性格温和且独立。喜欢攀爬，需要足够的活动空间。对家庭友善，但不会过分黏人。",
+    tags: ["大型", "独立", "长毛"],
+    stats: {
+      size: 85,
+      activity: 70,
+      friendly: 75,
+    },
   },
 ]);
 
 // 关键词搜索
 const filteredCats = computed(() => {
-  if (!searchQuery.value) return cats.value;
-  const query = searchQuery.value.toLowerCase();
-  return cats.value.filter(
-    (cat) =>
-      cat.name.toLowerCase().includes(query) ||
-      cat.tags.some((tag) => tag.toLowerCase().includes(query))
-  );
+  let result = cats.value;
+
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase();
+    result = result.filter(
+      (cat) =>
+        cat.name.toLowerCase().includes(query) ||
+        cat.tags.some((tag) => tag.toLowerCase().includes(query))
+    );
+  }
+
+  if (selectedTags.value.length > 0) {
+    result = result.filter((cat) =>
+      cat.tags.some((tag) => selectedTags.value.includes(tag))
+    );
+  }
+
+  return result;
 });
+
+// 根据 tag 筛选
+const toggleTag = (tag) => {
+  const index = selectedTags.value.indexOf(tag);
+  if (index === -1) {
+    selectedTags.value.push(tag);
+  } else {
+    selectedTags.value.splice(index, 1);
+  }
+};
 
 // 显示详情
 const showDetail = (cat) => {
-  selectedCat.value = cat;
+  router.push({
+    name: "WikiPetDetail",
+    params: {
+      type: "cats",
+      id: cat.id,
+    },
+  });
 };
 
 // 模拟加载更多数据
@@ -119,24 +175,66 @@ const loadMorePets = async () => {
   if (loading.value) return;
   loading.value = true;
 
-  // 模拟API请求延迟 -- 调用接口获取宠物数据
+  // 模拟API请求延迟
   await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // 计算当前每行显示的卡片数量
+  const containerWidth = document.querySelector(".cats-grid").offsetWidth;
+  const cardWidth = 300; // 卡片最小宽度
+  const cardsPerRow = Math.floor(containerWidth / cardWidth);
+
+  // 计算需要加载的卡片数量，确保是整行
+  const currentCards = cats.value.length;
+  const remainingCards = cardsPerRow - (currentCards % cardsPerRow);
+  const cardsToLoad =
+    remainingCards === cardsPerRow ? cardsPerRow : remainingCards;
 
   const newCats = [
     {
-      id: 8,
+      id: cats.value.length + 1,
       name: "布偶猫",
+      breed: "布偶",
       image: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=800",
-      shortDesc: "“温顺如布偶”",
-      description:
-        "布偶猫（英文名：Ragdoll Cat），是一种体格较大的宠物猫， 体长可达1米（包含尾巴），雄性体重约为6.8-9.0千克，雌性体重约为4.5-6.8千克。 面部较宽，双颊线条平顺，耳朵中等大小，眼睛蓝色。 有六种毛色，分别为海豹色、蓝色、巧克力色、丁香色、浅红色和白色根据毛色和图案分布的不同，国际猫协会（The International Cat Association，TICA）将布偶猫分为重点色、手套色和双色三种类型。布偶猫因其温顺的性格和被抱起时放松的姿态而得名，如同柔软的布偶一般。 该品种由美国加利福尼亚州的育种专家安·贝克（Ann Baker）在20世纪 60年代培育出来。 1993年，猫爱好者协会（CFA）注册了布偶猫， 2000年2月布偶猫获得了CFA的冠军。 布偶猫生长速度缓慢，2岁时毛色趋于稳定，3-4岁时身体发育完全。 布偶猫是一种可爱、安静、温和大方的猫， 对儿童宽容，喜欢玩耍，它们友善聪明，乐于和人类互动，是较为理想的室内伴侣。",
-      tags: ["大型", "粘人", "长毛"],
-      traits: ["性格超温顺", "非常粘人", "适合家庭", "智商较高"],
-      tips: ["每日梳理毛发", "保持运动量", "注意饮食均衡", "定期健康检查"],
+      description: "布偶猫性格温顺，体型较大，非常适合家庭饲养。",
+      stats: {
+        size: 70,
+        activity: 50,
+        friendly: 95,
+      },
+      tags: ["大型猫", "温顺", "亲人"],
+    },
+    {
+      id: cats.value.length + 2,
+      name: "缅因猫",
+      breed: "缅因",
+      image:
+        "https://images.unsplash.com/photo-1595752776689-aebef37b5d32?w=800",
+      description: "缅因猫是最大的家猫品种之一，性格温和友善。",
+      stats: {
+        size: 90,
+        activity: 60,
+        friendly: 85,
+      },
+      tags: ["大型猫", "长毛", "温和"],
+    },
+    {
+      id: cats.value.length + 3,
+      name: "暹罗猫",
+      breed: "暹罗",
+      image:
+        "https://images.unsplash.com/photo-1576120634744-ee3e08b3be0d?w=800",
+      description: "暹罗猫聪明活泼，性格外向，善于交流。",
+      stats: {
+        size: 50,
+        activity: 80,
+        friendly: 75,
+      },
+      tags: ["中型猫", "聪明", "活泼"],
     },
   ];
 
-  cats.value.push(...newCats);
+  // 只添加需要的卡片数量
+  cats.value.push(...newCats.slice(0, cardsToLoad));
   page.value++;
   loading.value = false;
 };
@@ -147,6 +245,7 @@ const handleScroll = () => {
   const scrollTop = document.documentElement.scrollTop;
   const clientHeight = document.documentElement.clientHeight;
 
+  // 当滚动到距离底部200px时触发加载
   if (scrollHeight - scrollTop - clientHeight < 200 && !loading.value) {
     loadMorePets();
   }
@@ -155,335 +254,748 @@ const handleScroll = () => {
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
 });
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+
+// 折叠面板状态
+const openPanels = ref({
+  personality: true,
+  care: false,
+  description: false,
+});
+
+// 打开详情弹窗
+const openDetail = (cat) => {
+  selectedCat.value = cat;
+  // 重置折叠面板状态
+  openPanels.value = {
+    personality: true,
+    care: false,
+    description: false,
+  };
+};
+
+// 切换折叠面板
+const togglePanel = (panel) => {
+  openPanels.value[panel] = !openPanels.value[panel];
+};
 </script>
 
 <template>
-  <div class="wiki-cats">
-    <!-- 搜索框 -->
-    <div class="wiki-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input
-        type="text"
-        v-model="searchQuery"
-        class="wiki-search__input"
-        placeholder="搜些什么吧 ε٩(๑> ₃ <)۶з"
-      />
-    </div>
-
-    <!-- wiki 表格 -->
-    <div class="wiki-grid">
-      <article
-        v-for="cat in filteredCats"
-        :key="cat.id"
-        class="wiki-card"
-        @click="showDetail(cat)"
-      >
-        <div class="wiki-card__image">
-          <img :src="cat.image" :alt="cat.name" />
+  <div class="wiki-container">
+    <!-- 搜索和筛选部分 - 上方区域 -->
+    <div class="top-section">
+      <div class="search-bar-container">
+        <div class="search-bar">
+          <span class="material-icons-sharp">search</span>
+          <input
+            type="text"
+            placeholder="搜索猫咪品种..."
+            v-model="searchQuery"
+          />
         </div>
-        <div class="wiki-card__content">
-          <h3 class="wiki-card__title">{{ cat.name }}</h3>
-          <p class="wiki-card__description">{{ cat.shortDesc }}</p>
-          <div class="wiki-card__tags">
-            <span v-for="tag in cat.tags" :key="tag" class="wiki-card__tag">
-              {{ tag }}
-            </span>
+      </div>
+
+      <div class="tag-panel">
+        <h2 class="tag-panel-title">品种分类</h2>
+        <div class="filter-chips">
+          <div
+            v-for="(tag, index) in filterTags"
+            :key="index"
+            :class="['filter-chip', { active: selectedTags.includes(tag) }]"
+            @click="toggleTag(tag)"
+          >
+            <span>{{ tag }}</span>
+            <span class="material-icons-sharp" v-if="selectedTags.includes(tag)"
+              >close</span
+            >
           </div>
         </div>
-      </article>
+      </div>
     </div>
 
-    <!-- 加载更多指示器 -->
-    <div v-if="loading" class="loading-indicator">
-      <div class="loader"></div>
-      <span>猫咪正在赶来的路上...</span>
-    </div>
+    <!-- 宠物详情区域 - 下方区域 -->
+    <div class="bottom-section">
+      <div class="wiki-header">
+        <h1 class="wiki-title">
+          <span class="material-icons-sharp">pets</span>
+          猫咪百科
+          <span class="cat-count">{{ filteredCats.length }}只猫咪</span>
+        </h1>
 
-    <!-- 详情弹窗 -->
-    <teleport to="body">
-      <div v-if="selectedCat" class="wiki-modal">
-        <div class="wiki-modal__backdrop" @click="selectedCat = null"></div>
-        <div class="wiki-modal__content">
-          <button class="wiki-modal__close" @click="selectedCat = null">
-            <i class="fas fa-times"></i>
+        <div class="view-toggle">
+          <button
+            class="view-toggle-btn"
+            :class="{ active: viewMode === 'grid' }"
+            @click="viewMode = 'grid'"
+          >
+            <span class="material-icons-sharp">grid_view</span>
           </button>
+          <button
+            class="view-toggle-btn"
+            :class="{ active: viewMode === 'list' }"
+            @click="viewMode = 'list'"
+          >
+            <span class="material-icons-sharp">view_list</span>
+          </button>
+        </div>
+      </div>
 
-          <div class="wiki-modal__header">
-            <img :src="selectedCat.image" :alt="selectedCat.name" />
-            <h2>{{ selectedCat.name }}</h2>
+      <!-- 猫咪卡片网格 -->
+      <div :class="['cats-grid', viewMode]" v-if="viewMode === 'grid'">
+        <div v-for="cat in filteredCats" :key="cat.id" class="cat-card">
+          <div class="image-container" @click="showDetail(cat)">
+            <img :src="cat.image" :alt="cat.name" />
+            <div class="breed-tag">{{ cat.breed }}</div>
+            <div class="overlay">
+              <span class="view-details">查看详情</span>
+            </div>
           </div>
 
-          <div class="wiki-modal__body">
-            <div class="wiki-modal__section">
-              <h3>宠物信息</h3>
-              <p>{{ selectedCat.description }}</p>
+          <div class="cat-info">
+            <h3 class="cat-name">{{ cat.name }}</h3>
+            <p class="cat-description">{{ cat.description }}</p>
+
+            <div class="cat-stats">
+              <div class="stat-item">
+                <div class="stat-header">
+                  <span class="stat-label">体型</span>
+                  <span class="stat-value">{{ cat.stats.size }}%</span>
+                </div>
+                <div class="stat-bar">
+                  <div
+                    class="stat-fill"
+                    :style="{ width: `${cat.stats.size}%` }"
+                  ></div>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-header">
+                  <span class="stat-label">活跃度</span>
+                  <span class="stat-value">{{ cat.stats.activity }}%</span>
+                </div>
+                <div class="stat-bar">
+                  <div
+                    class="stat-fill"
+                    :style="{ width: `${cat.stats.activity}%` }"
+                  ></div>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-header">
+                  <span class="stat-label">友善度</span>
+                  <span class="stat-value">{{ cat.stats.friendly }}%</span>
+                </div>
+                <div class="stat-bar">
+                  <div
+                    class="stat-fill"
+                    :style="{ width: `${cat.stats.friendly}%` }"
+                  ></div>
+                </div>
+              </div>
             </div>
 
-            <div class="wiki-modal__section">
-              <h3>性格特点</h3>
-              <ul>
-                <li v-for="trait in selectedCat.traits" :key="trait">
-                  {{ trait }}
-                </li>
-              </ul>
-            </div>
-
-            <div class="wiki-modal__section">
-              <h3>养护建议</h3>
-              <ul>
-                <li v-for="tip in selectedCat.tips" :key="tip">
-                  {{ tip }}
-                </li>
-              </ul>
+            <div class="cat-tags">
+              <span
+                v-for="(tag, tagIndex) in cat.tags"
+                :key="tagIndex"
+                class="cat-tag"
+              >
+                {{ tag }}
+              </span>
             </div>
           </div>
         </div>
       </div>
-    </teleport>
+
+      <!-- 列表视图 -->
+      <div class="cats-list" v-else>
+        <div v-for="cat in filteredCats" :key="cat.id" class="cat-list-item">
+          <div class="list-image" @click="showDetail(cat)">
+            <img :src="cat.image" :alt="cat.name" />
+            <div class="breed-tag">{{ cat.breed }}</div>
+          </div>
+
+          <div class="list-content">
+            <h3 class="cat-name">{{ cat.name }}</h3>
+            <p class="cat-description">{{ cat.description }}</p>
+
+            <div class="list-stats">
+              <div class="stat-item">
+                <span class="stat-label">体型</span>
+                <span class="stat-value">{{ cat.stats.size }}%</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">活跃度</span>
+                <span class="stat-value">{{ cat.stats.activity }}%</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">友善度</span>
+                <span class="stat-value">{{ cat.stats.friendly }}%</span>
+              </div>
+            </div>
+
+            <div class="cat-tags">
+              <span
+                v-for="(tag, tagIndex) in cat.tags"
+                :key="tagIndex"
+                class="cat-tag"
+              >
+                {{ tag }}
+              </span>
+            </div>
+
+            <button class="detail-btn" @click="showDetail(cat)">
+              <span class="material-icons-sharp">visibility</span>
+              查看详情
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 加载更多指示器 -->
+      <div class="loading-more" v-if="loading">
+        <div class="spinner"></div>
+        <span>加载更多猫咪...</span>
+      </div>
+
+      <!-- 空状态 -->
+      <div class="empty-state" v-if="filteredCats.length === 0">
+        <span class="material-icons-sharp">sentiment_dissatisfied</span>
+        <p>没有找到符合条件的猫咪</p>
+        <button
+          @click="
+            searchQuery = '';
+            selectedTags = [];
+          "
+          class="reset-btn"
+        >
+          重置搜索
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.wiki-cats {
-  padding: 2rem;
-  padding-top: 0;
-  box-sizing: border-box;
+<style scoped>
+.wiki-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
-// 搜索框
-.wiki-search {
-  position: relative;
-  margin-bottom: 2rem;
-
-  &__input {
-    width: 94%;
-    padding: 1rem 1rem 1rem 3rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.5rem;
-    font-size: 14px;
-    transition: all 0.3s ease;
-
-    &:focus {
-      outline: none;
-      border-color: var(--deongaree);
-      box-shadow: 0 0 0 2px #dbeafe;
-    }
-  }
-
-  i {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #94a3b8;
-  }
+.top-section {
+  padding: 20px;
+  background-color: var(--white);
+  border-radius: var(--radius-16);
+  box-shadow: var(--shadow-1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.wiki-grid {
+.search-bar-container {
+  width: 100%;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: var(--white_a3);
+  border-radius: var(--radius-pill);
+  padding: 12px 20px;
+  box-shadow: var(--shadow-1);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.search-bar:focus-within {
+  box-shadow: var(--shadow-2);
+  transform: translateY(-2px);
+}
+
+.search-bar .material-icons-sharp {
+  color: var(--dark-variant);
+  margin-right: 10px;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: var(--fs-16);
+  color: var(--dark);
+}
+
+.tag-panel {
+  padding: 20px 0 0 0;
+  border-top: 1px solid var(--light);
+}
+
+.tag-panel-title {
+  font-size: var(--fs-18);
+  color: var(--dark);
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-chip {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: var(--white_a3);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: var(--fs-14);
+  user-select: none;
+}
+
+.filter-chip:hover {
+  background-color: var(--light);
+}
+
+.filter-chip.active {
+  background-color: var(--deongaree);
+  color: white;
+}
+
+.filter-chip .material-icons-sharp {
+  font-size: 18px;
+  margin-left: 5px;
+}
+
+.cats-section {
+  background-color: var(--white);
+  border-radius: var(--radius-16);
+  box-shadow: var(--shadow-1);
+  padding: 20px;
+}
+
+.bottom-section {
+  background-color: var(--white);
+  border-radius: var(--radius-16);
+  box-shadow: var(--shadow-1);
+  padding: 20px;
+}
+
+.wiki-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--deongaree-yw);
+}
+
+.wiki-title {
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-32);
+  color: var(--dark);
+}
+
+.wiki-title .material-icons-sharp {
+  margin-right: 12px;
+  color: var(--deongaree);
+}
+
+.cat-count {
+  margin-left: 15px;
+  font-size: var(--fs-16);
+  color: var(--dark-variant);
+  background-color: var(--deongaree-yw);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+}
+
+.view-toggle {
+  display: flex;
+  gap: 10px;
+}
+
+.view-toggle-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: var(--radius-8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--dark-variant);
+}
+
+.view-toggle-btn:hover,
+.view-toggle-btn.active {
+  background-color: var(--light);
+  color: var(--deongaree);
+}
+
+.cats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+  gap: 30px;
+  margin-bottom: 40px;
 }
 
-// 卡片样式
-.wiki-card {
-  background: white;
-  border-radius: 1rem;
+.cat-card {
+  background-color: white;
+  border-radius: var(--radius-16);
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  }
-
-  &__image {
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: all 0.3s ease;
-    }
-  }
-
-  &__content {
-    padding: 1.5rem;
-  }
-
-  &__title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #1e293b;
-    font-family: var(--ff-llt);
-  }
-
-  &__description {
-    color: #64748b;
-    margin-bottom: 1rem;
-    line-height: 1.6;
-  }
-
-  &__tags {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  &__tag {
-    padding: 0.25rem 0.75rem;
-    background: #eff6ff;
-    color: #2563eb;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-  }
+  box-shadow: var(--shadow-1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid transparent;
 }
 
-// 详情样式
-.wiki-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
+.cat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-3);
+  border-color: var(--deongaree-yw);
+}
+
+.image-container {
+  height: 220px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.breed-tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--dark);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-12);
+  font-weight: 600;
+  box-shadow: var(--shadow-1);
+}
+
+.image-container:hover img {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
-
-  &__backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-  }
-
-  &__content {
-    position: relative;
-    width: 100%;
-    max-width: 1000px;
-    max-height: 90vh;
-    background: white;
-    border-radius: 1rem;
-    overflow-y: auto;
-  }
-
-  &__close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #000;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: rotate(90deg);
-      align-self: center;
-      justify-self: center;
-      background: rgba(0, 0, 0, 0.4);
-
-      i {
-        color: #fff;
-      }
-    }
-  }
-
-  &__header {
-    img {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-    }
-
-    h2 {
-      padding: 1.5rem;
-      font-size: 2rem;
-      font-weight: 700;
-      font-family: var(--ff-llt);
-    }
-  }
-
-  &__body {
-    padding: 0 1.5rem 1.5rem;
-  }
-
-  &__section {
-    margin-bottom: 2rem;
-
-    h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #1e293b;
-    }
-
-    p {
-      color: #64748b;
-      line-height: 1.6;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-
-      li {
-        position: relative;
-        padding-left: 1.5rem;
-        margin-bottom: 0.5rem;
-        color: #64748b;
-
-        &::before {
-          content: "";
-          position: absolute;
-          left: 0;
-          top: 0.5rem;
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #3b82f6;
-        }
-      }
-    }
-  }
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-// 加载动画
-.loading-indicator {
+.image-container:hover .overlay {
+  opacity: 1;
+}
+
+.view-details {
+  background-color: var(--deongaree);
+  color: white;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.image-container:hover .view-details {
+  transform: translateY(0);
+}
+
+.cat-info {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cat-name {
+  font-size: var(--fs-22);
+  margin: 0 0 12px 0;
+  color: var(--dark);
+  font-weight: 600;
+}
+
+.cat-description {
+  color: var(--dark-variant);
+  font-size: var(--fs-14);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.cat-stats {
+  margin-bottom: 20px;
+}
+
+.stat-item {
+  margin-bottom: 15px;
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: var(--fs-14);
+  color: var(--dark-variant);
+}
+
+.stat-value {
+  font-size: var(--fs-14);
+  color: var(--dark);
+  font-weight: 600;
+}
+
+.stat-bar {
+  height: 8px;
+  background-color: var(--light);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.stat-fill {
+  height: 100%;
+  background-color: var(--deongaree);
+  border-radius: var(--radius-pill);
+  transition: width 0.5s ease;
+}
+
+.cat-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.cat-tag {
+  padding: 4px 12px;
+  background-color: var(--deongaree-yw);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-12);
+  color: var(--dark);
+}
+
+.detail-btn {
+  width: 100%;
+  background-color: var(--deongaree);
+  color: white;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 10px 20px;
+  font-size: var(--fs-14);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.detail-btn:hover {
+  background-color: var(--deongaree-dark);
+  color: var(--deongaree);
+  transform: translateY(-2px);
+}
+
+.detail-btn .material-icons-sharp {
+  font-size: 18px;
+}
+
+.loading-more {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
-  color: #718096;
+  margin: 30px 0;
+  color: var(--dark-variant);
 }
 
-.loader {
-  width: 40px;
-  height: 40px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid var(--deongaree);
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--light);
+  border-top-color: var(--deongaree);
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin: 1rem 0;
+  margin-bottom: 10px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  color: var(--dark-variant);
+}
+
+.empty-state .material-icons-sharp {
+  font-size: 64px;
+  color: var(--light);
+  margin-bottom: 20px;
+}
+
+.empty-state p {
+  font-size: var(--fs-18);
+  margin-bottom: 20px;
+}
+
+.reset-btn {
+  background-color: var(--deongaree);
+  color: white;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 10px 20px;
+  font-size: var(--fs-14);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+  background-color: var(--deongaree-dark);
+  transform: translateY(-2px);
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .wiki-container {
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .cats-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .wiki-title {
+    font-size: var(--fs-24);
+  }
+
+  .cat-count {
+    display: none;
+  }
+
+  .sort-filter {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .sort-filter label {
+    display: none;
+  }
+}
+
+/* 添加列表视图样式 */
+.cats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cat-list-item {
+  display: flex;
+  gap: 20px;
+  background-color: white;
+  border-radius: var(--radius-16);
+  overflow: hidden;
+  box-shadow: var(--shadow-1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cat-list-item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-3);
+}
+
+.list-image {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  cursor: pointer;
+}
+
+.list-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.list-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.list-stats {
+  display: flex;
+  gap: 20px;
+  margin: 15px 0;
+}
+
+.list-stats .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.list-stats .stat-label {
+  font-size: var(--fs-12);
+  color: var(--dark-variant);
+}
+
+.list-stats .stat-value {
+  font-size: var(--fs-16);
+  font-weight: 600;
+  color: var(--dark);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .dog-list-item {
+    flex-direction: column;
+  }
+
+  .list-image {
+    width: 100%;
+    height: 200px;
+  }
+
+  .list-stats {
+    flex-wrap: wrap;
   }
 }
 </style>

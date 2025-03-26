@@ -1118,7 +1118,7 @@ const getImageSrc = (url) => {
                 {{ vip.details.description }}
               </div>
               <div class="vip-section-subscribe">
-                <button @click="router.push('/vip')">订阅计划</button>
+                <button >订阅计划</button>
               </div>
             </div>
           </div>
@@ -2862,29 +2862,5 @@ const getImageSrc = (url) => {
   100% {
     opacity: 0.8;
   }
-}
-
-// 添加content-visibility属性，优化渲染性能
-.home-serve,
-.all-services,
-.shop-section,
-.testimonials-section {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 1000px; // 预估尺寸，防止布局抖动
-}
-
-// 使用will-change优化transform动画
-.floating-shapes .shape,
-.main-box-startBtn:hover,
-.shop-section-card:hover {
-  will-change: transform;
-}
-
-// 使用GPU加速
-.img,
-.main-box-text,
-.main-box-subText,
-.main-box-startBtn {
-  transform: translateZ(0);
 }
 </style>
