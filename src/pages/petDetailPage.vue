@@ -722,7 +722,7 @@ onMounted(() => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: var(--ff-kai);
+  font-family: var(--ff-llt);
   color: var(--dark);
 }
 
