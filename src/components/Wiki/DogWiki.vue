@@ -460,7 +460,7 @@ const togglePanel = (panel) => {
 </script>
 
 <template>
-  <div class="wiki-container">
+  <div class="dogwiki-container">
     <!-- 搜索和筛选部分 - 上方区域 -->
     <div class="top-section">
       <div class="search-bar-container">
@@ -656,7 +656,7 @@ const togglePanel = (panel) => {
 </template>
 
 <style scoped>
-.wiki-container {
+.dogwiki-container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -993,7 +993,7 @@ const togglePanel = (panel) => {
 
 .detail-btn:hover {
   background-color: var(--deongaree-dark);
-  color:var(--deongaree) ;
+  color: var(--deongaree);
   transform: translateY(-2px);
 }
 

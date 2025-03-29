@@ -1,14 +1,17 @@
 <script setup>
-import { ref, computed, onUnmounted, onMounted } from "vue";
+import { ref, computed, onUnmounted, onMounted, watch } from "vue";
 import QrcodeVue from "qrcode.vue";
 import { useCartStore } from "../stores/cartStore";
+import { useCheckoutStore } from "../stores/checkoutStore";
+import { useOrderStore } from "../stores/orderStore";
 import { useRouter } from "vue-router";
 import _ from "lodash";
+import HomeHeader from "../components/Home/HomeHeader.vue";
 
 // 创建一个简单的防抖函数
 function createDebounce(fn, delay = 300) {
   let timer = null;
-  return function(...args) {
+  return function (...args) {
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => {
       fn.apply(this, args);
@@ -19,54 +22,13 @@ function createDebounce(fn, delay = 300) {
 const cartStore = useCartStore();
 const cartItems = computed(() => cartStore.items);
 
-// 示例地址数据
-const Address = ref([
-  {
-    id: 1,
-    name: "张三",
-    phone: "138xxxxxxxx",
-    province: "广东省",
-    tag: "家",
-    city: "佛山市",
-    district: "南海区",
-    detail: "xxxxxxxxxxx",
-    isDefault: true,
-  },
-  {
-    id: 6,
-    name: "张三",
-    phone: "138xxxxxxxx",
-    province: "广东省",
-    tag: "家",
-    city: "佛山市",
-    district: "南海区",
-    detail: "xxxxxxxxxxx",
-    isDefault: true,
-  },
-  {
-    id: 2,
-    name: "李四",
-    phone: "198xxxxxxxx",
-    province: "广东省",
-    tag: "公司",
-    city: "深圳市",
-    district: "南山区",
-    detail: "科技园南路XX号XX大厦",
-    isDefault: true,
-  },
-  {
-    id: 3,
-    name: "王五",
-    phone: "159xxxxxxxx",
-    province: "广东省",
-    tag: "学校",
-    city: "中山市",
-    district: "五桂山",
-    detail: "xxxxxxx",
-    isDefault: true,
-  },
-]);
-const selectedAddress = ref(1);
+// 导入checkoutStore
+const checkoutStore = useCheckoutStore();
+// 导入orderStore
+const orderStore = useOrderStore();
+// 获取地址数据
+const Address = computed(() => checkoutStore.shippingAddresses);
+const selectedAddress = ref(checkoutStore.selectedAddressId);
 
 // 支付方式数据
 const paymentMethods = [
@@ -205,6 +167,33 @@ const simulatePayment = async () => {
   try {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
+    // 获取选中的收货地址
+    const shippingAddress = checkoutStore.shippingAddresses.find(
+      (addr) => addr.id === selectedAddress.value
+    );
+
+    if (!shippingAddress) {
+      throw new Error("找不到选中的收货地址");
+    }
+
+    // 选中的商品
+    const itemsToPurchase = cartItems.value.filter((item) => item.selected);
+
+    // 创建订单
+    const orderId = orderStore.createOrder({
+      status: "paid",
+      paidAt: new Date().toISOString(),
+      items: [...itemsToPurchase],
+      totalAmount: totalPrice.value,
+      shippingFee: shipping.value,
+      finalAmount: finalTotal.value,
+      shippingAddress: shippingAddress,
+      paymentMethod: getPaymentMethodName(),
+      additionalData: {
+        orderCreatedAt: new Date().toISOString(),
+      },
+    });
+
     // 更新状态
     isPaymentStep.value = true;
     showPaymentModal.value = false;
@@ -212,10 +201,13 @@ const simulatePayment = async () => {
     isCompleteStep.value = true;
     clearInterval(timerInterval);
 
-    // 清空购物车
+    // 重置支付状态
+    isProcessingCardPayment.value = false;
+    
+    // 清空购物车中已选择的商品
     cartStore.clearCart();
 
-    // 3秒后跳转
+    // 不再自动跳转
     // setTimeout(() => {
     //   router.push("/orders");
     // }, 3000);
@@ -230,20 +222,97 @@ const simulatePayment = async () => {
 // 修改生成二维码效果
 onMounted(() => {
   // 模拟二维码生成
-  setTimeout(() => {
-    isGeneratingQR.value = false;
-
-    // 模拟10秒后扫码成功
-    setTimeout(() => {
-      isQRScanned.value = true;
-      showSimulateButton.value = true;
-    }, 10000);
-  }, 1500);
+  if (selectedPayment === "alipay" || selectedPayment === "wechat") {
+    resetPaymentState();
+  }
 });
 
 // 组件卸载时清理定时器
 onUnmounted(() => {
+  clearTimeout(qrGenerationTimer);
+  clearTimeout(qrScanTimer);
+  clearTimeout(verificationTimer);
   clearInterval(timerInterval);
+});
+
+// 重置支付状态
+const resetPaymentState = () => {
+  isGeneratingQR.value = true;
+  isQRScanned.value = false;
+  showSimulateButton.value = false;
+
+  // 清除旧的定时器
+  clearTimeout(qrGenerationTimer);
+  clearTimeout(qrScanTimer);
+
+  // 1秒后显示二维码
+  qrGenerationTimer = setTimeout(() => {
+    isGeneratingQR.value = false;
+
+    // 5秒后显示扫码成功
+    qrScanTimer = setTimeout(() => {
+      isQRScanned.value = true;
+      showSimulateButton.value = true;
+    }, 5000);
+  }, 1000);
+};
+
+// 定义验证码相关状态
+const showVerificationCodeInput = ref(false);
+const verificationCode = ref("");
+const isProcessingCardPayment = ref(false);
+let qrGenerationTimer = null;
+let qrScanTimer = null;
+let verificationTimer = null;
+
+// 银行卡支付处理
+const handleCardPayment = () => {
+  if (!showVerificationCodeInput.value) {
+    // 第一次点击，显示验证码输入框
+    showVerificationCodeInput.value = true;
+    return;
+  }
+
+  // 第二次点击，开始处理支付
+  isProcessingCardPayment.value = true;
+
+  // 清除旧的定时器
+  clearTimeout(verificationTimer);
+
+  // 5秒后自动完成支付
+  verificationTimer = setTimeout(() => {
+    simulatePayment();
+  }, 5000);
+};
+
+// 监听支付方式变更
+watch(selectedPayment, (newPaymentMethod) => {
+  if (isPaymentStep.value) {
+    // 重置支付状态
+    showSimulateButton.value = false;
+    isProcessingCardPayment.value = false;
+    
+    if (newPaymentMethod === "alipay" || newPaymentMethod === "wechat") {
+      showVerificationCodeInput.value = false;
+      resetPaymentState();
+    } else if (newPaymentMethod === "card") {
+      isGeneratingQR.value = false;
+      isQRScanned.value = false;
+      showVerificationCodeInput.value = false;
+    }
+  }
+});
+
+// 监听支付步骤变更
+watch(isPaymentStep, (newValue) => {
+  if (newValue) {
+    if (
+      selectedPayment.value === "alipay" ||
+      selectedPayment.value === "wechat"
+    ) {
+      resetPaymentState();
+    }
+  }
 });
 
 // 添加步骤状态计算
@@ -267,16 +336,129 @@ const goBack = () => {
     paymentTimer.value = 900;
   } else {
     // 否则返回到购物车页面
-    router.push("/cart");
+    router.push("/shop");
   }
 };
+
+// 银行卡表单数据和状态
+const showAddCardForm = ref(false);
+const newCardData = ref({
+  cardNumber: "",
+  expirationDate: "",
+  cardHolder: "",
+  isDefault: false,
+});
+
+// 表单验证
+const isCardFormValid = computed(() => {
+  return (
+    newCardData.value.cardNumber.length >= 16 &&
+    newCardData.value.expirationDate.length === 5 &&
+    newCardData.value.cardHolder.length > 0
+  );
+});
+
+// 处理银行卡添加
+const handleAddCard = () => {
+  if (isCardFormValid.value) {
+    // 获取卡类型
+    let cardType = "unknown";
+    const firstDigit = newCardData.value.cardNumber.charAt(0);
+    if (firstDigit === "4") cardType = "visa";
+    else if (firstDigit === "5") cardType = "mastercard";
+    else if (firstDigit === "3") cardType = "amex";
+    else if (firstDigit === "6") cardType = "discover";
+    else if (firstDigit === "2") cardType = "jcb";
+
+    // 添加新卡
+    checkoutStore.addCreditCard({
+      ...newCardData.value,
+      cardType,
+    });
+
+    // 重置表单
+    newCardData.value = {
+      cardNumber: "",
+      expirationDate: "",
+      cardHolder: "",
+      isDefault: false,
+    };
+
+    // 隐藏表单
+    showAddCardForm.value = false;
+  }
+};
+
+// 格式化银行卡号，每4位添加空格
+const formatCardNumber = (value) => {
+  if (!value) return "";
+  value = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
+  const parts = [];
+  for (let i = 0; i < value.length; i += 4) {
+    parts.push(value.substr(i, 4));
+  }
+  return parts.join(" ");
+};
+
+// 处理卡号输入，自动添加空格
+const handleCardNumberInput = (e) => {
+  const input = e.target;
+  let { value } = input;
+
+  // 移除非数字字符
+  value = value.replace(/\D/g, "");
+
+  // 限制长度为16位
+  if (value.length > 16) {
+    value = value.slice(0, 16);
+  }
+
+  // 格式化并更新
+  newCardData.value.cardNumber = formatCardNumber(value);
+};
+
+// 处理到期日输入，自动添加/
+const handleExpirationDateInput = (e) => {
+  const input = e.target;
+  let { value } = input;
+
+  // 移除非数字字符
+  value = value.replace(/\D/g, "");
+
+  // 限制长度为4位
+  if (value.length > 4) {
+    value = value.slice(0, 4);
+  }
+
+  // 格式化 MM/YY
+  if (value.length > 2) {
+    value = value.slice(0, 2) + "/" + value.slice(2);
+  }
+
+  // 更新
+  newCardData.value.expirationDate = value;
+};
+
+// 格式化手机号码
+const maskPhoneNumber = (phone) => {
+  if (!phone) return "";
+  return phone.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2");
+};
+
+// 获取当前选中的银行卡
+const selectedCard = computed(() => {
+  return checkoutStore.creditCards.find(
+    (card) => card.id === checkoutStore.selectedCardId
+  );
+});
 </script>
 
 <template>
+  <HomeHeader />
   <div class="checkout-container">
     <!-- 页面标题 -->
     <div class="checkout-header">
-      <button class="back-btn" @click="goBack">
+      <button class="back-btn" @click="goBack" v-if="!isCompleteStep">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -361,7 +543,13 @@ const goBack = () => {
                 </div>
                 <div class="address-edit">
                   <span>编辑</span> <span class="divider">|</span>
-                  <span class="delete">删除</span>
+                  <span
+                    class="delete"
+                    @click.stop="
+                      checkoutStore.removeShippingAddress(address.id)
+                    "
+                    >删除</span
+                  >
                 </div>
               </div>
               <div class="address-info">
@@ -466,7 +654,7 @@ const goBack = () => {
             </div>
           </div>
 
-          <!--  -->
+          <!-- 支付方式选择 -->
           <div class="payment-options">
             <label
               v-for="method in paymentMethods"
@@ -482,6 +670,167 @@ const goBack = () => {
               />
               <span class="payment-icon" v-html="method.icon"></span>
             </label>
+          </div>
+
+          <!-- 银行卡信息区域 - 仅在选择银行卡支付方式时显示 -->
+          <div v-if="selectedPayment === 'card'" class="card-information">
+            <!-- 存在银行卡情况 -->
+            <div
+              v-if="checkoutStore.creditCards.length > 0 && !showAddCardForm"
+              class="saved-cards"
+            >
+              <h3 class="section-subtitle">已保存的银行卡</h3>
+
+              <div class="saved-card-list">
+                <div
+                  v-for="card in checkoutStore.creditCards"
+                  :key="card.id"
+                  class="saved-card"
+                  :class="{
+                    active: checkoutStore.selectedCardId === card.id,
+                    'card-visa': card.cardType === 'visa',
+                    'card-mastercard': card.cardType === 'mastercard',
+                    'card-amex': card.cardType === 'amex',
+                    'card-jcb': card.cardType === 'jcb',
+                  }"
+                  @click="checkoutStore.selectedCardId = card.id"
+                >
+                  <div class="card-type-icon">
+                    <img
+                      v-if="card.cardType === 'visa'"
+                      src="https://cdn-icons-png.flaticon.com/512/196/196578.png"
+                      alt="Visa"
+                    />
+                    <img
+                      v-else-if="card.cardType === 'mastercard'"
+                      src="https://cdn-icons-png.flaticon.com/512/196/196561.png"
+                      alt="Mastercard"
+                    />
+                    <img
+                      v-else-if="card.cardType === 'amex'"
+                      src="https://cdn-icons-png.flaticon.com/512/196/196539.png"
+                      alt="American Express"
+                    />
+                    <img
+                      v-else-if="card.cardType === 'jcb'"
+                      src="https://cdn-icons-png.flaticon.com/512/196/196560.png"
+                      alt="JCB"
+                    />
+                    <span v-else>Card</span>
+                  </div>
+
+                  <div class="card-details">
+                    <div class="card-number">
+                      •••• •••• •••• {{ card.cardNumber.slice(-4) }}
+                    </div>
+                    <div class="card-expiry">{{ card.expirationDate }}</div>
+                  </div>
+
+                  <div class="card-actions">
+                    <button
+                      class="btn-remove"
+                      @click.stop="checkoutStore.removeCreditCard(card.id)"
+                    >
+                      <span class="material-icons-sharp">delete</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <button class="add-new-card" @click="showAddCardForm = true">
+                <span class="material-icons-sharp">add</span>
+                添加新卡
+              </button>
+            </div>
+
+            <!-- 添加新卡表单 -->
+            <div
+              v-if="showAddCardForm || checkoutStore.creditCards.length === 0"
+              class="card-form"
+            >
+              <h3 class="section-subtitle">添加信用卡或借记卡</h3>
+
+              <div class="form-group">
+                <label for="cardNumber">卡号</label>
+                <input
+                  type="text"
+                  id="cardNumber"
+                  v-model="newCardData.cardNumber"
+                  @input="handleCardNumberInput"
+                  placeholder="1234 5678 9012 3456"
+                  maxlength="19"
+                  class="card-input"
+                />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group half">
+                  <label for="expirationDate">到期日 (MM/YY)</label>
+                  <input
+                    type="text"
+                    id="expirationDate"
+                    v-model="newCardData.expirationDate"
+                    @input="handleExpirationDateInput"
+                    placeholder="MM/YY"
+                    maxlength="5"
+                    class="card-input"
+                  />
+                </div>
+
+                <div class="form-group half">
+                  <label for="securityCode">安全码</label>
+                  <input
+                    type="password"
+                    id="securityCode"
+                    placeholder="123"
+                    maxlength="4"
+                    class="card-input"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="cardHolder">持卡人姓名</label>
+                <input
+                  type="text"
+                  id="cardHolder"
+                  v-model="newCardData.cardHolder"
+                  placeholder="持卡人姓名"
+                  class="card-input"
+                />
+              </div>
+
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  id="defaultCard"
+                  v-model="newCardData.isDefault"
+                />
+                <label for="defaultCard">设为默认支付方式</label>
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" id="saveAddress" checked />
+                <label for="saveAddress">使用购物地址作为账单地址</label>
+              </div>
+
+              <div class="form-actions">
+                <button
+                  class="btn-save"
+                  @click="handleAddCard"
+                  :disabled="!isCardFormValid"
+                >
+                  保存卡信息
+                </button>
+                <button
+                  v-if="checkoutStore.creditCards.length > 0"
+                  class="btn-cancel"
+                  @click="showAddCardForm = false"
+                >
+                  取消
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -502,41 +851,165 @@ const goBack = () => {
     <div v-else-if="isPaymentStep && !isCompleteStep" class="payment-content">
       <div class="payment-info-section">
         <div class="payment-order-info">
-          <h2>订单信息</h2>
-          <div class="payment-order-number">订单号：{{ orderNumber }}</div>
-          <div class="payment-order-number">创建时间：2024-11-30 18:45:07</div>
-          <div class="payment-amount">
-            <span>支付金额</span>
-            <div class="amount">
-              <span class="value">￥{{ finalTotal.toFixed(2) }}</span>
+          <h2 class="payment-section-title">订单信息</h2>
+          <div class="order-card">
+            <div class="order-card-header">
+              <div class="order-status">
+                <span class="status-badge">待支付</span>
+              </div>
+              <div class="order-meta">
+                <div class="order-number">订单号：{{ orderNumber }}</div>
+                <div class="order-time">创建时间：2024-11-30 18:45:07</div>
+              </div>
             </div>
-          </div>
-          <div class="payment-timer">
-            <span>支付剩余时间：</span>
-            <span class="timer">{{ formatTime(paymentTimer) }}</span>
+
+            <div class="payment-amount">
+              <div class="amount-label">支付金额</div>
+              <div class="amount-value">
+                <span class="currency">¥</span>
+                <span class="value">{{ finalTotal.toFixed(2) }}</span>
+              </div>
+            </div>
+
+            <div class="payment-timer">
+              <div class="timer-icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div class="timer-text">
+                <span>支付剩余时间：</span>
+                <span class="timer">{{ formatTime(paymentTimer) }}</span>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="order-details">
-          <div class="order-details-header">商品清单</div>
+          <div class="order-details-header">
+            <h2 class="details-title">商品清单</h2>
+            <span class="details-count">共 {{ cartItems.length }} 件商品</span>
+          </div>
+
           <div class="order-items">
             <div v-for="item in cartItems" :key="item.id" class="order-item">
-              <img :src="item.image" :alt="item.title" class="item-image" />
+              <div class="item-image-container">
+                <img :src="item.image" :alt="item.title" class="item-image" />
+              </div>
               <div class="item-info">
                 <div class="item-title">{{ item.title }}</div>
+                <div class="item-attributes" v-if="item.color || item.size">
+                  <span v-if="item.color" class="item-attribute"
+                    >颜色: {{ item.color }}</span
+                  >
+                  <span v-if="item.size" class="item-attribute"
+                    >尺寸: {{ item.size }}</span
+                  >
+                </div>
                 <div class="item-meta">
                   <span class="item-price">¥ {{ item.price.toFixed(2) }}</span>
                   <span class="item-quantity">× {{ item.quantity }}</span>
                 </div>
               </div>
+              <div class="item-subtotal">
+                <span class="subtotal-label">小计</span>
+                <span class="subtotal-value"
+                  >¥ {{ (item.price * item.quantity).toFixed(2) }}</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="order-summary">
+            <div class="summary-row">
+              <span>商品总价</span>
+              <span>¥ {{ totalPrice.toFixed(2) }}</span>
+            </div>
+            <div class="summary-row">
+              <span>运费</span>
+              <span>{{
+                shipping > 0 ? `¥${shipping.toFixed(2)}` : "免费"
+              }}</span>
+            </div>
+            <div class="summary-row">
+              <span>优惠</span>
+              <span>-¥ 0.00</span>
+            </div>
+            <div class="summary-row total">
+              <span>实付款</span>
+              <span>¥ {{ finalTotal.toFixed(2) }}</span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="payment-method-section">
-        <h2>请使用{{ getPaymentMethodName() }}扫码支付</h2>
-        <div class="qr-code-container">
+        <h2>请使用{{ getPaymentMethodName() }}支付</h2>
+
+        <!-- 银行卡验证码输入框 -->
+        <div
+          v-if="selectedPayment === 'card' && isPaymentStep"
+          class="card-verification"
+        >
+          <div v-if="showVerificationCodeInput" class="verification-container">
+            <p class="verification-message">
+              验证码已发送至手机 {{ maskPhoneNumber(selectedCard?.cardHolder) }}
+            </p>
+
+            <div class="verification-input-container">
+              <input
+                type="text"
+                v-model="verificationCode"
+                placeholder="请输入6位验证码"
+                maxlength="6"
+                class="verification-input"
+                :disabled="isProcessingCardPayment"
+              />
+            </div>
+
+            <div class="verification-status" v-if="isProcessingCardPayment">
+              <div class="loading-spinner"></div>
+              <p>支付处理中，请稍候...</p>
+            </div>
+
+            <button
+              class="verify-button"
+              @click="handleCardPayment"
+              v-if="!isProcessingCardPayment"
+            >
+              确认支付
+            </button>
+          </div>
+
+          <button
+            v-if="!showVerificationCodeInput"
+            class="start-payment-btn"
+            @click="handleCardPayment"
+          >
+            开始支付
+          </button>
+        </div>
+
+        <!-- 支付宝/微信二维码支付 -->
+        <div
+          v-if="
+            (selectedPayment === 'alipay' || selectedPayment === 'wechat') &&
+            isPaymentStep
+          "
+          class="qr-code-container"
+        >
           <div class="qr-code-wrapper">
             <div class="mock-qr-code">
               <div v-if="isGeneratingQR" class="qr-loading">
@@ -578,7 +1051,10 @@ const goBack = () => {
 
         <!-- 仅用于演示的模拟支付按钮 -->
         <button
-          v-if="showSimulateButton"
+          v-if="
+            showSimulateButton ||
+            (isProcessingCardPayment && selectedPayment === 'card')
+          "
           class="simulate-payment-btn"
           @click="simulatePayment"
           :disabled="isProcessing"
@@ -646,6 +1122,9 @@ const goBack = () => {
           >
           <router-link to="/" class="btn btn-default">返回首页</router-link>
         </div>
+        <div class="success-notice">
+          <p>您可以查看订单列表，跟踪您的订单状态</p>
+        </div>
       </div>
     </div>
   </div>
@@ -658,7 +1137,6 @@ const goBack = () => {
   padding: 40px 20px;
   min-height: 100vh;
   background: #fff;
-  font-family: var(--ff-kai);
 }
 
 .checkout-header {
@@ -1180,37 +1658,85 @@ const goBack = () => {
 
 /* 支付信息区域 */
 .payment-info-section {
-  padding: 12px 24px;
+  padding: 0;
   overflow: hidden;
-  border-radius: 10px;
-  background-color: #e4e0e015;
+  border-radius: 12px;
+  background-color: #fff;
 }
 
-.payment-order-number {
-  font-size: 15px;
+.payment-section-title {
+  font-size: 20px;
   font-weight: 600;
-  margin-bottom: 5px;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+
+.order-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.status-badge {
+  background-color: #37a6a0;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.order-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-number,
+.order-time {
+  font-size: 14px;
+  color: #64748b;
 }
 
 .payment-amount {
   text-align: center;
-  margin-bottom: 24px;
+  margin: 30px 0;
 }
 
-.payment-amount span {
-  display: block;
+.amount-label {
+  font-size: 14px;
   color: #64748b;
   margin-bottom: 8px;
 }
 
-.amount {
-  font-size: 32px;
+.amount-value {
   font-weight: 600;
+}
+
+.currency {
+  font-size: 20px;
+  color: #ef4444;
+}
+
+.value {
+  font-size: 32px;
   color: #ef4444;
 }
 
 .payment-timer {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 12px;
   background: #fffbeb;
   border-radius: 8px;
@@ -1218,63 +1744,166 @@ const goBack = () => {
   font-size: 14px;
 }
 
-/* 订单详情区域 */
+.timer-icon {
+  padding-top: 5px;
+  color: #d97706;
+}
+
+.timer {
+  font-weight: 600;
+  color: #d97706;
+}
+
+/* 订单详情样式美化 */
 .order-details {
-  padding: 24px 0;
+  margin-top: 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .order-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.details-title {
   font-size: 18px;
   font-weight: 600;
   color: #1e293b;
-  margin-bottom: 16px;
+  margin: 0;
 }
 
-.order-details .order-items {
+.details-count {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.order-items {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  height: 60vh;
+  max-height: 400px;
   overflow-y: auto;
+  padding: 0 16px;
 }
 
-.order-details .order-item {
-  display: flex;
+.order-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   gap: 16px;
-  padding: 16px;
-  background: #f8fafc;
-  border-radius: 12px;
-  transition: transform 0.2s ease;
+  padding: 20px 8px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-.order-details .item-image {
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.item-image-container {
   width: 80px;
   height: 80px;
   border-radius: 8px;
   overflow: hidden;
 }
 
-.order-details .item-image img {
+.item-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.order-details .item-info {
-  flex: 1;
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.order-details .item-title {
+.item-title {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   color: #1e293b;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.item-attributes {
+  display: flex;
+  gap: 8px;
   margin-bottom: 8px;
 }
 
-.order-details .item-meta {
+.item-attribute {
+  font-size: 12px;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.item-meta {
   display: flex;
   justify-content: space-between;
   color: #64748b;
   font-size: 14px;
+}
+
+.item-price {
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.item-subtotal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.subtotal-label {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.subtotal-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ef4444;
+}
+
+.order-summary {
+  padding: 20px 24px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.summary-row:last-child {
+  margin-bottom: 0;
+}
+
+.summary-row.total {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.summary-row.total span:last-child {
+  color: #ef4444;
 }
 
 /* 支付方式区域 */
@@ -1355,6 +1984,7 @@ const goBack = () => {
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
+  margin-top: 20px;
   transition: all 0.3s ease;
 }
 
@@ -1513,6 +2143,7 @@ const goBack = () => {
 
 .detail-item .value {
   font-weight: 500;
+  font-size: 16px;
   color: #1f2937;
 }
 
@@ -1569,5 +2200,337 @@ const goBack = () => {
 
 .success-actions .btn-default:hover {
   background: #f3f4f6;
+}
+
+.success-notice {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #6b7280;
+  padding: 12px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+}
+
+/* 银行卡区域样式 */
+.card-information {
+  margin-top: 20px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.section-subtitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1e293b;
+}
+
+.saved-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.saved-card {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.saved-card:hover {
+  border-color: #37a6a0;
+  background-color: rgba(55, 166, 160, 0.05);
+}
+
+.saved-card.active {
+  border-color: #37a6a0;
+  background-color: rgba(55, 166, 160, 0.1);
+}
+
+.card-type-icon {
+  width: 40px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.card-type-icon img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.card-details {
+  flex: 1;
+}
+
+.card-number {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.card-expiry {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-remove {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s ease;
+}
+
+.btn-remove:hover {
+  color: #ef4444;
+}
+
+.add-new-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 1px dashed #cbd5e1;
+  color: #37a6a0;
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.add-new-card:hover {
+  border-color: #37a6a0;
+  background-color: rgba(55, 166, 160, 0.05);
+}
+
+/* 表单样式 */
+.card-form {
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-group.half {
+  flex: 1;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.card-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.card-input:focus {
+  border-color: #37a6a0;
+  outline: none;
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.form-check label {
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-save {
+  flex: 1;
+  background-color: #37a6a0;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-save:hover:not(:disabled) {
+  background-color: #2c8480;
+}
+
+.btn-save:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  padding: 12px;
+  border: 1px solid #ddd;
+  background-color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+  border-color: #64748b;
+  color: #1e293b;
+}
+
+/* 卡类型样式 */
+.card-visa {
+  border-left: 4px solid #1a1f71;
+}
+
+.card-mastercard {
+  border-left: 4px solid #eb001b;
+}
+
+.card-amex {
+  border-left: 4px solid #2e77bc;
+}
+
+.card-jcb {
+  border-left: 4px solid #0b4ea2;
+}
+
+/* 银行卡验证码输入框样式 */
+.card-verification {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.card-verification h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.verification-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.verification-message {
+  font-size: 14px;
+  color: #666;
+}
+
+.verification-input-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.verification-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.verification-status {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+  color: #666;
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #ccc;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.verify-button {
+  width: 100%;
+  padding: 14px;
+  background: #37a6a0;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.verify-button:hover:not(:disabled) {
+  background-color: #2c8480;
+}
+
+.verify-button:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.start-payment-btn {
+  width: 100%;
+  padding: 14px;
+  background: #37a6a0;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 20px;
+}
+
+.start-payment-btn:hover:not(:disabled) {
+  background-color: #2c8480;
+}
+
+.start-payment-btn:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
 }
 </style>

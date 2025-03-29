@@ -4,88 +4,10 @@ import { ref, computed } from "vue";
 export const useCartStore = defineStore(
   "cart",
   () => {
-    const items = ref([
-      {
-        id: "1001 1200 011",
-        title: "限定版手办 - 初音未来2024版",
-        price: 1299.0,
-        quantity: 1,
-        image: "https://picsum.photos/400/400?random=1",
-        selected: false,
-      },
-      {
-        id: "1005 1200 011",
-        title: "动漫周边抱枕 - 特典版",
-        price: 129.0,
-        quantity: 2,
-        image: "https://picsum.photos/400/400?random=2",
-        selected: false,
-      },
-      {
-        id: "1003 1200 011",
-        title: "原创设计T恤 - 夏日限定",
-        price: 199.0,
-        quantity: 1,
-        image: "https://picsum.photos/400/400?random=3",
-        selected: false,
-      },
-      {
-        id: "1002 1200 011",
-        title: "动漫角色立牌 - 珍藏版",
-        price: 89.0,
-        quantity: 1,
-        image: "https://picsum.photos/400/400?random=4",
-        selected: false,
-      },
-      {
-        id: "1001 1200 011",
-        title: "二次元主题帆布包",
-        price: 159.0,
-        quantity: 1,
-        image: "https://picsum.photos/400/400?random=5",
-        selected: false,
-      },
-      {
-        id: "1001 1200 011",
-        title: "动漫角色钥匙扣套装",
-        price: 49.9,
-        quantity: 3,
-        image: "https://picsum.photos/400/400?random=6",
-        selected: false,
-      },
-      {
-        id: "8375 6540 311",
-        title: "限量版动漫海报组合",
-        price: 79.9,
-        quantity: 1,
-        image: "https://picsum.photos/400/400?random=7",
-        selected: false,
-      },
-      {
-        id: "1281 6475 132`",
-        title: "二次元主题笔记本",
-        price: 39.9,
-        quantity: 2,
-        image: "https://picsum.photos/400/400?random=8",
-        selected: false,
-      },
-      {
-        id: "1321 1224 053",
-        title: "动漫人物徽章套装",
-        price: 29.9,
-        quantity: 4,
-        image: "https://picsum.photos/400/400?random=9",
-        selected: false,
-      },
-      {
-        id: "1001 1213 011",
-        title: "二次元主题手机壳",
-        price: 69.0,
-        quantity: 1,
-        image: "https://picsum.photos/400/400?random=10",
-        selected: false,
-      },
-    ]);
+    const items = ref([]);
+
+    // 添加喜欢商品的状态管理
+    const favorites = ref({});
 
     // 添加全选状态
     const isAllSelected = computed({
@@ -104,14 +26,55 @@ export const useCartStore = defineStore(
       );
     });
 
+    // 购物车列表 - 合并相同商品
+    const groupedItems = computed(() => {
+      const groupedMap = {};
+
+      items.value.forEach((item) => {
+        if (!groupedMap[item.id]) {
+          // 第一次遇到该商品时，复制对象，设置数量为1
+          groupedMap[item.id] = { ...item };
+        } else {
+          // 已存在该商品，增加数量
+          groupedMap[item.id].quantity += item.quantity;
+        }
+      });
+
+      return Object.values(groupedMap);
+    });
+
     const addItem = (item) => {
-      items.value.push({ ...item, selected: false });
+      // 检查商品是否已存在于购物车中
+      const existingItem = items.value.find((i) => i.id === item.id);
+
+      if (existingItem) {
+        // 如果已存在，增加数量
+        existingItem.quantity += item.quantity || 1;
+      } else {
+        // 如果不存在，添加新项
+        items.value.push({ ...item, selected: false });
+      }
     };
 
     const removeItem = (id) => {
       const index = items.value.findIndex((item) => item.id === id);
       if (index > -1) {
         items.value.splice(index, 1);
+      }
+    };
+
+    // 减少商品数量，当数量为1时移除商品
+    const decreaseQuantity = (id) => {
+      const item = items.value.find((item) => item.id === id);
+
+      if (item) {
+        if (item.quantity > 1) {
+          // 如果数量大于1，减少数量
+          item.quantity--;
+        } else {
+          // 如果数量为1，移除商品
+          removeItem(id);
+        }
       }
     };
 
@@ -122,27 +85,59 @@ export const useCartStore = defineStore(
       }
     };
 
-    // const toggleSelect = (id) => {
-    //   const item = items.value.find(item => item.id === id)
-    //   if (item) {
-    //     item.selected = !item.selected
-    //   }
-    // }
+    // 管理喜欢状态的方法
+    const toggleFavorite = (productId) => {
+      favorites.value[productId] = !favorites.value[productId];
+    };
 
+    const addToFavorites = (productId) => {
+      favorites.value[productId] = true;
+    };
+
+    const removeFromFavorites = (productId) => {
+      favorites.value[productId] = false;
+    };
+
+    const isFavorite = (productId) => {
+      return !!favorites.value[productId];
+    };
+
+    // 清空购物车
     const clearCart = () => {
       items.value = [];
+      updateLocalStorage();
+    };
+
+    // 清空已选中的商品
+    const clearSelectedItems = () => {
+      items.value = items.value.filter(item => !item.selected);
+      updateLocalStorage();
+    };
+
+    // 更新本地存储
+    const updateLocalStorage = () => {
+      // 这个函数在使用 pinia-plugin-persistedstate 时通常不需要手动调用
+      // 但为了确保清理功能立即生效，我们保留这个方法
+      // 实际上，pinia persist 插件会自动处理状态的保存
     };
 
     return {
       items,
+      favorites,
       selectedTotal,
       addItem,
       removeItem,
       updateQuantity,
       clearCart,
       isAllSelected,
-      // selectedCount,
-      // toggleSelect,
+      // 喜欢商品相关方法
+      toggleFavorite,
+      addToFavorites,
+      removeFromFavorites,
+      isFavorite,
+      groupedItems,
+      decreaseQuantity,
+      clearSelectedItems,
     };
   },
   {

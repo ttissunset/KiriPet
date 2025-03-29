@@ -1,5 +1,4 @@
 import { createWebHistory, createRouter } from "vue-router";
-import shopPages from '../pages/shopPages.vue'
 
 // 创建路由规则
 const routes = [
@@ -72,8 +71,7 @@ const routes = [
   },
   {
     path: "/shop",
-    name: "Shop",
-    component: shopPages
+    component: () => import("../pages/shopPages.vue"),
   },
   {
     path: "/serve",
@@ -90,11 +88,6 @@ const routes = [
   {
     path: "/user",
     component: () => import("../pages/userPages.vue"),
-  },
-  {
-    path: "/cart",
-    name: "Cart",
-    component: () => import("../pages/cartPages.vue"),
   },
   {
     path: "/checkout",
@@ -125,6 +118,11 @@ const routes = [
     path: "/upload",
     name: "upload",
     component: () => import("../pages/uploadPages.vue"),
+  },
+  {
+    path: "/orders",
+    name: "orders",
+    component: () => import("../pages/orderPages.vue"),
   },
   {
     path: "/vip",

@@ -284,7 +284,7 @@ const togglePanel = (panel) => {
 </script>
 
 <template>
-  <div class="wiki-container">
+  <div class="catwiki-container">
     <!-- 搜索和筛选部分 - 上方区域 -->
     <div class="top-section">
       <div class="search-bar-container">
@@ -480,7 +480,7 @@ const togglePanel = (panel) => {
 </template>
 
 <style scoped>
-.wiki-container {
+.catwiki-container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -490,6 +490,7 @@ const togglePanel = (panel) => {
   gap: 30px;
 }
 
+/* 上方区域样式 */
 .top-section {
   padding: 20px;
   background-color: var(--white);
@@ -532,6 +533,7 @@ const togglePanel = (panel) => {
   background: transparent;
   font-size: var(--fs-16);
   color: var(--dark);
+  width: 100%;
 }
 
 .tag-panel {
@@ -578,13 +580,7 @@ const togglePanel = (panel) => {
   margin-left: 5px;
 }
 
-.cats-section {
-  background-color: var(--white);
-  border-radius: var(--radius-16);
-  box-shadow: var(--shadow-1);
-  padding: 20px;
-}
-
+/* 下方区域样式 */
 .bottom-section {
   background-color: var(--white);
   border-radius: var(--radius-16);
@@ -656,9 +652,9 @@ const togglePanel = (panel) => {
   overflow: hidden;
   box-shadow: var(--shadow-1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  height: 100%;
   border: 1px solid transparent;
 }
 
@@ -681,6 +677,7 @@ const togglePanel = (panel) => {
   object-fit: cover;
   transition: transform 0.5s ease;
 }
+
 .breed-tag {
   position: absolute;
   top: 12px;
@@ -907,12 +904,7 @@ const togglePanel = (panel) => {
     display: none;
   }
 
-  .sort-filter {
-    flex-direction: column;
-    align-items: flex-end;
-  }
-
-  .sort-filter label {
+  .view-toggle {
     display: none;
   }
 }
@@ -985,7 +977,7 @@ const togglePanel = (panel) => {
 
 /* 响应式调整 */
 @media (max-width: 768px) {
-  .dog-list-item {
+  .cat-list-item {
     flex-direction: column;
   }
 

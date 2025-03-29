@@ -60,7 +60,7 @@ const confirm = () => {
 const menuList = [
   { id: 0, name: "首页", path: "/home" },
   { id: 1, name: "宠物百科", path: "/wiki" },
-  { id: 2, name: "宠物商店", path: "/goods" },
+  { id: 2, name: "宠物商店", path: "/shop" },
   { id: 3, name: "宠物服务", path: "/serve" },
   { id: 4, name: "宠物乐园", path: "/social" },
 ];
@@ -460,5 +460,4 @@ onMounted(getCurrentMenuId);
     right: 0;
   }
 }
-
 </style>
