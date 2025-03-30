@@ -154,6 +154,7 @@ const switchChat = (friend) => {
   flex-direction: row;
   margin-top: 15px;
   padding-bottom: 15px;
+  cursor: pointer;
   border-bottom: 1px solid #e1e4e7;
 }
 

@@ -140,6 +140,13 @@ const routes = [
 const router = createRouter({
   routes,
   history: createWebHistory(import.meta.env.VITE_BASE_URL),
+  scrollBehavior() {
+    // 始终滚动到顶部，添加平滑滚动效果
+    return { 
+      top: 0,
+      behavior: 'smooth'  // 添加平滑滚动
+    }
+  },
 });
 
 // 导出路由对象
