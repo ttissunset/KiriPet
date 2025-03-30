@@ -719,9 +719,9 @@ onMounted(() => {
 
 <style scoped>
 .pet-detail-container {
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 2rem 0;
   font-family: var(--ff-llt);
   color: var(--dark);
 }

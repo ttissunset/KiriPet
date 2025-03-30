@@ -43,6 +43,11 @@ const routes = [
         component: () => import("../components/Wiki/DogWiki.vue"),
       },
       {
+        path: "knowledges",
+        name: "Knowledges",
+        component: () => import("../components/Wiki/KnowledgeWiki.vue"),
+      },
+      {
         path: ":type/:id",
         name: "WikiPetDetail",
         component: () => import("../pages/petDetailPage.vue"),
