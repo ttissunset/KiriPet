@@ -203,7 +203,7 @@ const simulatePayment = async () => {
 
     // 重置支付状态
     isProcessingCardPayment.value = false;
-    
+
     // 清空购物车中已选择的商品
     cartStore.clearCart();
 
@@ -291,7 +291,7 @@ watch(selectedPayment, (newPaymentMethod) => {
     // 重置支付状态
     showSimulateButton.value = false;
     isProcessingCardPayment.value = false;
-    
+
     if (newPaymentMethod === "alipay" || newPaymentMethod === "wechat") {
       showVerificationCodeInput.value = false;
       resetPaymentState();
@@ -454,7 +454,28 @@ const selectedCard = computed(() => {
 </script>
 
 <template>
-  <HomeHeader />
+  <!-- 简化版checkout header -->
+  <div class="checkout-header-wrapper">
+    <div class="checkout-header-container">
+      <div class="checkout-header-left">
+        <div class="logo" @click="router.push('/home')">
+          <img src="https://kiripet.tos-cn-beijing.volces.com/image/logo.png" />
+          <h2 class="logo-text">KiriPet</h2>
+        </div>
+      </div>
+      <div class="checkout-header-right">
+        <div class="cart-icon" @click="router.push('/shop')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="cart-count" v-if="cartItems.length">{{ cartItems.length }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <div class="checkout-container">
     <!-- 页面标题 -->
     <div class="checkout-header">
@@ -1131,6 +1152,102 @@ const selectedCard = computed(() => {
 </template>
 
 <style scoped>
+/* 简化版checkout header样式 */
+.checkout-header-wrapper {
+  width: 100%;
+  padding: 10px 0;
+  border-bottom: 1px solid #ede7f3;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #fff;
+}
+
+.checkout-header-container {
+  width: 76%;
+  display: flex;
+  margin: 0 auto;
+  padding: 0.75rem 2.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkout-header-left .logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--fs-20);
+  font-family: var(--ff-hymhtw);
+  cursor: pointer;
+}
+
+.checkout-header-left .logo img {
+  width: 30px;
+  height: 30px;
+}
+
+.checkout-header-left .logo .logo-text {
+  margin: 0;
+}
+
+.checkout-header-right {
+  display: flex;
+  align-items: center;
+}
+
+.cart-icon {
+  position: relative;
+  cursor: pointer;
+  margin-left: 20px;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.cart-icon:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.cart-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--deongaree, #5661ef);
+  color: white;
+  font-size: 12px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 768px) {
+  .checkout-header-container {
+    width: 90%;
+    padding: 0.5rem 1rem;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .checkout-header-container {
+    width: 95%;
+    padding: 0.5rem;
+  }
+  
+  .checkout-header-left .logo img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .checkout-header-left .logo .logo-text {
+    font-size: 16px;
+  }
+}
+
 .checkout-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -1432,6 +1549,7 @@ const selectedCard = computed(() => {
 .payment-section {
   border: 1px solid #ddd;
   padding: 24px;
+  height: fit-content;
 }
 
 /* 订单部分样式 */
@@ -2532,5 +2650,378 @@ const selectedCard = computed(() => {
 .start-payment-btn:disabled {
   background-color: #94a3b8;
   cursor: not-allowed;
+}
+
+/* 响应式设计 - 媒体查询 */
+@media screen and (max-width: 1200px) {
+  .checkout-container {
+    width: 95%;
+    max-width: 1100px;
+  }
+
+  .checkout-columns {
+    gap: 20px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .checkout-container {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .checkout-columns {
+    flex-direction: column;
+  }
+
+  .checkout-left-column {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .checkout-right-column {
+    width: 100%;
+  }
+
+  .address-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .payment-methods {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .modal-content {
+    width: 90%;
+    max-width: 500px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .checkout-steps {
+    padding: 15px 10px;
+  }
+  
+  .step-item {
+    font-size: 14px;
+  }
+  
+  .step-item::after {
+    width: 20px;
+    right: -10px;
+  }
+  
+  .checkout-section-title {
+    font-size: 18px;
+  }
+
+  .checkout-header h1 {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .checkout-header p {
+    font-size: 13px;
+  }
+  
+  .order-item {
+    grid-template-columns: 80px 1fr;
+    gap: 10px;
+    padding: 10px 0;
+  }
+  
+  .order-item-image {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .order-item-title {
+    font-size: 14px;
+  }
+  
+  .order-item-price {
+    font-size: 14px;
+  }
+  
+  .order-item-quantity {
+    font-size: 14px;
+  }
+  
+  .order-total-line {
+    font-size: 14px;
+  }
+  
+  .address-section {
+    height: fit-content;
+  }
+
+  .address-item {
+    padding: 0 20px;
+    padding-top: 16px;
+  }
+
+  .address-header .address-name {
+    font-size: 16px;
+  }
+
+  .address-info {
+    font-size: 14px;
+  }
+
+  .address-edit {
+    font-size: 12px;
+  }
+  
+  .add-address-button,
+  .submit-button {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  
+  .payment-method {
+    padding: 10px;
+  }
+  
+  .payment-method-name {
+    font-size: 14px;
+  }
+  
+  .qr-code-container {
+    padding: 15px;
+  }
+  
+  .modal-title {
+    font-size: 18px;
+  }
+
+  /* 订单信息优化 */
+  .summary-row {
+    font-size: 14px;
+  }
+
+  .order-header h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  /* 支付页面优化 */
+  .payment-section-title {
+    font-size: 18px;
+  }
+
+  .order-number, .order-time {
+    font-size: 13px;
+  }
+
+  .amount-label {
+    font-size: 13px;
+  }
+
+  .currency {
+    font-size: 18px;
+  }
+
+  .value {
+    font-size: 28px;
+  }
+
+  .payment-timer {
+    font-size: 13px;
+  }
+
+  .details-title {
+    font-size: 16px;
+  }
+
+  .details-count {
+    font-size: 13px;
+  }
+
+  .item-title {
+    font-size: 14px;
+  }
+
+  .item-attribute {
+    font-size: 11px;
+  }
+
+  .item-meta {
+    font-size: 13px;
+  }
+
+  .subtotal-label {
+    font-size: 11px;
+  }
+
+  .subtotal-value {
+    font-size: 14px;
+  }
+
+  .summary-row.total {
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .checkout-container {
+    padding: 15px;
+  }
+  
+  .checkout-section {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .payment-methods {
+    grid-template-columns: 1fr;
+  }
+  
+  .step-item {
+    font-size: 12px;
+    padding: 0 5px;
+  }
+  
+  .step-item::after {
+    display: none;
+  }
+  
+  .checkout-steps {
+    justify-content: space-around;
+  }
+
+  .checkout-header h1 {
+    font-size: 20px;
+  }
+
+  .checkout-header p {
+    font-size: 12px;
+  }
+  
+  .order-summary {
+    padding: 10px;
+  }
+  
+  .order-total-section {
+    padding: 10px;
+  }
+  
+  .add-address-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .order-success {
+    padding: 20px 15px;
+  }
+  
+  .success-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .success-title {
+    font-size: 20px;
+  }
+  
+  .success-details {
+    font-size: 13px;
+  }
+
+  .detail-item {
+    font-size: 13px;
+  }
+
+  .detail-item .value {
+    font-size: 14px;
+  }
+  
+  .card-info-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .card-number-input {
+    width: 100%;
+  }
+  
+  .card-expiry-input,
+  .card-cvv-input {
+    width: 100%;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .modal-actions button {
+    width: 100%;
+  }
+
+  /* 支付成功页面优化 */
+  .success-content h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .success-message p {
+    font-size: 13px;
+  }
+
+  .success-message .tip {
+    font-size: 12px;
+  }
+
+  .success-notice {
+    font-size: 12px;
+  }
+
+  .success-actions .btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  /* 银行卡部分优化 */
+  .section-subtitle {
+    font-size: 15px;
+  }
+
+  .card-number {
+    font-size: 13px;
+  }
+
+  .card-expiry {
+    font-size: 11px;
+  }
+
+  .add-new-card {
+    font-size: 13px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .card-input {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .form-check label {
+    font-size: 12px;
+  }
+
+  .verify-button, .start-payment-btn {
+    font-size: 14px;
+  }
+
+  .verification-message {
+    font-size: 12px;
+  }
 }
 </style>

@@ -590,4 +590,276 @@ onUnmounted(() => {
     grid-template-columns: 1fr;
   }
 }
+
+/* 移动端购物车弹窗样式 */
+@media screen and (max-width: 768px) {
+  .cart-sidebar {
+    width: 100%;
+    max-width: 100%;
+    height: 90vh;
+    max-height: 90vh;
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    right: 0;
+    transform: translateY(100%);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .cart-sidebar.cart-open {
+    transform: translateY(0);
+  }
+  
+  .cart-header {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .cart-header h2 {
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  .cart-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* 购物车项目样式优化 */
+  .cart-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
+    position: relative;
+    padding: 15px 0;
+  }
+  
+  .item-image {
+    grid-row: span 2;
+    width: 80px;
+    height: 80px;
+  }
+  
+  .item-details {
+    padding-right: 25px;
+  }
+  
+  .remove-item {
+    position: absolute;
+    top: 15px;
+    right: 0;
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .item-title {
+    font-size: 14px;
+    margin: 0 0 5px;
+    max-width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .item-price {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 5px 0;
+  }
+  
+  .item-attributes {
+    font-size: 12px;
+    color: #666;
+    margin: 5px 0;
+  }
+  
+  .quantity-control {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+  }
+  
+  .quantity-control span {
+    font-size: 12px;
+    color: #666;
+    margin-right: 10px;
+  }
+  
+  .quantity-btn {
+    width: 24px;
+    height: 24px;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .quantity-value {
+    margin: 0 8px;
+  }
+  
+  /* 推荐产品区域优化 */
+  .recommended-products {
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding: 15px 5px 0; /* 减小左右内边距，增加内容区域宽度 */
+  }
+  
+  .recommended-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px; /* 缩小间隙以增加卡片宽度 */
+  }
+  
+  .recommended-item {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    padding-bottom: 5px; /* 减小底部内边距 */
+    width: 100%; /* 确保宽度占满整个空间 */
+  }
+  
+  .recommended-item .item-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    grid-row: auto;
+  }
+  
+  .recommended-item .item-info {
+    padding: 8px 8px 0; /* 减小内边距 */
+  }
+  
+  .recommended-item h4 {
+    font-size: 13px;
+    margin: 0 0 3px; /* 减小下边距 */
+    height: 32px; /* 适当减小高度 */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  
+  .recommended-item .item-attributes {
+    font-size: 12px;
+    margin: 2px 0;
+    color: #666;
+  }
+  
+  .recommended-item .item-price {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 3px 0;
+    color: #e53935;
+  }
+  
+  .add-to-bag {
+    margin: 5px 8px 0; /* 调整左右边距 */
+    padding: 6px 0;
+    background: var(--deongaree, #5661ef);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  /* 超小屏幕单列布局适配 */
+  @media screen and (max-width: 375px) {
+    .recommended-items {
+      grid-template-columns: 1fr; /* 在极小屏幕上改为单列布局 */
+    }
+    
+    .recommended-item {
+      max-width: 100%;
+    }
+  }
+  
+  /* 购物车底部 */
+  .cart-footer {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background: white;
+  }
+  
+  .subtotal {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .shipping-note {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 15px;
+  }
+  
+  .checkout-button {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    background: var(--deongaree, #5661ef);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  /* 增加底部安全区域间距 (对iPhone X及以上机型) */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .cart-footer {
+      padding-bottom: calc(15px + env(safe-area-inset-bottom));
+    }
+  }
+  
+  /* 空购物车状态 */
+  .empty-cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+    text-align: center;
+  }
+  
+  .empty-cart p {
+    margin-bottom: 20px;
+    color: #666;
+  }
+  
+  .continue-shopping {
+    padding: 10px 20px;
+    background: var(--deongaree, #5661ef);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+}
 </style>

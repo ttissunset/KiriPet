@@ -1129,12 +1129,12 @@ button:hover {
   
   /* 医生板块响应式 */
   .main-images {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
   }
   
   .info-card {
-    padding: 30px 40px;
+    padding: 20px 30px;
   }
   
   .severe-doctor {
@@ -1190,6 +1190,11 @@ button:hover {
     margin-right: 0;
     margin-bottom: 15px;
     text-align: center;
+  }
+  
+  /* 医生板块在手机端改为一列布局 */
+  .main-images {
+    grid-template-columns: 1fr;
   }
   
   .carousel-image {

@@ -328,14 +328,14 @@ const wikiPageDescription =
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
+  padding: 18px 20px;
   border-bottom: 1px solid #f1f5f9;
 }
 
 .section-title {
   display: flex;
   align-items: center;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   margin: 0;
   font-family: var(--ff-llt);
@@ -343,9 +343,9 @@ const wikiPageDescription =
 
 .title-icon {
   display: inline-block;
-  width: 4px;
-  height: 16px;
-  margin-right: 8px;
+  width: 5px;
+  height: 18px;
+  margin-right: 10px;
   border-radius: 2px;
 
   &.hot {
@@ -363,7 +363,7 @@ const wikiPageDescription =
 
 .section-filter,
 .section-more {
-  font-size: 14px;
+  font-size: 15px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -387,15 +387,16 @@ const wikiPageDescription =
 .topic-list {
   flex: 1;
   overflow-y: auto;
-  padding: 10px;
+  padding: 15px;
 }
 
 .topic-item {
   display: flex;
-  padding: 10px;
+  padding: 15px;
   border-bottom: 1px solid #f1f5f9;
   cursor: pointer;
   transition: all 0.2s ease;
+  margin-bottom: 5px;
 
   &:hover {
     background-color: #eeeeeea9;
@@ -407,11 +408,11 @@ const wikiPageDescription =
 }
 
 .topic-image {
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   border-radius: 8px;
   overflow: hidden;
-  margin-right: 12px;
+  margin-right: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   img {
@@ -431,9 +432,9 @@ const wikiPageDescription =
 }
 
 .topic-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
-  margin: 0 0 5px 0;
+  margin: 0 0 8px 0;
   font-family: var(--ff-llt);
   transition: color 0.2s ease;
 
@@ -443,10 +444,10 @@ const wikiPageDescription =
 }
 
 .topic-description {
-  font-size: 12px;
+  font-size: 14px;
   color: #64748b;
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.6;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -456,15 +457,16 @@ const wikiPageDescription =
 // Wiki分类样式
 .category-list {
   flex: 1;
-  padding: 10px;
+  padding: 15px;
 }
 
 .category-item {
   display: flex;
-  padding: 10px;
+  padding: 15px;
   border-bottom: 1px solid #f1f5f9;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-bottom: 5px;
 
   &:hover {
     background-color: #eeeeeea9;
@@ -476,11 +478,11 @@ const wikiPageDescription =
 }
 
 .category-image {
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   border-radius: 6px;
   overflow: hidden;
-  margin-right: 12px;
+  margin-right: 15px;
 
   img {
     width: 100%;
@@ -494,17 +496,17 @@ const wikiPageDescription =
 }
 
 .category-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
-  margin: 0 0 5px 0;
+  margin: 0 0 8px 0;
   font-family: var(--ff-llt);
 }
 
 .category-description {
-  font-size: 12px;
+  font-size: 14px;
   color: #64748b;
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.6;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -516,15 +518,15 @@ const wikiPageDescription =
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 15px;
+  padding: 18px;
 }
 
 .featured-wiki-image {
   width: 100%;
-  height: 200px;
+  height: 210px;
   border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 
   img {
     width: 100%;
@@ -534,17 +536,17 @@ const wikiPageDescription =
 }
 
 .featured-wiki-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
-  margin: 0 0 10px 0;
+  margin: 0 0 12px 0;
   font-family: var(--ff-llt);
 }
 
 .featured-wiki-description {
-  font-size: 14px;
+  font-size: 15px;
   color: #64748b;
-  margin: 0 0 15px 0;
-  line-height: 1.5;
+  margin: 0 0 18px 0;
+  line-height: 1.6;
 }
 
 .featured-wiki-footer {
