@@ -7,6 +7,8 @@ import vips from "../../mock/vips";
 import infos from "../../mock/infos";
 import shops from "../../mock/shops";
 import goods from "../../mock/goods";
+// 导入新的FloatingEffects组件
+import FloatingEffects from "../Common/FloatingEffects.vue";
 
 const router = useRouter();
 
@@ -184,16 +186,15 @@ const getImageSrc = (url) => {
 </script>
 
 <template>
-  <!-- 添加浮动形状 -->
-  <div class="floating-shapes">
-    <div class="shape circle"></div>
-    <div class="shape square"></div>
-    <div class="shape square"></div>
-    <div class="shape circle"></div>
-  </div>
-
-  <!-- 添加光效 -->
-  <div class="light-effect"></div>
+  <!-- 使用新的浮动形状和光效组件，并自定义属性 -->
+  <FloatingEffects 
+    shapesColor="rgba(139, 152, 228, 0.15)"
+    lightColor="rgba(139, 152, 228, 0.25)"
+    :dogPawPosition="{ top: '12%', left: '8%' }"
+    :catPawPosition="{ top: '65%', left: '18%' }"
+    :birdPrintPosition="{ top: '18%', right: '10%' }"
+    :rabbitPawPosition="{ top: '75%', right: '15%' }"
+  />
 
   <div class="home-main">
     <div class="home-main-left">
@@ -1140,7 +1141,6 @@ const getImageSrc = (url) => {
 }
 
 // 使用will-change优化transform动画
-.floating-shapes .shape,
 .main-box-startBtn:hover,
 .shop-section-card:hover {
   will-change: transform;
@@ -1154,85 +1154,7 @@ const getImageSrc = (url) => {
   transform: translateZ(0);
 }
 
-/* 浮动形状的样式 */
-.floating-shapes {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: -1;
-}
-
-.shape {
-  position: absolute;
-  background-color: rgba(139, 152, 228, 0.1);
-  animation: float 15s infinite ease-in-out;
-}
-
-.circle {
-  border-radius: 50%;
-}
-
-.square {
-  border-radius: 15px;
-}
-
-.shape:nth-child(1) {
-  width: 100px;
-  height: 100px;
-  top: 15%;
-  left: 10%;
-  animation-delay: 0s;
-}
-
-.shape:nth-child(2) {
-  width: 150px;
-  height: 150px;
-  top: 60%;
-  left: 20%;
-  animation-delay: 2s;
-}
-
-.shape:nth-child(3) {
-  width: 120px;
-  height: 120px;
-  top: 20%;
-  right: 15%;
-  animation-delay: 4s;
-}
-
-.shape:nth-child(4) {
-  width: 80px;
-  height: 80px;
-  top: 70%;
-  right: 10%;
-  animation-delay: 6s;
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(5deg);
-  }
-}
-
-/* 光效样式 */
-.light-effect {
-  position: absolute;
-  width: 800px;
-  height: 800px;
-  top: -350px;
-  left: -350px;
-  background: radial-gradient(
-    circle,
-    rgba(139, 152, 228, 0.2) 0%,
-    rgba(139, 152, 228, 0) 70%
-  );
-  z-index: -1;
-}
+/* 移除浮动形状相关的样式，现在使用独立组件 */
 
 /* 主体部分 */
 .home-main {

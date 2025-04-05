@@ -1,6 +1,7 @@
 <script setup>
-import { ref, computed, onMounted, inject } from "vue";
+import { ref, computed, onMounted, inject, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
+import { dogInfos } from "../../../src/mock/infos.js";
 
 // Inject search state from parent
 const parentSearchQuery = inject('searchQuery', ref(''));
@@ -14,302 +15,8 @@ const filterTags = ["活泼", "可爱", "友善", "聪明", "敏捷", "叛逆"];
 const router = useRouter();
 const viewMode = ref("grid");
 
-const dogs = ref([
-  {
-    id: 1,
-    name: "金毛寻回犬",
-    age: "2-4岁",
-    breed: "金毛",
-    avatar:
-      "https://images.unsplash.com/photo-1508532566027-b2032cd8a715?w=800",
-    image: "https://images.unsplash.com/photo-1508532566027-b2032cd8a715?w=800",
-    shortDesc: '"最受欢迎的友善家庭犬"',
-    gender: "公",
-    weight: "25-34公斤",
-    health: "健康",
-    vaccinated: "已接种",
-    neutered: "已绝育",
-    tags: ["友善", "聪明", "忠诚"],
-    stats: {
-      size: 80,
-      exercise: 85,
-      friendly: 95,
-    },
-    personalityTraits: [
-      "性格极其友善，适合家庭饲养",
-      "对儿童有极高的耐心和包容性",
-      "聪明好学，容易训练",
-      "喜欢户外活动，精力充沛",
-      "忠诚度高，对主人非常依恋",
-    ],
-    careAdvice: [
-      "每天需要至少1小时的户外运动",
-      "定期梳理被毛，春秋季节脱毛多",
-      "注意耳部清洁，预防耳道感染",
-      "定期驱虫和疫苗接种",
-      "控制饮食，防止肥胖",
-    ],
-    description:
-      "金毛寻回犬原产于苏格兰，性格友善活泼，智商高且易于训练。是理想的家庭犬和工作犬，适合有孩子的家庭。需要充分的运动和社交活动。",
-  },
-  {
-    id: 2,
-    name: "拉布拉多犬",
-    age: "1-3岁",
-    breed: "拉布拉多",
-    avatar:
-      "https://images.unsplash.com/photo-1579213838942-6723a7979e33?w=800",
-    image: "https://images.unsplash.com/photo-1579213838942-6723a7979e33?w=800",
-    shortDesc: '"工作犬中的全能选手"',
-    gender: "母",
-    weight: "25-36公斤",
-    health: "健康",
-    vaccinated: "已接种",
-    neutered: "已绝育",
-    tags: ["温顺", "聪明", "活泼"],
-    stats: {
-      size: 80,
-      exercise: 90,
-      friendly: 90,
-    },
-    personalityTraits: [
-      "性格温和友善，是优秀的家庭犬",
-      "适应性强，喜欢与人互动",
-      "学习能力强，容易训练",
-      "对人友好，几乎不会有攻击性",
-      "喜欢水，游泳能力极佳",
-    ],
-    careAdvice: [
-      "需要大量运动，每天至少1-2小时",
-      "控制饮食，容易肥胖",
-      "定期梳理被毛，减少掉毛",
-      "注意耳朵清洁，预防感染",
-      "定期检查牙齿健康",
-    ],
-    description:
-      "拉布拉多犬是友善忠诚的大型犬，智商高，容易训练。性格温和，特别适合家庭饲养。喜欢水，游泳能力强，需要充分的运动和互动。",
-  },
-  {
-    id: 3,
-    name: "边境牧羊犬",
-    age: "1-2岁",
-    breed: "边牧",
-    avatar: "https://images.unsplash.com/photo-1551717743-49959800b1f6?w=800",
-    image: "https://images.unsplash.com/photo-1551717743-49959800b1f6?w=800",
-    shortDesc: '"世界上最聪明的犬种"',
-    gender: "公",
-    weight: "14-20公斤",
-    health: "健康",
-    vaccinated: "已接种",
-    neutered: "已绝育",
-    tags: ["聪明", "敏捷", "工作型"],
-    stats: {
-      size: 65,
-      exercise: 95,
-      friendly: 75,
-    },
-    personalityTraits: [
-      "极其聪明，被公认为犬类中智商最高的品种",
-      "精力充沛，需要大量运动和智力挑战",
-      "工作欲望强，喜欢有任务的生活",
-      "对主人忠诚，形成强烈的依恋关系",
-      "警觉性高，有很好的保护意识",
-    ],
-    careAdvice: [
-      "需要大量身体和智力活动，每天至少2小时",
-      "定期梳理被毛，特别是换毛季节",
-      "提供智力玩具和挑战性任务",
-      "系统性训练，建立良好的沟通",
-      "避免长时间独处，防止分离焦虑",
-    ],
-    description:
-      "边境牧羊犬被公认为犬类中智商最高的品种，源自英国边境地区。精力旺盛，需要大量身体和智力活动，适合有经验的养犬人士。",
-  },
-  {
-    id: 4,
-    name: "哈士奇",
-    age: "1-3岁",
-    breed: "哈士奇",
-    avatar:
-      "https://images.unsplash.com/photo-1605568427561-40dd23c2acea?w=800",
-    image: "https://images.unsplash.com/photo-1605568427561-40dd23c2acea?w=800",
-    shortDesc: '"雪橇三傻之一"',
-    gender: "公",
-    weight: "16-27公斤",
-    health: "健康",
-    vaccinated: "已接种",
-    neutered: "已绝育",
-    tags: ["活泼", "独立", "叛逆"],
-    stats: {
-      size: 70,
-      exercise: 90,
-      friendly: 80,
-    },
-    personalityTraits: [
-      "性格独立，有时显得叛逆",
-      "极其友善，对陌生人也很友好",
-      "聪明但倔强，训练时需要耐心",
-      "活力充沛，需要大量运动",
-      "喜欢挖掘和探索，好奇心强",
-    ],
-    careAdvice: [
-      "需要大量运动，每天至少2小时",
-      "定期梳理被毛，尤其是换毛季节",
-      "牢固的围栏，防止逃跑",
-      "夏季注意防暑，不适合炎热环境",
-      "一致性训练，建立明确规则",
-    ],
-    description:
-      "哈士奇是西伯利亚原产的中型犬，性格活泼独立。喜欢户外活动，需要大量运动。不适合高温环境，换毛期掉毛量大。适合有经验的饲养者。",
-  },
-  {
-    id: 5,
-    name: "德国牧羊犬",
-    age: "2-4岁",
-    breed: "德牧",
-    avatar:
-      "https://images.unsplash.com/photo-1589941013453-ec89f2e6d268?w=800",
-    image: "https://images.unsplash.com/photo-1589941013453-ec89f2e6d268?w=800",
-    shortDesc: '"忠诚勇敢的工作犬"',
-    gender: "公",
-    weight: "30-40公斤",
-    health: "健康",
-    vaccinated: "已接种",
-    neutered: "已绝育",
-    tags: ["智能", "勇敢", "工作型"],
-    stats: {
-      size: 85,
-      exercise: 85,
-      friendly: 70,
-    },
-    personalityTraits: [
-      "性格勇敢、自信、稳定",
-      "极其忠诚，对主人有强烈保护欲",
-      "聪明且工作热情高，易训练",
-      "警觉性强，是优秀的看门犬",
-      "对家庭成员温顺友善",
-    ],
-    careAdvice: [
-      "需要大量运动和训练，每天至少1.5小时",
-      "定期梳理被毛，减少脱毛",
-      "提供智力挑战和任务",
-      "社会化训练，避免过度保护行为",
-      "注意关节健康，避免幼犬剧烈运动",
-    ],
-    description:
-      "德国牧羊犬是一种勇敢、聪明的工作犬，警觉性高，保护意识强。需要系统训练和大量运动，适合有经验的主人。是优秀的警犬和服务犬。",
-  },
-  {
-    id: 6,
-    name: "法国斗牛犬",
-    age: "1-2岁",
-    breed: "法斗",
-    avatar:
-      "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800",
-    image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800",
-    shortDesc: '"小型伴侣犬中的明星"',
-    gender: "母",
-    weight: "8-14公斤",
-    health: "注意呼吸系统",
-    vaccinated: "已接种",
-    neutered: "已绝育",
-    tags: ["友善", "活泼", "性格好"],
-    stats: {
-      size: 40,
-      exercise: 50,
-      friendly: 90,
-    },
-    personalityTraits: [
-      "性格友善、活泼、充满活力",
-      "与家人建立亲密关系，喜欢陪伴",
-      "警觉性强但不常吠叫",
-      "对陌生人友好，社交性好",
-      "适应性强，适合公寓生活",
-    ],
-    careAdvice: [
-      "控制运动量，避免过度运动",
-      "注意呼吸问题，避免高温环境",
-      "定期清洁面部褶皱，预防感染",
-      "控制体重，提供均衡饮食",
-      "避免游泳，大多数法斗不善游泳",
-    ],
-    description:
-      "法国斗牛犬是受欢迎的小型伴侣犬，性格友善活泼。适合公寓生活，不需要大量运动。注意呼吸道健康，避免高温环境。温和友善，适合各类家庭。",
-  },
-  {
-    id: 7,
-    name: "柴犬",
-    age: "1-3岁",
-    breed: "柴犬",
-    avatar: "https://images.unsplash.com/photo-1562221440-abcf93a4c1c6?w=800",
-    image: "https://images.unsplash.com/photo-1562221440-abcf93a4c1c6?w=800",
-    shortDesc: '"日本国宝级犬种"',
-    gender: "公",
-    weight: "8-11公斤",
-    health: "健康",
-    vaccinated: "已接种",
-    neutered: "已绝育",
-    tags: ["独立", "忠诚", "警觉"],
-    stats: {
-      size: 45,
-      exercise: 70,
-      friendly: 65,
-    },
-    personalityTraits: [
-      "性格独立自主，有时显得高冷",
-      "对主人极其忠诚，形成强烈依恋",
-      "警觉性高，是优秀的看门犬",
-      "有丰富的表情，喜欢表达自己",
-      "适应能力强，适合公寓生活",
-    ],
-    careAdvice: [
-      "需要适量运动，每天1小时左右",
-      "定期梳理被毛，尤其是换毛期",
-      "早期社会化训练非常重要",
-      "建立明确的规则和界限",
-      "保持一致性训练，避免混淆",
-    ],
-    description:
-      '柴犬是日本的国宝级犬种，体型小巧，性格独立忠诚。表情丰富，网络上著名的"狗头"表情包犬种。适合公寓生活，需要适当训练和社会化。',
-  },
-  {
-    id: 8,
-    name: "萨摩耶犬",
-    age: "1-2岁",
-    breed: "萨摩耶",
-    avatar:
-      "https://images.unsplash.com/photo-1565708097881-9eeaad9cc335?w=800",
-    image: "https://images.unsplash.com/photo-1565708097881-9eeaad9cc335?w=800",
-    shortDesc: '"微笑天使"',
-    gender: "母",
-    weight: "16-30公斤",
-    health: "健康",
-    vaccinated: "已接种",
-    neutered: "已绝育",
-    tags: ["友善", "活泼", "漂亮"],
-    stats: {
-      size: 70,
-      exercise: 80,
-      friendly: 95,
-    },
-    personalityTraits: [
-      "性格友善开朗，永远面带微笑",
-      "对人友好，几乎没有攻击性",
-      "聪明但有独立性，训练需要耐心",
-      "活力充沛，喜欢户外活动",
-      "与家人亲密，享受家庭生活",
-    ],
-    careAdvice: [
-      "需要大量梳理，每周至少3-4次",
-      "需要适量运动，每天1-2小时",
-      "夏季注意防暑，不适合炎热环境",
-      "社会化训练要尽早开始",
-      "注意牙齿和耳朵的清洁",
-    ],
-    description:
-      '萨摩耶犬因其上扬的嘴角被称为"微笑天使"，原产于西伯利亚。纯白色被毛，性格友善，几乎没有攻击性。需要频繁梳理毛发，不适合高温环境。',
-  },
-]);
+// 使用infos.js中的dogInfos数据
+const dogs = ref(dogInfos);
 
 // Update filteredDogs computed property to handle search query
 const filteredDogs = computed(() => {
@@ -437,22 +144,6 @@ const loadMorePets = async () => {
   page.value++;
   loading.value = false;
 };
-
-// 监听滚动加载更多
-const handleScroll = () => {
-  const scrollHeight = document.documentElement.scrollHeight;
-  const scrollTop = document.documentElement.scrollTop;
-  const clientHeight = document.documentElement.clientHeight;
-
-  // 当滚动到距离底部200px时触发加载
-  if (scrollHeight - scrollTop - clientHeight < 200 && !loading.value) {
-    loadMorePets();
-  }
-};
-
-onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
-});
 
 // 折叠面板状态
 const openPanels = ref({
@@ -592,7 +283,7 @@ const togglePanel = (panel) => {
       </div>
 
       <!-- 列表视图 -->
-      <div class="dogs-list" v-else>
+      <div class="dogs-list" v-if="viewMode === 'list'">
         <div v-for="dog in filteredDogs" :key="dog.id" class="dog-list-item">
           <div class="list-image" @click="showDetail(dog)">
             <img :src="dog.image" :alt="dog.name" />
@@ -609,7 +300,7 @@ const togglePanel = (panel) => {
                 <span class="stat-value">{{ dog.stats.size }}%</span>
               </div>
               <div class="stat-item">
-                <span class="stat-label">运动量</span>
+                <span class="stat-label">运动需求</span>
                 <span class="stat-value">{{ dog.stats.exercise }}%</span>
               </div>
               <div class="stat-item">
@@ -635,11 +326,22 @@ const togglePanel = (panel) => {
           </div>
         </div>
       </div>
+      
+      <!-- 加载更多按钮 -->
+      <div class="load-more-container">
+        <button 
+          class="load-more-btn" 
+          @click="loadMorePets" 
+          :disabled="loading"
+        >
+          <span v-if="!loading" class="button-text">加载更多</span>
+          <span class="button-loader" v-if="loading"></span>
+        </button>
+      </div>
 
-      <!-- 加载更多指示器 -->
-      <div class="loading-more" v-if="loading">
-        <div class="spinner"></div>
-        <span>加载更多狗狗...</span>
+      <!-- 宠物详情弹窗 (当选中某只狗狗时显示) -->
+      <div class="pet-detail-modal" v-if="selectedDog">
+        <!-- 宠物详情弹窗内容 -->
       </div>
 
       <!-- 空状态 -->
@@ -1184,5 +886,73 @@ const togglePanel = (panel) => {
 
 .detail-btn .material-icons-sharp {
   font-size: 18px;
+}
+
+/* 加载更多按钮样式 */
+.load-more-container {
+  width: fit-content;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 60px;
+  background-color: var(--deongaree);
+}
+
+.load-more-btn {
+  background: none;
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+}
+
+.load-more-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: height 0.5s ease;
+}
+
+.load-more-btn:hover::after {
+  height: 100%;
+}
+
+.load-more-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.button-loader {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spin 1s infinite linear;
+}
+
+.load-more-btn.loading .button-text {
+  visibility: hidden;
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 </style>

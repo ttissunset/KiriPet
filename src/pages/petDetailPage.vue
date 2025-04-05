@@ -1,9 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { useRouter, useRoute } from 'vue-router';
+import { ref, onMounted, onUnmounted } from "vue";
+import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
+import { useRouter, useRoute } from "vue-router";
+import { catInfos, dogInfos } from "../mock/infos.js";
+import * as echarts from "echarts";
 
 const router = useRouter();
 const route = useRoute();
@@ -16,82 +19,92 @@ const goBack = () => {
 // 宠物数据
 const petData = ref({});
 
+// 基因展示切换
+const showDominantGenes = ref(true);
+
+// 图片预览相关状态
+const showImagePreview = ref(false);
+const currentImageIndex = ref(0);
+
+// 模型控制相关状态
+const isAnimationPaused = ref(false);
+
+// 打开图片预览
+const openImagePreview = (index) => {
+  currentImageIndex.value = index;
+  showImagePreview.value = true;
+};
+
+// 关闭图片预览
+const closeImagePreview = () => {
+  showImagePreview.value = false;
+};
+
+// 切换预览图片
+const changePreviewImage = (index) => {
+  currentImageIndex.value = index;
+};
+
+// 获取当前预览图片
+const getCurrentPreviewImage = () => {
+  if (!petData.value.images || petData.value.images.length === 0) {
+    return petData.value.image;
+  }
+  return petData.value.images[currentImageIndex.value];
+};
+
+// 获取地区颜色
+const getRegionColor = (index) => {
+  const colors = [
+    "#4CAF50", // 绿色
+    "#2196F3", // 蓝色
+    "#FF9800", // 橙色
+    "#9C27B0", // 紫色
+    "#F44336", // 红色
+  ];
+  return colors[index % colors.length];
+};
+
+// 存储ECharts实例的引用
+const pieChart = ref(null);
+const chartInstance = ref(null);
+
+// 用于3D渲染的变量
+let camera, scene, renderer, model, controls;
+const modelContainer = ref(null);
+let animationFrameId = null;
+
+// 遗传病风险预测仪表盘
+const diseaseRiskChart = ref(null);
+const riskChartInstance = ref(null);
+
+// 重置模型位置和大小
+const resetModelView = () => {
+  if (controls) {
+    controls.reset();
+    camera.position.set(5, 3, 5);
+    camera.lookAt(0, 0, 0);
+  }
+};
+
+// 切换动画暂停状态
+const toggleAnimation = () => {
+  isAnimationPaused.value = !isAnimationPaused.value;
+};
+
 // 根据路由参数获取宠物数据
-const fetchPetData = () => {
+const fetchPetData = async () => {
   const petType = route.params.type; // 'cats' 或 'dogs'
   const petId = Number(route.params.id);
   
   console.log(`正在获取宠物数据: 类型=${petType}, ID=${petId}`);
   
-  // 这里应该使用API获取数据，现在模拟从本地数据
-  if (petType === 'cats') {
-    // 猫咪数据
-    const catsData = [
-      {
-        id: 1,
-        name: "英国短毛猫",
-        age: "3岁",
-        breed: "英短",
-        avatar: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=800",
-        image: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=800",
-        shortDesc: "英国短毛猫性格温和友善，适合家庭饲养。",
-        gender: "公",
-        weight: "5公斤",
-        health: "健康",
-        vaccinated: "已接种",
-        neutered: "已绝育",
-        tags: ["温顺", "友好", "易护理", "适合家庭"],
-        personalityTraits: [
-          "性格温和，对人友善",
-          "适应能力强，容易与家人建立感情",
-          "独立性强，但也喜欢陪伴",
-          "不需要太多的运动量，适合室内饲养",
-          "好奇心适中，不会过分调皮"
-        ],
-        careAdvice: [
-          "定期梳理毛发，尤其是换季时期",
-          "保持清洁的饮水和食物环境",
-          "提供适当的猫爬架和玩具",
-          "定期检查耳朵和牙齿健康",
-          "保持规律的喂食和健康饮食"
-        ],
-        description: "英国短毛猫起源于古罗马时期，是英国本土猫种，在维多利亚时代得到正式认可。它们身体强壮，胸部宽阔，四肢粗短有力，被毛短而密，手感如丝绒般柔软。因其友善的性格和低需求的照顾要求，成为全球最受欢迎的猫品种之一。"
-      },
-      {
-        id: 2,
-        name: '美国短毛猫',
-        age: '1-3岁',
-        breed: '美短',
-        avatar: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800',
-        image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800',
-        shortDesc: '"温和且适应性强"',
-        gender: '母',
-        weight: '3.5-6公斤',
-        health: '健康',
-        vaccinated: '已接种',
-        neutered: '已绝育',
-        tags: ['活泼', '亲人', '耐心'],
-        personalityTraits: [
-          '性格活泼开朗，喜欢与人互动',
-          '亲近人类，特别适合家庭饲养',
-          '智商较高，容易训练',
-          '适应能力强，能适应各种生活环境',
-          '与其他宠物相处融洽'
-        ],
-        careAdvice: [
-          '需要充足的玩耍时间和互动',
-          '注意营养均衡，提供高质量猫粮',
-          '定期驱虫和疫苗接种',
-          '保持环境清洁，定期更换猫砂',
-          '提供适当的爬高和运动空间'
-        ],
-        description: '美国短毛猫原产于美国。关于其起源有两种说法，一部分人认为该猫是美洲大陆土著猫，经长期选育而成，另一部分人认为它是17世纪从欧洲随移民带入美国后，经改良而育成。美国短毛猫体格强壮，肌肉发达，脸呈圆形，眼睛大小适中；脊背平直，胸部浑圆；背毛柔而厚，毛色与波斯猫相似，并以银色条纹为珍贵，雄性体型比雌性稍大。'
-      }
-    ];
-    const foundCat = catsData.find(cat => cat.id === petId);
+  if (petType === "cats") {
+    // 使用导入的猫咪数据
+    const foundCat = catInfos.find((cat) => cat.id === petId);
     if (foundCat) {
       petData.value = foundCat;
-      console.log('成功获取猫咪数据:', foundCat.name);
+      console.log("成功获取猫咪数据:", foundCat.name);
     } else {
       console.error(`未找到ID为${petId}的猫咪数据`);
       // 设置默认数据或错误信息
@@ -100,297 +113,15 @@ const fetchPetData = () => {
         description: "抱歉，我们找不到这只猫咪的信息",
         tags: [],
         personalityTraits: [],
-        careAdvice: []
+        careAdvice: [],
       };
     }
-  } else if (petType === 'dogs') {
-    // 狗狗数据 - 确保与DogWiki.vue中的狗狗数据一致
-    const dogsData = [
-      {
-        id: 1,
-        name: '金毛寻回犬',
-        age: '2-4岁',
-        breed: '金毛',
-        avatar: 'https://images.unsplash.com/photo-1508532566027-b2032cd8a715?w=800',
-        image: 'https://images.unsplash.com/photo-1508532566027-b2032cd8a715?w=800',
-        shortDesc: '"最受欢迎的友善家庭犬"',
-        gender: '公',
-        weight: '25-34公斤',
-        health: '健康',
-        vaccinated: '已接种',
-        neutered: '已绝育',
-        tags: ['友善', '聪明', '忠诚'],
-        stats: {
-          size: 80,
-          exercise: 85,
-          friendly: 95,
-        },
-        personalityTraits: [
-          '性格极其友善，适合家庭饲养',
-          '对儿童有极高的耐心和包容性',
-          '聪明好学，容易训练',
-          '喜欢户外活动，精力充沛',
-          '忠诚度高，对主人非常依恋'
-        ],
-        careAdvice: [
-          '每天需要至少1小时的户外运动',
-          '定期梳理被毛，春秋季节脱毛多',
-          '注意耳部清洁，预防耳道感染',
-          '定期驱虫和疫苗接种',
-          '控制饮食，防止肥胖'
-        ],
-        description: '金毛寻回犬原产于苏格兰，性格友善活泼，智商高且易于训练。是理想的家庭犬和工作犬，适合有孩子的家庭。需要充分的运动和社交活动。'
-      },
-      {
-        id: 2,
-        name: '拉布拉多犬',
-        age: '1-3岁',
-        breed: '拉布拉多',
-        avatar: 'https://images.unsplash.com/photo-1579213838942-6723a7979e33?w=800',
-        image: 'https://images.unsplash.com/photo-1579213838942-6723a7979e33?w=800',
-        shortDesc: '"工作犬中的全能选手"',
-        gender: '母',
-        weight: '25-36公斤',
-        health: '健康',
-        vaccinated: '已接种',
-        neutered: '已绝育',
-        tags: ['温顺', '聪明', '活泼'],
-        stats: {
-          size: 80,
-          exercise: 90,
-          friendly: 90,
-        },
-        personalityTraits: [
-          '性格温和友善，是优秀的家庭犬',
-          '适应性强，喜欢与人互动',
-          '学习能力强，容易训练',
-          '对人友好，几乎不会有攻击性',
-          '喜欢水，游泳能力极佳'
-        ],
-        careAdvice: [
-          '需要大量运动，每天至少1-2小时',
-          '控制饮食，容易肥胖',
-          '定期梳理被毛，减少掉毛',
-          '注意耳朵清洁，预防感染',
-          '定期检查牙齿健康'
-        ],
-        description: '拉布拉多犬是友善忠诚的大型犬，智商高，容易训练。性格温和，特别适合家庭饲养。喜欢水，游泳能力强，需要充分的运动和互动。'
-      },
-      {
-        id: 3,
-        name: '边境牧羊犬',
-        age: '1-2岁',
-        breed: '边牧',
-        avatar: 'https://images.unsplash.com/photo-1551717743-49959800b1f6?w=800',
-        image: 'https://images.unsplash.com/photo-1551717743-49959800b1f6?w=800',
-        shortDesc: '"世界上最聪明的犬种"',
-        gender: '公',
-        weight: '14-20公斤',
-        health: '健康',
-        vaccinated: '已接种',
-        neutered: '已绝育',
-        tags: ['聪明', '敏捷', '工作型'],
-        stats: {
-          size: 65,
-          exercise: 95,
-          friendly: 75,
-        },
-        personalityTraits: [
-          '极其聪明，被公认为犬类中智商最高的品种',
-          '精力充沛，需要大量运动和智力挑战',
-          '工作欲望强，喜欢有任务的生活',
-          '对主人忠诚，形成强烈的依恋关系',
-          '警觉性高，有很好的保护意识'
-        ],
-        careAdvice: [
-          '需要大量身体和智力活动，每天至少2小时',
-          '定期梳理被毛，特别是换毛季节',
-          '提供智力玩具和挑战性任务',
-          '系统性训练，建立良好的沟通',
-          '避免长时间独处，防止分离焦虑'
-        ],
-        description: '边境牧羊犬被公认为犬类中智商最高的品种，源自英国边境地区。精力旺盛，需要大量身体和智力活动，适合有经验的养犬人士。'
-      },
-      {
-        id: 4,
-        name: '哈士奇',
-        age: '1-3岁',
-        breed: '哈士奇',
-        avatar: 'https://images.unsplash.com/photo-1605568427561-40dd23c2acea?w=800',
-        image: 'https://images.unsplash.com/photo-1605568427561-40dd23c2acea?w=800',
-        shortDesc: '"雪橇三傻之一"',
-        gender: '公',
-        weight: '16-27公斤',
-        health: '健康',
-        vaccinated: '已接种',
-        neutered: '已绝育',
-        tags: ['活泼', '独立', '叛逆'],
-        stats: {
-          size: 70,
-          exercise: 90,
-          friendly: 80,
-        },
-        personalityTraits: [
-          '性格独立，有时显得叛逆',
-          '极其友善，对陌生人也很友好',
-          '聪明但倔强，训练时需要耐心',
-          '活力充沛，需要大量运动',
-          '喜欢挖掘和探索，好奇心强'
-        ],
-        careAdvice: [
-          '需要大量运动，每天至少2小时',
-          '定期梳理被毛，尤其是换毛季节',
-          '牢固的围栏，防止逃跑',
-          '夏季注意防暑，不适合炎热环境',
-          '一致性训练，建立明确规则'
-        ],
-        description: '哈士奇是西伯利亚原产的中型犬，性格活泼独立。喜欢户外活动，需要大量运动。不适合高温环境，换毛期掉毛量大。适合有经验的饲养者。'
-      },
-      {
-        id: 5,
-        name: '德国牧羊犬',
-        age: '2-4岁',
-        breed: '德牧',
-        avatar: 'https://images.unsplash.com/photo-1589941013453-ec89f2e6d268?w=800',
-        image: 'https://images.unsplash.com/photo-1589941013453-ec89f2e6d268?w=800',
-        shortDesc: '"忠诚勇敢的工作犬"',
-        gender: '公',
-        weight: '30-40公斤',
-        health: '健康',
-        vaccinated: '已接种',
-        neutered: '已绝育',
-        tags: ['智能', '勇敢', '工作型'],
-        stats: {
-          size: 85,
-          exercise: 85,
-          friendly: 70,
-        },
-        personalityTraits: [
-          '性格勇敢、自信、稳定',
-          '极其忠诚，对主人有强烈保护欲',
-          '聪明且工作热情高，易训练',
-          '警觉性强，是优秀的看门犬',
-          '对家庭成员温顺友善'
-        ],
-        careAdvice: [
-          '需要大量运动和训练，每天至少1.5小时',
-          '定期梳理被毛，减少脱毛',
-          '提供智力挑战和任务',
-          '社会化训练，避免过度保护行为',
-          '注意关节健康，避免幼犬剧烈运动'
-        ],
-        description: '德国牧羊犬是一种勇敢、聪明的工作犬，警觉性高，保护意识强。需要系统训练和大量运动，适合有经验的主人。是优秀的警犬和服务犬。'
-      },
-      {
-        id: 6,
-        name: '法国斗牛犬',
-        age: '1-2岁',
-        breed: '法斗',
-        avatar: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800',
-        image: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800',
-        shortDesc: '"小型伴侣犬中的明星"',
-        gender: '母',
-        weight: '8-14公斤',
-        health: '注意呼吸系统',
-        vaccinated: '已接种',
-        neutered: '已绝育',
-        tags: ['友善', '活泼', '性格好'],
-        stats: {
-          size: 40,
-          exercise: 50,
-          friendly: 90,
-        },
-        personalityTraits: [
-          '性格友善、活泼、充满活力',
-          '与家人建立亲密关系，喜欢陪伴',
-          '警觉性强但不常吠叫',
-          '对陌生人友好，社交性好',
-          '适应性强，适合公寓生活'
-        ],
-        careAdvice: [
-          '控制运动量，避免过度运动',
-          '注意呼吸问题，避免高温环境',
-          '定期清洁面部褶皱，预防感染',
-          '控制体重，提供均衡饮食',
-          '避免游泳，大多数法斗不善游泳'
-        ],
-        description: '法国斗牛犬是受欢迎的小型伴侣犬，性格友善活泼。适合公寓生活，不需要大量运动。注意呼吸道健康，避免高温环境。温和友善，适合各类家庭。'
-      },
-      {
-        id: 7,
-        name: '柴犬',
-        age: '1-3岁',
-        breed: '柴犬',
-        avatar: 'https://images.unsplash.com/photo-1562221440-abcf93a4c1c6?w=800',
-        image: 'https://images.unsplash.com/photo-1562221440-abcf93a4c1c6?w=800',
-        shortDesc: '"日本国宝级犬种"',
-        gender: '公',
-        weight: '8-11公斤',
-        health: '健康',
-        vaccinated: '已接种',
-        neutered: '已绝育',
-        tags: ['独立', '忠诚', '警觉'],
-        stats: {
-          size: 45,
-          exercise: 70,
-          friendly: 65,
-        },
-        personalityTraits: [
-          '性格独立自主，有时显得高冷',
-          '对主人极其忠诚，形成强烈依恋',
-          '警觉性高，是优秀的看门犬',
-          '有丰富的表情，喜欢表达自己',
-          '适应能力强，适合公寓生活'
-        ],
-        careAdvice: [
-          '需要适量运动，每天1小时左右',
-          '定期梳理被毛，尤其是换毛期',
-          '早期社会化训练非常重要',
-          '建立明确的规则和界限',
-          '保持一致性训练，避免混淆'
-        ],
-        description: '柴犬是日本的国宝级犬种，体型小巧，性格独立忠诚。表情丰富，网络上著名的"狗头"表情包犬种。适合公寓生活，需要适当训练和社会化。'
-      },
-      {
-        id: 8,
-        name: '萨摩耶犬',
-        age: '1-2岁',
-        breed: '萨摩耶',
-        avatar: 'https://images.unsplash.com/photo-1565708097881-9eeaad9cc335?w=800',
-        image: 'https://images.unsplash.com/photo-1565708097881-9eeaad9cc335?w=800',
-        shortDesc: '"微笑天使"',
-        gender: '母',
-        weight: '16-30公斤',
-        health: '健康',
-        vaccinated: '已接种',
-        neutered: '已绝育',
-        tags: ['友善', '活泼', '漂亮'],
-        stats: {
-          size: 70,
-          exercise: 80,
-          friendly: 95,
-        },
-        personalityTraits: [
-          '性格友善开朗，永远面带微笑',
-          '对人友好，几乎没有攻击性',
-          '聪明但有独立性，训练需要耐心',
-          '活力充沛，喜欢户外活动',
-          '与家人亲密，享受家庭生活'
-        ],
-        careAdvice: [
-          '需要大量梳理，每周至少3-4次',
-          '需要适量运动，每天1-2小时',
-          '夏季注意防暑，不适合炎热环境',
-          '社会化训练要尽早开始',
-          '注意牙齿和耳朵的清洁'
-        ],
-        description: '萨摩耶犬因其上扬的嘴角被称为"微笑天使"，原产于西伯利亚。纯白色被毛，性格友善，几乎没有攻击性。需要频繁梳理毛发，不适合高温环境。'
-      }
-    ];    
-    const foundDog = dogsData.find(dog => dog.id === petId);
+  } else if (petType === "dogs") {
+    // 使用导入的狗狗数据
+    const foundDog = dogInfos.find((dog) => dog.id === petId);
     if (foundDog) {
       petData.value = foundDog;
-      console.log('成功获取狗狗数据:', foundDog.name);
+      console.log("成功获取狗狗数据:", foundDog.name);
     } else {
       console.error(`未找到ID为${petId}的狗狗数据`);
       // 设置默认数据或错误信息
@@ -399,7 +130,7 @@ const fetchPetData = () => {
         description: "抱歉，我们找不到这只狗狗的信息",
         tags: [],
         personalityTraits: [],
-        careAdvice: []
+        careAdvice: [],
       };
     }
   } else {
@@ -410,14 +141,15 @@ const fetchPetData = () => {
       description: "不支持的宠物类型",
       tags: [],
       personalityTraits: [],
-      careAdvice: []
+      careAdvice: [],
     };
   }
-};
 
-// 用于3D渲染的变量
-let camera, scene, renderer, model, controls;
-const modelContainer = ref(null);
+  // 在获取数据后初始化饼图
+  setTimeout(() => {
+    initPieChart();
+  }, 100);
+};
 
 // 初始化3D场景
 function initScene() {
@@ -445,7 +177,10 @@ function initScene() {
 
   // 创建渲染器
   renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(modelContainer.value.clientWidth, modelContainer.value.clientHeight);
+  renderer.setSize(
+    modelContainer.value.clientWidth,
+    modelContainer.value.clientHeight
+  );
   renderer.setPixelRatio(window.devicePixelRatio);
   modelContainer.value.appendChild(renderer.domElement);
 
@@ -456,14 +191,14 @@ function initScene() {
   controls.minDistance = 3;
   controls.maxDistance = 10;
 
-  // 创建临时模型（实际应该加载GLB文件）
+  // 创建临时模型（如果没有真实模型可用）
   createTempModel();
 
   // 加载3D模型（注释掉，因为模型路径不确定）
   // loadModel();
 
   // 添加窗口大小调整监听
-  window.addEventListener('resize', onWindowResize);
+  window.addEventListener("resize", onWindowResize);
 
   // 开始动画循环
   animate();
@@ -471,136 +206,512 @@ function initScene() {
 
 // 创建临时模型（如果没有真实模型可用）
 function createTempModel() {
-  // 创建一个简单的狗形状（简化版）
+  // 创建一个更加精细的狗形状
   const group = new THREE.Group();
   
-  // 身体
-  const bodyGeometry = new THREE.CapsuleGeometry(0.5, 1, 4, 8);
-  const bodyMaterial = new THREE.MeshPhongMaterial({ color: 0xf9d71c });
+  // 使用更复杂的几何体和材质
+  const bodyMaterial = new THREE.MeshPhongMaterial({
+    color: 0xf9d71c,
+    shininess: 30,
+    specular: 0x111111,
+  });
+
+  // 高光材质，用于眼睛
+  const eyeMaterial = new THREE.MeshPhongMaterial({
+    color: 0x222222,
+    shininess: 100,
+    specular: 0xffffff,
+  });
+
+  // 鼻子材质
+  const noseMaterial = new THREE.MeshPhongMaterial({
+    color: 0x000000,
+    shininess: 50,
+    specular: 0x555555,
+  });
+
+  // 身体 - 使用更平滑的椭球体
+  const bodyGeometry = new THREE.SphereGeometry(0.6, 32, 32);
+  bodyGeometry.scale(1.8, 1, 1.2);
   const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-  body.rotation.z = Math.PI / 2;
+  body.position.set(0, 0, 0);
   group.add(body);
   
-  // 头部
-  const headGeometry = new THREE.SphereGeometry(0.4, 16, 16);
-  const headMaterial = new THREE.MeshPhongMaterial({ color: 0xf9d71c });
-  const head = new THREE.Mesh(headGeometry, headMaterial);
-  head.position.set(-0.8, 0, 0);
+  // 头部 - 使用更平滑的球体，略微拉长
+  const headGeometry = new THREE.SphereGeometry(0.45, 32, 32);
+  headGeometry.scale(1.2, 1, 1);
+  const head = new THREE.Mesh(headGeometry, bodyMaterial);
+  head.position.set(-0.9, 0.2, 0);
   group.add(head);
   
-  // 鼻子
-  const noseGeometry = new THREE.SphereGeometry(0.1, 16, 16);
-  const noseMaterial = new THREE.MeshPhongMaterial({ color: 0x000000 });
+  // 吻部 - 添加立体感的吻部
+  const muzzleGeometry = new THREE.SphereGeometry(0.25, 32, 16);
+  muzzleGeometry.scale(1.2, 0.8, 1);
+  const muzzle = new THREE.Mesh(muzzleGeometry, bodyMaterial);
+  muzzle.position.set(-1.3, 0.1, 0);
+  group.add(muzzle);
+
+  // 鼻子 - 更立体的鼻子
+  const noseGeometry = new THREE.SphereGeometry(0.08, 16, 16);
+  noseGeometry.scale(1.2, 0.7, 1);
   const nose = new THREE.Mesh(noseGeometry, noseMaterial);
-  nose.position.set(-1.2, 0, 0);
+  nose.position.set(-1.5, 0.15, 0);
   group.add(nose);
   
-  // 前腿
-  const legGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.7, 8);
-  const legMaterial = new THREE.MeshPhongMaterial({ color: 0xf9d71c });
-  
-  const frontLegL = new THREE.Mesh(legGeometry, legMaterial);
-  frontLegL.position.set(-0.3, 0, 0.3);
-  frontLegL.rotation.x = Math.PI / 2;
+  // 眼睛 - 添加更立体的眼睛
+  const eyeGeometry = new THREE.SphereGeometry(0.07, 16, 16);
+
+  const eyeL = new THREE.Mesh(eyeGeometry, eyeMaterial);
+  eyeL.position.set(-1.1, 0.3, 0.2);
+  group.add(eyeL);
+
+  // 眼睛高光
+  const eyeHighlightGeometry = new THREE.SphereGeometry(0.02, 8, 8);
+  const eyeHighlightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+  const eyeHighlightL = new THREE.Mesh(
+    eyeHighlightGeometry,
+    eyeHighlightMaterial
+  );
+  eyeHighlightL.position.set(-1.13, 0.32, 0.23);
+  group.add(eyeHighlightL);
+
+  const eyeR = new THREE.Mesh(eyeGeometry, eyeMaterial);
+  eyeR.position.set(-1.1, 0.3, -0.2);
+  group.add(eyeR);
+
+  const eyeHighlightR = new THREE.Mesh(
+    eyeHighlightGeometry,
+    eyeHighlightMaterial
+  );
+  eyeHighlightR.position.set(-1.13, 0.32, -0.23);
+  group.add(eyeHighlightR);
+
+  // 耳朵 - 更自然的耳朵形状
+  const earGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+  earGeometry.scale(0.7, 1, 0.5);
+
+  const earL = new THREE.Mesh(earGeometry, bodyMaterial);
+  earL.position.set(-0.8, 0.5, 0.3);
+  earL.rotation.z = -Math.PI / 6;
+  earL.rotation.y = Math.PI / 12;
+  group.add(earL);
+
+  const earR = new THREE.Mesh(earGeometry, bodyMaterial);
+  earR.position.set(-0.8, 0.5, -0.3);
+  earR.rotation.z = -Math.PI / 6;
+  earR.rotation.y = -Math.PI / 12;
+  group.add(earR);
+
+  // 前腿 - 更自然的腿部形状
+  const frontLegGeometry = new THREE.CylinderGeometry(0.12, 0.1, 0.8, 16);
+
+  const frontLegL = new THREE.Mesh(frontLegGeometry, bodyMaterial);
+  frontLegL.position.set(-0.4, -0.6, 0.3);
+  frontLegL.rotation.x = Math.PI / 36;
   group.add(frontLegL);
   
-  const frontLegR = new THREE.Mesh(legGeometry, legMaterial);
-  frontLegR.position.set(-0.3, 0, -0.3);
-  frontLegR.rotation.x = Math.PI / 2;
+  const frontLegR = new THREE.Mesh(frontLegGeometry, bodyMaterial);
+  frontLegR.position.set(-0.4, -0.6, -0.3);
+  frontLegR.rotation.x = -Math.PI / 36;
   group.add(frontLegR);
   
-  // 后腿
-  const backLegL = new THREE.Mesh(legGeometry, legMaterial);
-  backLegL.position.set(0.5, 0, 0.3);
-  backLegL.rotation.x = Math.PI / 2;
+  // 后腿 - 更加强壮的后腿
+  const backLegGeometry = new THREE.CylinderGeometry(0.15, 0.12, 0.85, 16);
+
+  const backLegL = new THREE.Mesh(backLegGeometry, bodyMaterial);
+  backLegL.position.set(0.7, -0.6, 0.32);
+  backLegL.rotation.x = Math.PI / 24;
   group.add(backLegL);
   
-  const backLegR = new THREE.Mesh(legGeometry, legMaterial);
-  backLegR.position.set(0.5, 0, -0.3);
-  backLegR.rotation.x = Math.PI / 2;
+  const backLegR = new THREE.Mesh(backLegGeometry, bodyMaterial);
+  backLegR.position.set(0.7, -0.6, -0.32);
+  backLegR.rotation.x = -Math.PI / 24;
   group.add(backLegR);
   
-  // 尾巴
-  const tailGeometry = new THREE.CylinderGeometry(0.08, 0.02, 0.5, 8);
-  const tailMaterial = new THREE.MeshPhongMaterial({ color: 0xf9d71c });
-  const tail = new THREE.Mesh(tailGeometry, tailMaterial);
-  tail.position.set(0.8, 0.3, 0);
-  tail.rotation.z = Math.PI / 4;
+  // 脚爪 - 添加脚爪细节
+  const pawGeometry = new THREE.SphereGeometry(0.12, 16, 16);
+  pawGeometry.scale(1, 0.4, 1);
+
+  const frontPawL = new THREE.Mesh(pawGeometry, bodyMaterial);
+  frontPawL.position.set(-0.4, -1, 0.3);
+  group.add(frontPawL);
+
+  const frontPawR = new THREE.Mesh(pawGeometry, bodyMaterial);
+  frontPawR.position.set(-0.4, -1, -0.3);
+  group.add(frontPawR);
+
+  const backPawL = new THREE.Mesh(pawGeometry, bodyMaterial);
+  backPawL.position.set(0.7, -1, 0.32);
+  group.add(backPawL);
+
+  const backPawR = new THREE.Mesh(pawGeometry, bodyMaterial);
+  backPawR.position.set(0.7, -1, -0.32);
+  group.add(backPawR);
+
+  // 尾巴 - 更自然弯曲的尾巴
+  const tailCurve = new THREE.CubicBezierCurve3(
+    new THREE.Vector3(1.1, 0.1, 0),
+    new THREE.Vector3(1.4, 0.3, 0),
+    new THREE.Vector3(1.5, 0.6, 0),
+    new THREE.Vector3(1.3, 0.9, 0)
+  );
+
+  const tailGeometry = new THREE.TubeGeometry(tailCurve, 20, 0.08, 16, false);
+  const tail = new THREE.Mesh(tailGeometry, bodyMaterial);
   group.add(tail);
-  
-  // 耳朵
-  const earGeometry = new THREE.ConeGeometry(0.15, 0.3, 8);
-  const earMaterial = new THREE.MeshPhongMaterial({ color: 0xf9d71c });
-  
-  const earL = new THREE.Mesh(earGeometry, earMaterial);
-  earL.position.set(-0.8, 0.4, 0.2);
-  earL.rotation.z = -Math.PI / 2;
-  group.add(earL);
-  
-  const earR = new THREE.Mesh(earGeometry, earMaterial);
-  earR.position.set(-0.8, 0.4, -0.2);
-  earR.rotation.z = -Math.PI / 2;
-  group.add(earR);
+
+  // 细节：添加项圈
+  const collarGeometry = new THREE.TorusGeometry(0.3, 0.05, 16, 32);
+  const collarMaterial = new THREE.MeshPhongMaterial({
+    color: 0x3366ff,
+    shininess: 50,
+    specular: 0x222222,
+  });
+  const collar = new THREE.Mesh(collarGeometry, collarMaterial);
+  collar.position.set(-0.7, 0.05, 0);
+  collar.rotation.y = Math.PI / 2;
+  group.add(collar);
+
+  // 调整整体位置和大小
+  group.scale.set(0.9, 0.9, 0.9);
+  group.position.set(0, 0.3, 0);
   
   // 添加到场景
   scene.add(group);
   model = group;
 }
 
-// 加载真实的3D模型
-function loadModel() {
-  const loader = new GLTFLoader();
-  loader.load(
-    petData.value.modelPath,
-    (gltf) => {
-      model = gltf.scene;
-      scene.add(model);
-      
-      // 调整模型位置和比例
-      model.position.set(0, 0, 0);
-      model.scale.set(1, 1, 1);
-      
-      // 添加动画（如果有）
-      if (gltf.animations && gltf.animations.length) {
-        mixer = new THREE.AnimationMixer(model);
-        const action = mixer.clipAction(gltf.animations[0]);
-        action.play();
-      }
-    },
-    (xhr) => {
-      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-    },
-    (error) => {
-      console.error('Error loading model:', error);
-    }
-  );
-}
-
 // 窗口大小调整响应
 function onWindowResize() {
   if (modelContainer.value) {
-    camera.aspect = modelContainer.value.clientWidth / modelContainer.value.clientHeight;
+    camera.aspect =
+      modelContainer.value.clientWidth / modelContainer.value.clientHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(modelContainer.value.clientWidth, modelContainer.value.clientHeight);
+    renderer.setSize(
+      modelContainer.value.clientWidth,
+      modelContainer.value.clientHeight
+    );
   }
 }
 
 // 动画循环
 function animate() {
-  requestAnimationFrame(animate);
-  
-  // 更新控制器
-  if (controls) controls.update();
-  
-  // 渲染场景
-  if (renderer && scene && camera) {
+  animationFrameId = requestAnimationFrame(animate);
+
+  if (controls) {
+    controls.update();
+  }
+
+  // 只有在未暂停时才旋转模型
+  if (model && !isAnimationPaused.value) {
+    model.rotation.y += 0.003;
+  }
+
     renderer.render(scene, camera);
   }
   
-  // 如果模型存在，可以添加一些旋转或动画
-  if (model) {
-    model.rotation.y += 0.003;
+// 计算饼图切片的样式
+function getPieSliceStyle(index) {
+  const regions = petData.value.globalDistribution.regions;
+  let startAngle = 0;
+
+  // 计算当前区域之前所有区域的百分比总和
+  for (let i = 0; i < index; i++) {
+    startAngle += regions[i].percentage;
   }
+
+  // 将百分比转换为角度（360度 × 百分比）
+  const startAngleDeg = startAngle * 3.6; // 3.6 = 360 / 100
+  const sliceAngleDeg = regions[index].percentage * 3.6;
+
+  return {
+    backgroundColor: getRegionColor(index),
+    transform: `rotate(${startAngleDeg}deg)`,
+    clip: `rect(0, 150px, 150px, 75px)`,
+    // 如果切片角度 > 180度，需要特殊处理
+    "--end-angle": `${sliceAngleDeg <= 180 ? sliceAngleDeg : 180}deg`,
+    "--next-end-angle": `${sliceAngleDeg > 180 ? sliceAngleDeg - 180 : 0}deg`,
+  };
+}
+
+// 初始化ECharts饼图
+function initPieChart() {
+  if (!pieChart.value) return;
+
+  // 销毁已存在的图表实例
+  if (chartInstance.value) {
+    chartInstance.value.dispose();
+  }
+
+  // 创建新的图表实例
+  chartInstance.value = echarts.init(pieChart.value);
+
+  // 检查是否有分布数据
+  if (
+    !petData.value.globalDistribution ||
+    !petData.value.globalDistribution.regions
+  ) {
+    return;
+  }
+
+  const regions = petData.value.globalDistribution.regions;
+
+  // 准备数据
+  const pieData = regions.map((region) => ({
+    value: region.percentage,
+    name: region.name,
+  }));
+
+  // 配置图表选项
+  const option = {
+    tooltip: {
+      trigger: "item",
+      formatter: "{a} <br/>{b}: {c}%",
+    },
+    legend: {
+      orient: "vertical",
+      right: 10,
+      top: "center",
+      data: regions.map((region) => region.name),
+    },
+    series: [
+      {
+        name: "全球分布",
+        type: "pie",
+        radius: ["40%", "70%"],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 10,
+          borderColor: "#fff",
+          borderWidth: 2,
+        },
+        label: {
+          show: true,
+          formatter: "{b}: {c}%",
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: "14",
+            fontWeight: "bold",
+          },
+        },
+        data: pieData,
+      },
+    ],
+  };
+
+  // 设置图表选项并渲染
+  chartInstance.value.setOption(option);
+}
+
+// 在窗口大小变化时调整图表大小
+function resizeChart() {
+  if (chartInstance.value) {
+    chartInstance.value.resize();
+  }
+}
+
+// 修改图片导出功能
+const exportImage = () => {
+  const imageUrl = getCurrentPreviewImage();
+  if (!imageUrl) return;
+
+  // 创建下载状态指示
+  const exportBtn = document.querySelector(".export-btn");
+  const originalIcon = exportBtn.innerHTML;
+  exportBtn.innerHTML =
+    '<span class="material-icons-sharp">hourglass_top</span>';
+
+  // 获取图片并转换为Blob
+  fetch(imageUrl)
+    .then((response) => response.blob())
+    .then((blob) => {
+      // 创建Blob URL
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // 创建下载链接
+      const link = document.createElement("a");
+      link.href = blobUrl;
+
+      // 从URL中提取文件名，如果没有则使用宠物名称作为文件名
+      const fileName =
+        imageUrl.split("/").pop() || `${petData.value.name}_image.jpg`;
+      link.download = fileName;
+
+      // 触发下载
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // 释放Blob URL
+      window.URL.revokeObjectURL(blobUrl);
+
+      // 恢复按钮状态
+      exportBtn.innerHTML = originalIcon;
+    })
+    .catch((error) => {
+      console.error("下载图片时出错:", error);
+      exportBtn.innerHTML = originalIcon;
+    });
+};
+
+// 导出3D模型
+const exportModel = () => {
+  if (!model) return;
+
+  const exporter = new GLTFExporter();
+  exporter.parse(
+    model,
+    (gltf) => {
+      // 将导出的数据转换为Blob
+      const output = JSON.stringify(gltf, null, 2);
+      const blob = new Blob([output], { type: "application/octet-stream" });
+      const url = URL.createObjectURL(blob);
+
+      // 创建下载链接
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${petData.value.name || "pet"}_3d_model.gltf`;
+      document.body.appendChild(link);
+      link.click();
+
+      // 清理
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    },
+    (error) => {
+      console.error("导出模型时出错:", error);
+    },
+    { binary: false }
+  );
+};
+
+// 初始化遗传病风险预测仪表盘
+function initDiseaseRiskChart() {
+  if (!diseaseRiskChart.value) return;
+
+  // 销毁已存在的图表实例
+  if (riskChartInstance.value) {
+    riskChartInstance.value.dispose();
+  }
+
+  // 创建新的图表实例
+  riskChartInstance.value = echarts.init(diseaseRiskChart.value);
+
+  // 创建模拟数据（实际应用中应从petData中获取）
+  const riskData = petData.value.geneticRiskPrediction || {
+    overallRisk: 12,
+    specificRisks: [
+      { name: "髋关节发育不良", value: 15 },
+      { name: "心脏病", value: 8 },
+      { name: "白内障", value: 20 },
+      { name: "甲状腺功能减退", value: 5 },
+    ],
+  };
+
+  // 配置仪表盘选项
+  const option = {
+    title: {
+      text: "遗传病风险预测",
+      left: "center",
+    },
+    tooltip: {
+      formatter: "{a} <br/>{b} : {c}%",
+    },
+    series: [
+      {
+        name: "总体风险",
+        type: "gauge",
+        detail: { formatter: "{value}%" },
+        data: [{ value: riskData.overallRisk, name: "总体风险" }],
+        axisLine: {
+          lineStyle: {
+            width: 30,
+            color: [
+              [0.2, "#67e0e3"],
+              [0.5, "#37a2da"],
+              [0.8, "#fd666d"],
+              [1, "#e62c2b"],
+            ],
+          },
+        },
+        pointer: {
+          itemStyle: {
+            color: "auto",
+          },
+        },
+        axisLabel: {
+          show: false,
+        },
+      },
+    ],
+  };
+
+  // 设置图表选项并渲染
+  riskChartInstance.value.setOption(option);
+
+  // 创建下方的特定风险条形图
+  setTimeout(() => {
+    initSpecificRisksChart(riskData.specificRisks);
+  }, 100);
+}
+
+// 初始化特定风险条形图
+function initSpecificRisksChart(risksData) {
+  const specificRisksContainer = document.getElementById("specificRisksChart");
+  if (!specificRisksContainer) return;
+
+  const specificRisksChart = echarts.init(specificRisksContainer);
+
+  const option = {
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
+      },
+    },
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
+      containLabel: true,
+    },
+    xAxis: {
+      type: "value",
+      max: 100,
+      name: "风险百分比",
+      nameLocation: "end",
+    },
+    yAxis: {
+      type: "category",
+      data: risksData.map((item) => item.name),
+    },
+    series: [
+      {
+        name: "风险程度",
+        type: "bar",
+        data: risksData.map((item) => item.value),
+        itemStyle: {
+          color: function (params) {
+            const value = params.value;
+            if (value < 10) return "#67e0e3";
+            if (value < 30) return "#37a2da";
+            if (value < 60) return "#fd666d";
+            return "#e62c2b";
+          },
+        },
+        label: {
+          show: true,
+          position: "right",
+          formatter: "{c}%",
+        },
+      },
+    ],
+  };
+
+  specificRisksChart.setOption(option);
 }
 
 // 组件挂载后执行
@@ -611,6 +722,41 @@ onMounted(() => {
   // 初始化3D场景
   if (modelContainer.value) {
     initScene();
+  }
+
+  // 添加窗口调整大小的事件监听器
+  window.addEventListener("resize", resizeChart);
+
+  // 初始化仪表盘
+  setTimeout(() => {
+    initDiseaseRiskChart();
+  }, 500);
+});
+
+// 在组件卸载时清理资源
+onUnmounted(() => {
+  // 移除窗口调整大小的事件监听器
+  window.removeEventListener("resize", resizeChart);
+
+  // 销毁图表实例
+  if (chartInstance.value) {
+    chartInstance.value.dispose();
+    chartInstance.value = null;
+  }
+
+  if (riskChartInstance.value) {
+    riskChartInstance.value.dispose();
+    riskChartInstance.value = null;
+  }
+
+  // 清理3D资源
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+
+  if (renderer) {
+    renderer.dispose();
   }
 });
 </script>
@@ -629,17 +775,106 @@ onMounted(() => {
     <div class="pet-detail-content">
       <!-- 左侧图片/3D模型视图 -->
       <div class="pet-model-section">
-        <!-- 如果有真实图片，优先显示图片 -->
-        <div v-if="petData.image" class="pet-image-container">
-          <img :src="petData.image" :alt="petData.name" class="pet-image" />
+        <!-- 上方图片展示区 - 只显示第一张图片 -->
+        <div
+          class="pet-image-container"
+          v-if="petData.images && petData.images.length > 0"
+        >
+          <img
+            :src="petData.images[0]"
+            :alt="petData.name"
+            class="pet-image"
+            @click="openImagePreview(0)"
+          />
         </div>
-        <!-- 否则显示3D模型 -->
-        <div v-else class="model-container" ref="modelContainer"></div>
-        
-        <div class="pet-badges">
-          <span class="pet-badge">{{ petData.age }}</span>
-          <span class="pet-badge">{{ petData.gender }}</span>
-          <span class="pet-badge">{{ petData.weight }}</span>
+        <!-- 单张图片展示（向后兼容） -->
+        <div class="pet-image-container" v-else-if="petData.image">
+          <img
+            :src="petData.image"
+            :alt="petData.name"
+            class="pet-image"
+            @click="openImagePreview(0)"
+          />
+        </div>
+        <!-- 下方3D模型展示区 -->
+        <div class="model-container" ref="modelContainer">
+          <!-- 模型控制按钮 -->
+          <div class="model-controls">
+            <button
+              class="model-control-btn reset-btn"
+              @click="resetModelView"
+              title="重置视图"
+            >
+              <span class="material-icons-sharp">restart_alt</span>
+            </button>
+            <button
+              class="model-control-btn pause-btn"
+              @click="toggleAnimation"
+              title="暂停/播放"
+            >
+              <span class="material-icons-sharp">{{
+                isAnimationPaused ? "play_arrow" : "pause"
+              }}</span>
+            </button>
+            <button
+              class="model-control-btn export-btn"
+              @click="exportModel"
+              title="导出模型"
+            >
+              <span class="material-icons-sharp">file_download</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 遗传病风险预测仪表盘 -->
+        <div class="disease-risk-section">
+          <div ref="diseaseRiskChart" class="risk-gauge-chart"></div>
+          <div id="specificRisksChart" class="specific-risks-chart"></div>
+        </div>
+
+        <!-- 生命周期数据轴 -->
+        <div class="lifecycle-section">
+          <h3>生命周期关键指标</h3>
+          <div class="lifecycle-timeline">
+            <div class="lifecycle-stage">
+              <div class="stage-header">
+                <span class="stage-icon">🐶</span>
+                <span class="stage-name">幼年期</span>
+              </div>
+              <ul class="stage-metrics">
+                <li>体重: 2-5kg</li>
+                <li>活动量: 高</li>
+                <li>喂食: 每日3-4次</li>
+                <li>社交化: 关键阶段</li>
+              </ul>
+            </div>
+
+            <div class="lifecycle-stage">
+              <div class="stage-header">
+                <span class="stage-icon">🐕</span>
+                <span class="stage-name">成年期</span>
+              </div>
+              <ul class="stage-metrics">
+                <li>体重: 5-8kg</li>
+                <li>活动量: 中等</li>
+                <li>喂食: 每日2次</li>
+                <li>健康检查: 每年1次</li>
+              </ul>
+            </div>
+
+            <div class="lifecycle-stage">
+              <div class="stage-header">
+                <span class="stage-icon">🦮</span>
+                <span class="stage-name">老年期</span>
+              </div>
+              <ul class="stage-metrics">
+                <li>体重: 4-7kg</li>
+                <li>活动量: 低</li>
+                <li>喂食: 特殊老年餐</li>
+                <li>健康检查: 每半年1次</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -663,7 +898,10 @@ onMounted(() => {
         <div class="pet-detail-section">
           <h2>性格特点</h2>
           <ul class="trait-list">
-            <li v-for="(trait, index) in petData.personalityTraits" :key="index">
+            <li
+              v-for="(trait, index) in petData.personalityTraits"
+              :key="index"
+            >
               <span class="material-icons-sharp">check_circle</span>
               <span>{{ trait }}</span>
             </li>
@@ -680,29 +918,185 @@ onMounted(() => {
           </ul>
         </div>
         
-        <div class="pet-health-info">
-          <h2>健康信息</h2>
-          <div class="health-grid">
-            <div class="health-item">
-              <span class="material-icons-sharp">medical_services</span>
+        <!-- 基本特征区域 -->
+        <div class="pet-detail-section">
+          <h2>基本特征</h2>
+          <div class="features-grid">
+            <div class="feature-item" v-if="petData.livingRange">
+              <span class="material-icons-sharp">home</span>
               <div>
-                <h3>健康状态</h3>
-                <p>{{ petData.health || '未知' }}</p>
+                <h3>适宜居住范围</h3>
+                <p>{{ petData.livingRange }}</p>
               </div>
             </div>
-            <div class="health-item">
-              <span class="material-icons-sharp">vaccines</span>
+            <div class="feature-item" v-if="petData.bodySize">
+              <span class="material-icons-sharp">pets</span>
               <div>
-                <h3>疫苗情况</h3>
-                <p>{{ petData.vaccinated || '未知' }}</p>
+                <h3>体型</h3>
+                <p>{{ petData.bodySize }}</p>
               </div>
             </div>
-            <div class="health-item">
-              <span class="material-icons-sharp">healing</span>
+            <div class="feature-item" v-if="petData.shedding">
+              <span class="material-icons-sharp">content_cut</span>
               <div>
-                <h3>绝育情况</h3>
-                <p>{{ petData.neutered || '未知' }}</p>
+                <h3>掉毛量</h3>
+                <p>{{ petData.shedding }}</p>
               </div>
+            </div>
+            <div class="feature-item" v-if="petData.intelligence">
+              <span class="material-icons-sharp">psychology</span>
+              <div>
+                <h3>智商</h3>
+                <p>{{ petData.intelligence }}</p>
+              </div>
+            </div>
+            <div class="feature-item" v-if="petData.lifespan">
+              <span class="material-icons-sharp">favorite</span>
+              <div>
+                <h3>寿命</h3>
+                <p>{{ petData.lifespan }}</p>
+              </div>
+            </div>
+            <div class="feature-item" v-if="petData.origin">
+              <span class="material-icons-sharp">public</span>
+              <div>
+                <h3>原产地</h3>
+                <p>{{ petData.origin }}</p>
+              </div>
+            </div>
+            <div class="feature-item" v-if="petData.trainability">
+              <span class="material-icons-sharp">school</span>
+              <div>
+                <h3>可训练度</h3>
+                <p>{{ petData.trainability }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 新增基因身份证展示 -->
+        <div class="pet-detail-section" v-if="petData.geneticProfile">
+          <h2>基因身份证</h2>
+          <div class="genetic-profile">
+            <div class="gene-image-container">
+              <img
+                :src="petData.geneticProfile.dnaVisualUrl"
+                alt="DNA可视化"
+                class="dna-image"
+              />
+              <div class="gene-image-overlay">
+                <button
+                  class="gene-toggle-btn"
+                  @click="showDominantGenes = !showDominantGenes"
+                >
+                  {{ showDominantGenes ? "查看隐性基因" : "查看显性基因" }}
+                </button>
+              </div>
+            </div>
+            
+            <div class="gene-info">
+              <div v-if="showDominantGenes" class="gene-list dominant">
+                <h3>显性基因标记</h3>
+                <div class="gene-tags">
+                  <span
+                    class="gene-tag"
+                    v-for="(gene, index) in petData.geneticProfile
+                      .dominantGenes"
+                    :key="'dom-' + index"
+                  >
+                    <span class="material-icons-sharp">verified</span>
+                    {{ gene }}
+                  </span>
+                </div>
+              </div>
+              
+              <div v-else class="gene-list recessive">
+                <h3>隐性基因标记</h3>
+                <div class="gene-tags">
+                  <span
+                    class="gene-tag"
+                    v-for="(gene, index) in petData.geneticProfile
+                      .recessiveGenes"
+                    :key="'rec-' + index"
+                  >
+                    <span class="material-icons-sharp">dna</span>
+                    {{ gene }}
+                  </span>
+                </div>
+              </div>
+              
+              <div class="health-risks">
+                <h3>健康风险评估</h3>
+                <ul class="risk-list">
+                  <li
+                    v-for="(risk, index) in petData.geneticProfile.healthRisks"
+                    :key="index"
+                  >
+                    <span class="material-icons-sharp">
+                      {{
+                        risk.includes("低")
+                          ? "check_circle"
+                          : risk.includes("中")
+                          ? "info"
+                          : "warning"
+                      }}
+                    </span>
+                    <span
+                      :class="{
+                        'risk-low': risk.includes('低'),
+                        'risk-medium': risk.includes('中'),
+                        'risk-high': risk.includes('高'),
+                      }"
+                      >{{ risk }}</span
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 新增历史溯源轴展示 -->
+        <div
+          class="pet-detail-section"
+          v-if="petData.history && petData.history.length"
+        >
+          <h2>历史溯源轴</h2>
+          <div class="history-timeline">
+            <div class="timeline-container">
+              <div
+                v-for="(historyItem, index) in petData.history"
+                :key="index"
+                class="timeline-item"
+                :class="{ even: index % 2 === 0, odd: index % 2 !== 0 }"
+              >
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                  <h3 class="year">{{ historyItem.year }}</h3>
+                  <p class="event">{{ historyItem.event }}</p>
+                </div>
+              </div>
+              <div class="timeline-line"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 修改全球分布热力图展示 -->
+        <div class="pet-detail-section" v-if="petData.globalDistribution">
+          <h2>全球分布热力图</h2>
+          <div class="distribution-container">
+            <!-- 使用ECharts的饼图代替原来的CSS实现 -->
+            <div class="distribution-chart">
+              <div ref="pieChart" class="pie-chart-container"></div>
+                </div>
+            <div
+              class="popularity-rank"
+              v-if="petData.globalDistribution.popularityRank"
+            >
+              <span class="rank-label">全球流行度排名</span>
+              <span class="rank-number"
+                >#{{ petData.globalDistribution.popularityRank }}</span
+              >
             </div>
           </div>
         </div>
@@ -711,6 +1105,42 @@ onMounted(() => {
         <div class="pet-actions">
           <button class="action-button primary">联系咨询领养</button>
           <button class="action-button secondary">加入收藏</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 图片预览弹窗 -->
+    <div class="image-preview-modal" v-if="showImagePreview">
+      <div class="preview-overlay" @click="closeImagePreview"></div>
+      <div class="preview-content">
+        <button class="close-preview" @click="closeImagePreview">
+          <span class="material-icons-sharp">close</span>
+        </button>
+
+        <!-- 上方大图展示 -->
+        <div class="preview-main-image">
+          <img :src="getCurrentPreviewImage()" :alt="petData.name" />
+
+          <!-- 导出按钮 -->
+          <button class="export-btn" @click="exportImage" title="导出图片">
+            <span class="material-icons-sharp">file_download</span>
+          </button>
+        </div>
+
+        <!-- 下方缩略图列表 - 修改为居中显示 -->
+        <div
+          class="preview-thumbnails"
+          v-if="petData.images && petData.images.length > 0"
+        >
+          <div
+            v-for="(image, index) in petData.images"
+            :key="index"
+            class="preview-thumbnail"
+            :class="{ active: index === currentImageIndex }"
+            @click="changePreviewImage(index)"
+          >
+            <img :src="image" :alt="`${petData.name} 图片 ${index + 1}`" />
+          </div>
         </div>
       </div>
     </div>
@@ -767,10 +1197,10 @@ onMounted(() => {
 }
 
 .pet-model-section {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  position: relative;
+  gap: 20px;
+  width: 45%;
 }
 
 .pet-image-container {
@@ -786,47 +1216,21 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  cursor: pointer;
   transition: transform 0.5s ease;
 }
 
-.pet-image-container:hover .pet-image {
+.pet-image:hover {
   transform: scale(1.03);
 }
 
 .model-container {
-  flex: 1;
-  width: 100%;
-  min-height: 500px;
-  background-color: var(--white_a3);
+  min-height: 300px;
   border-radius: var(--radius-16);
   overflow: hidden;
   position: relative;
   box-shadow: var(--shadow-2);
-}
-
-.pet-badges {
-  display: flex;
-  gap: 10px;
-  position: absolute;
-  top: 20px;
-  left: 20px;
-}
-
-.pet-badge {
-  background-color: rgba(255, 255, 255, 0.8);
-  color: var(--dark);
-  padding: 6px 12px;
-  border-radius: 30px;
-  font-size: var(--fs-14);
-  font-weight: 600;
-  backdrop-filter: blur(4px);
-}
-
-.model-controls {
-  margin-top: 15px;
-  text-align: center;
-  font-size: var(--fs-14);
-  color: var(--info-dark);
+  background-color: #f5f5f5;
 }
 
 .pet-info-section {
@@ -922,12 +1326,14 @@ onMounted(() => {
   border-radius: var(--radius-20);
 }
 
-.trait-list, .care-list {
+.trait-list,
+.care-list {
   list-style-type: none;
   padding: 0;
 }
 
-.trait-list li, .care-list li {
+.trait-list li,
+.care-list li {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -943,64 +1349,6 @@ onMounted(() => {
 .care-list .material-icons-sharp {
   color: var(--deongaree-pr);
   font-size: 20px;
-}
-
-.pet-health-info h2 {
-  font-size: var(--fs-22);
-  color: var(--dark);
-  margin-bottom: 20px;
-  position: relative;
-  padding-left: 18px;
-}
-
-.pet-health-info h2::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 6px;
-  height: 24px;
-  background-color: var(--deongaree-pi);
-  border-radius: var(--radius-20);
-}
-
-.health-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.health-item {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 20px;
-  background-color: var(--white_a3);
-  border-radius: var(--radius-12);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.health-item:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-2);
-}
-
-.health-item .material-icons-sharp {
-  font-size: var(--fs-32);
-  color: var(--deongaree);
-}
-
-.health-item h3 {
-  font-size: var(--fs-16);
-  margin: 0 0 5px 0;
-  color: var(--dark);
-}
-
-.health-item p {
-  margin: 0;
-  color: var(--deongaree);
-  font-weight: var(--fw-600);
 }
 
 .pet-actions {
@@ -1044,6 +1392,45 @@ onMounted(() => {
   transform: translateY(-2px);
 }
 
+/* 添加结构化信息的样式 */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 20px;
+  box-shadow: var(--shadow-2);
+  border-radius: var(--radius-12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+}
+
+.feature-item .material-icons-sharp {
+  font-size: var(--fs-28);
+  color: var(--deongaree);
+}
+
+.feature-item h3 {
+  font-size: var(--fs-16);
+  margin: 0 0 5px 0;
+  color: var(--dark);
+  font-weight: var(--fw-500);
+}
+
+.feature-item p {
+  margin: 0;
+  color: var(--dark-variant);
+  font-size: var(--fs-15);
+}
+
 @media (max-width: 900px) {
   .pet-detail-content {
     flex-direction: column;
@@ -1054,12 +1441,606 @@ onMounted(() => {
     min-height: 350px;
   }
   
-  .health-grid {
+  .features-grid {
     grid-template-columns: 1fr;
   }
   
   .pet-actions {
     flex-direction: column;
+  }
+}
+
+/* 添加基因身份证相关样式 */
+.genetic-profile {
+  display: flex;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.gene-image-container {
+  flex: 1;
+  position: relative;
+  border-radius: var(--radius-12);
+  overflow: hidden;
+  box-shadow: var(--shadow-2);
+  height: 300px;
+}
+
+.dna-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.gene-image-container:hover .dna-image {
+  transform: scale(1.05);
+}
+
+.gene-image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  display: flex;
+  justify-content: center;
+}
+
+.gene-toggle-btn {
+  background-color: var(--deongaree);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.gene-toggle-btn:hover {
+  background-color: var(--deongaree-dark);
+  transform: translateY(-2px);
+}
+
+.gene-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gene-list h3,
+.health-risks h3 {
+  font-size: var(--fs-18);
+  margin-bottom: 15px;
+  color: var(--dark);
+  border-left: 4px solid var(--deongaree);
+  padding-left: 10px;
+}
+
+.gene-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gene-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background-color: rgba(59, 130, 246, 0.1);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-14);
+}
+
+.gene-tag .material-icons-sharp {
+  color: var(--deongaree);
+  font-size: 16px;
+}
+
+.risk-list {
+  list-style: none;
+  padding: 0;
+}
+
+.risk-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius-8);
+  background-color: var(--white_a3);
+}
+
+.risk-list .material-icons-sharp {
+  font-size: 20px;
+}
+
+.risk-low {
+  color: var(--youth-green-3);
+}
+
+.risk-medium {
+  color: var(--warning);
+}
+
+.risk-high {
+  color: var(--danger);
+}
+
+.risk-list .material-icons-sharp {
+  color: inherit;
+}
+
+/* 历史溯源轴样式 */
+.history-timeline {
+  margin-top: 20px;
+  padding: 20px 0;
+}
+
+.timeline-container {
+  position: relative;
+  padding: 20px 0;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--deongaree-yw);
+  transform: translateX(-50%);
+}
+
+.timeline-item {
+  display: flex;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.timeline-item.even {
+  flex-direction: row;
+  padding-right: 50%;
+  padding-left: 0;
+}
+
+.timeline-item.odd {
+  flex-direction: row-reverse;
+  padding-left: 50%;
+  padding-right: 0;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: 50%;
+  top: 15px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--deongaree);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  box-shadow: 0 0 0 4px var(--deongaree-yw);
+}
+
+.timeline-content {
+  background-color: white;
+  border-radius: var(--radius-12);
+  padding: 15px;
+  box-shadow: var(--shadow-1);
+  width: 80%;
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.timeline-content:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-2);
+}
+
+.timeline-content::after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  width: 15px;
+  height: 15px;
+  background-color: white;
+  transform: rotate(45deg);
+}
+
+.timeline-item.even .timeline-content::after {
+  right: -7px;
+}
+
+.timeline-item.odd .timeline-content::after {
+  left: -7px;
+}
+
+.timeline-content .year {
+  color: var(--deongaree);
+  font-size: var(--fs-16);
+  margin: 0 0 8px 0;
+}
+
+.timeline-content .event {
+  color: var(--dark-variant);
+  margin: 0;
+  font-size: var(--fs-14);
+}
+
+/* 全球分布热力图样式 */
+.distribution-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.distribution-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.pie-chart-container {
+  width: 100%;
+  height: 400px;
+  margin: 0 auto;
+}
+
+.pie-chart,
+.pie-slice,
+.pie-slice::before,
+.pie-slice::after {
+  display: none;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.legend-label {
+  font-size: var(--fs-14);
+}
+
+.popularity-rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  background-color: var(--deongaree-yw);
+  border-radius: var(--radius-12);
+  margin-top: 10px;
+}
+
+.rank-label {
+  font-size: var(--fs-16);
+  color: var(--dark);
+}
+
+.rank-number {
+  font-size: var(--fs-24);
+  font-weight: 700;
+  color: var(--deongaree);
+}
+
+/* 响应式调整 */
+@media (max-width: 900px) {
+  .genetic-profile {
+    flex-direction: column;
+  }
+  
+  .gene-image-container {
+    height: 200px;
+  }
+  
+  .timeline-item.even,
+  .timeline-item.odd {
+    flex-direction: column;
+    padding: 0 0 0 30px;
+  }
+  
+  .timeline-line {
+    left: 15px;
+  }
+  
+  .timeline-marker {
+    left: 15px;
+  }
+  
+  .timeline-content {
+    width: 100%;
+  }
+  
+  .timeline-item.even .timeline-content::after,
+  .timeline-item.odd .timeline-content::after {
+    left: -7px;
+  }
+}
+
+/* 图片预览弹窗样式 */
+.image-preview-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.preview-content {
+  position: relative;
+  width: 80%;
+  height: 80%;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.close-preview {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1002;
+  transition: background 0.3s ease;
+}
+
+.close-preview:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.preview-main-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: #f5f5f5;
+  position: relative;
+}
+
+.preview-main-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.preview-thumbnails {
+  height: 100px;
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background-color: white;
+  border-top: 1px solid #eee;
+  justify-content: center;
+}
+
+.preview-thumbnail {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-8);
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.preview-thumbnail.active {
+  border-color: var(--deongaree);
+}
+
+.preview-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 模型控制按钮样式 */
+.model-controls {
+  display: flex;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.model-control-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.model-control-btn:hover {
+  transform: translateY(-2px);
+}
+
+.model-control-btn .material-icons-sharp {
+  font-size: 20px;
+  color: var(--dark);
+}
+
+.reset-btn:hover {
+  background-color: rgba(33, 150, 243, 0.2);
+}
+
+.pause-btn:hover {
+  background-color: rgba(76, 175, 80, 0.2);
+}
+
+.export-btn:hover {
+  background-color: rgba(230, 127, 216, 0.2);
+}
+
+/* 遗传病风险预测仪表盘样式 */
+.disease-risk-section {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: white;
+  border-radius: var(--radius-16);
+  box-shadow: var(--shadow-1);
+  padding: 20px;
+}
+
+.risk-gauge-chart {
+  height: 300px;
+  width: 100%;
+}
+
+.specific-risks-chart {
+  height: 250px;
+  width: 100%;
+}
+
+/* 生命周期数据轴样式 */
+.lifecycle-section {
+  margin-top: 30px;
+  background-color: white;
+  border-radius: var(--radius-16);
+  box-shadow: var(--shadow-1);
+  padding: 20px;
+}
+
+.lifecycle-section h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: var(--fs-20);
+  color: var(--dark);
+  text-align: center;
+}
+
+.lifecycle-timeline {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: 20px 0;
+}
+
+.lifecycle-timeline::before {
+  content: "";
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #67e0e3, #37a2da, #fd666d);
+  z-index: 0;
+}
+
+.lifecycle-stage {
+  position: relative;
+  background-color: white;
+  border-radius: var(--radius-12);
+  padding: 15px;
+  width: 30%;
+  box-shadow: var(--shadow-1);
+  z-index: 1;
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.stage-icon {
+  font-size: 24px;
+}
+
+.stage-name {
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.stage-metrics {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stage-metrics li {
+  padding: 5px 0;
+  font-size: var(--fs-14);
+  color: var(--dark-variant);
+  border-bottom: 1px dashed #eee;
+}
+
+.stage-metrics li:last-child {
+  border-bottom: none;
+}
+
+@media (max-width: 900px) {
+  .lifecycle-timeline {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .lifecycle-timeline::before {
+    display: none;
+  }
+
+  .lifecycle-stage {
+    width: 100%;
   }
 }
 </style> 

@@ -140,12 +140,21 @@ const routes = [
 const router = createRouter({
   routes,
   history: createWebHistory(import.meta.env.VITE_BASE_URL),
-  scrollBehavior() {
-    // 始终滚动到顶部，添加平滑滚动效果
-    return { 
-      top: 0,
-      behavior: 'smooth'  // 添加平滑滚动
+  scrollBehavior(to, from) {
+    // 比较主路由路径是否发生变化
+    const toPathSegments = to.path.split('/');
+    const fromPathSegments = from.path.split('/');
+    
+    // 只有当主路由（第一级路径）变化时才滚动到顶部
+    if (toPathSegments[1] !== fromPathSegments[1]) {
+      return { 
+        top: 0,
+        behavior: 'smooth'  // 平滑滚动
+      }
     }
+    
+    // 子路由变化时保持当前滚动位置
+    return false;
   },
 });
 

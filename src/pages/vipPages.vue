@@ -297,13 +297,6 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "CoffeeSubscription",
-};
-</script>
-
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap");
 

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, inject } from "vue";
 import { useRouter } from "vue-router";
+import { catInfos } from "../../../src/mock/infos.js";
 
 // Inject search state from parent
 const parentSearchQuery = inject("searchQuery", ref(""));
@@ -14,121 +15,8 @@ const router = useRouter();
 const viewMode = ref("grid");
 const filterTags = ["温顺", "活泼", "短毛", "长毛", "聪明", "独立"];
 
-// 存放宠物数据
-const cats = ref([
-  {
-    id: 1,
-    name: "英国短毛猫",
-    breed: "英短",
-    image: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=800",
-    description:
-      "英国短毛猫性格温和友善，适合家庭饲养。圆圆的脸和大眼睛是其标志性特征。被毛短而密，易于护理，是受欢迎的家庭宠物。",
-    tags: ["温顺", "友好", "易护理"],
-    stats: {
-      size: 60,
-      activity: 50,
-      friendly: 90,
-    },
-  },
-  {
-    id: 2,
-    name: "美国短毛猫",
-    breed: "美短",
-    image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800",
-    description:
-      "美国短毛猫温和且适应性强，是理想的家庭宠物。体格健壮，被毛短密，性格友善，与人和其他宠物相处融洽。寿命长，护理简单。",
-    tags: ["活泼", "亲人", "耐心"],
-    stats: {
-      size: 65,
-      activity: 55,
-      friendly: 85,
-    },
-  },
-  {
-    id: 3,
-    name: "波斯猫",
-    breed: "波斯",
-    image: "https://images.unsplash.com/photo-1616089966833-d61352757708?w=800",
-    description:
-      "波斯猫是长毛猫的代表，性格安静优雅。扁平的脸和长而密的被毛是其特色。性格温和，活动量低，适合室内饲养，需要定期梳理毛发。",
-    tags: ["优雅", "安静", "长毛"],
-    stats: {
-      size: 55,
-      activity: 30,
-      friendly: 70,
-    },
-  },
-  {
-    id: 4,
-    name: "暹罗猫",
-    breed: "暹罗",
-    image: "https://images.unsplash.com/photo-1576120634744-ee3e08b3be0d?w=800",
-    description:
-      "暹罗猫聪明活泼，性格外向。蓝眼睛和颜色对比强烈的四肢是其特征。声音响亮，善于交流，需要大量互动和陪伴。",
-    tags: ["聪明", "外向", "粘人"],
-    stats: {
-      size: 50,
-      activity: 80,
-      friendly: 75,
-    },
-  },
-  {
-    id: 5,
-    name: "缅因猫",
-    breed: "缅因",
-    image: "https://images.unsplash.com/photo-1595752776689-aebef37b5d32?w=800",
-    description:
-      "缅因猫是最大的家猫品种之一，体型巨大，性格温和友善。毛发浓密且长，具有防水特性。适应性强，喜欢与人互动，但不过分粘人。",
-    tags: ["大型", "温和", "聪明"],
-    stats: {
-      size: 90,
-      activity: 60,
-      friendly: 85,
-    },
-  },
-  {
-    id: 6,
-    name: "苏格兰折耳猫",
-    breed: "折耳",
-    image: "https://images.unsplash.com/photo-1596854372407-baba7fef6e51?w=800",
-    description:
-      "苏格兰折耳猫以其特殊的耳朵形状而闻名。性格温顺，对人友善，适合家庭饲养。活动量适中，可以适应公寓生活。需要注意遗传性骨骼问题。",
-    tags: ["独特", "温顺", "可爱"],
-    stats: {
-      size: 55,
-      activity: 55,
-      friendly: 80,
-    },
-  },
-  {
-    id: 7,
-    name: "孟加拉猫",
-    breed: "孟加拉",
-    image: "https://images.unsplash.com/photo-1638524222399-1a8607fa0daa?w=800",
-    description:
-      "孟加拉猫是家猫与亚洲豹猫杂交的品种，外表像小型豹子。精力充沛，智商高，需要足够的活动空间。性格友善但独立，喜欢互动和玩耍。",
-    tags: ["豹纹", "活跃", "聪明"],
-    stats: {
-      size: 60,
-      activity: 90,
-      friendly: 70,
-    },
-  },
-  {
-    id: 8,
-    name: "挪威森林猫",
-    breed: "森林猫",
-    image: "https://images.unsplash.com/photo-1538488881038-e252a119ace7?w=800",
-    description:
-      "挪威森林猫体型大，毛发长且防水。适应能力强，性格温和且独立。喜欢攀爬，需要足够的活动空间。对家庭友善，但不会过分黏人。",
-    tags: ["大型", "独立", "长毛"],
-    stats: {
-      size: 85,
-      activity: 70,
-      friendly: 75,
-    },
-  },
-]);
+// 存放宠物数据 - 使用infos.js中的catInfos
+const cats = ref(catInfos);
 
 // Filter cats based on tags and search query
 const filteredCats = computed(() => {
@@ -259,26 +147,6 @@ const loadMorePets = async () => {
   loading.value = false;
 };
 
-// 监听滚动加载更多
-const handleScroll = () => {
-  const scrollHeight = document.documentElement.scrollHeight;
-  const scrollTop = document.documentElement.scrollTop;
-  const clientHeight = document.documentElement.clientHeight;
-
-  // 当滚动到距离底部200px时触发加载
-  if (scrollHeight - scrollTop - clientHeight < 200 && !loading.value) {
-    loadMorePets();
-  }
-};
-
-onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
-});
-
 // 折叠面板状态
 const openPanels = ref({
   personality: true,
@@ -358,7 +226,7 @@ const togglePanel = (panel) => {
             <img :src="cat.image" :alt="cat.name" />
             <div class="breed-tag">{{ cat.breed }}</div>
             <div class="overlay">
-              <span class="view-details">查看详情</span>
+              <div class="view-details">查看详情</div>
             </div>
           </div>
 
@@ -463,10 +331,12 @@ const togglePanel = (panel) => {
         </div>
       </div>
 
-      <!-- 加载更多指示器 -->
-      <div class="loading-more" v-if="loading">
-        <div class="spinner"></div>
-        <span>加载更多猫咪...</span>
+      <!-- 加载更多按钮 -->
+      <div class="load-more-container">
+        <button class="load-more-btn" @click="loadMorePets" :disabled="loading">
+          <span v-if="!loading" class="button-text">加载更多</span>
+          <span class="button-loader" v-if="loading"></span>
+        </button>
       </div>
 
       <!-- 空状态 -->
@@ -954,15 +824,15 @@ const togglePanel = (panel) => {
 }
 
 .list-stats .stat-item:nth-child(1) .stat-value::after {
-  background-color: #4CAF50;
+  background-color: #4caf50;
 }
 
 .list-stats .stat-item:nth-child(2) .stat-value::after {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 .list-stats .stat-item:nth-child(3) .stat-value::after {
-  background-color: #FF9800;
+  background-color: #ff9800;
 }
 
 .detail-btn {
@@ -1006,6 +876,74 @@ const togglePanel = (panel) => {
 
   .list-stats {
     flex-wrap: wrap;
+  }
+}
+
+/* 加载更多按钮样式 */
+.load-more-container {
+  width: fit-content;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 60px;
+  background-color: var(--deongaree);
+}
+
+.load-more-btn {
+  background: none;
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+}
+
+.load-more-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: height 0.5s ease;
+}
+
+.load-more-btn:hover::after {
+  height: 100%;
+}
+
+.load-more-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.button-loader {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spin 1s infinite linear;
+}
+
+.load-more-btn.loading .button-text {
+  visibility: hidden;
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 </style>
