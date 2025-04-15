@@ -97,39 +97,39 @@ const router = useRouter();
             <div class="moment-images">
               <img
                 class="moment-image"
-                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-1.jpg"
+                src="../assets/image/a1.png"
               />
               <img
                 class="moment-image"
-                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-10.jpg"
+                src="../assets/image/a1.png"
               />
               <img
                 class="moment-image"
-                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-11.jpg"
+                src="../assets/image/a1.png"
               />
               <img
                 class="moment-image"
-                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-1.jpg"
+                src="../assets/image/a1.png"
               />
               <img
                 class="moment-image"
-                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-10.jpg"
+                src="../assets/image/a1.png"
               />
               <img
                 class="moment-image"
-                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-11.jpg"
+                src="../assets/image/a1.png"
               />
               <img
                 class="moment-image"
-                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-1.jpg"
+                src="../assets/image/a1.png"
               />
               <img
                 class="moment-image"
-                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-10.jpg"
+                src="../assets/image/a1.png"
               />
               <img
                 class="moment-image"
-                src="https://kiripet.tos-cn-beijing.volces.com/image/cat-11.jpg"
+                src="../assets/image/a1.png"
               />
             </div>
             <div class="moment-actions">

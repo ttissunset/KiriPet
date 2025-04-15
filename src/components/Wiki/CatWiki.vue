@@ -53,6 +53,60 @@ const toggleTag = (tag) => {
   }
 };
 
+// 根据标签获取特殊样式类
+const getTagClass = (tag) => {
+  const specialTags = {
+    "温顺": "tag-gentle",
+    "友好": "tag-friendly",
+    "易护理": "tag-easy-care",
+    "亲人": "tag-friendly",
+    "大型猫": "tag-size",
+    "中型猫": "tag-size",
+    "聪明": "tag-smart",
+    "活泼": "tag-active",
+    "短毛": "tag-short-hair",
+    "长毛": "tag-long-hair",
+    "独立": "tag-independent",
+    "优雅": "tag-elegant",
+    "安静": "tag-quiet",
+    "粘人": "tag-clingy",
+    "好奇": "tag-curious",
+    "警觉": "tag-alert"
+  };
+  
+  return specialTags[tag] || "";
+};
+
+// 生成随机颜色
+const getRandomColor = () => {
+  // 在网站的配色范围内生成随机颜色
+  const colors = [
+    '#4285F4', // 蓝色
+    '#EA4335', // 红色
+    '#FBBC05', // 黄色
+    '#34A853', // 绿色
+    '#FF6D00', // 橙色
+    '#9C27B0', // 紫色
+    '#00BCD4', // 青色
+    '#009688', // 青绿色
+    '#673AB7', // 深紫色
+    '#FF5722', // 深橙色
+    '#795548', // 棕色
+    '#607D8B'  // 蓝灰色
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
+
+// 处理猫爪悬停事件
+const handlePawHover = (event) => {
+  // 获取猫爪图标元素
+  const icon = event.currentTarget.querySelector('.material-icons-sharp');
+  if (icon) {
+    // 应用随机颜色
+    icon.style.color = getRandomColor();
+  }
+};
+
 // 显示详情
 const showDetail = (cat) => {
   router.push({
@@ -240,11 +294,15 @@ const togglePanel = (panel) => {
                   <span class="stat-label">体型</span>
                   <span class="stat-value">{{ cat.stats.size }}%</span>
                 </div>
-                <div class="stat-bar">
-                  <div
-                    class="stat-fill"
-                    :style="{ width: `${cat.stats.size}%` }"
-                  ></div>
+                <div class="paw-progress">
+                  <span 
+                    v-for="n in 5" 
+                    :key="n" 
+                    :class="['paw-icon', { filled: n <= Math.round(cat.stats.size / 20) }]"
+                    @mouseenter="handlePawHover"
+                  >
+                    <span class="material-icons-sharp">pets</span>
+                  </span>
                 </div>
               </div>
               <div class="stat-item">
@@ -252,11 +310,15 @@ const togglePanel = (panel) => {
                   <span class="stat-label">活跃度</span>
                   <span class="stat-value">{{ cat.stats.activity }}%</span>
                 </div>
-                <div class="stat-bar">
-                  <div
-                    class="stat-fill"
-                    :style="{ width: `${cat.stats.activity}%` }"
-                  ></div>
+                <div class="paw-progress">
+                  <span 
+                    v-for="n in 5" 
+                    :key="n" 
+                    :class="['paw-icon', { filled: n <= Math.round(cat.stats.activity / 20) }]"
+                    @mouseenter="handlePawHover"
+                  >
+                    <span class="material-icons-sharp">pets</span>
+                  </span>
                 </div>
               </div>
               <div class="stat-item">
@@ -264,11 +326,15 @@ const togglePanel = (panel) => {
                   <span class="stat-label">友善度</span>
                   <span class="stat-value">{{ cat.stats.friendly }}%</span>
                 </div>
-                <div class="stat-bar">
-                  <div
-                    class="stat-fill"
-                    :style="{ width: `${cat.stats.friendly}%` }"
-                  ></div>
+                <div class="paw-progress">
+                  <span 
+                    v-for="n in 5" 
+                    :key="n" 
+                    :class="['paw-icon', { filled: n <= Math.round(cat.stats.friendly / 20) }]"
+                    @mouseenter="handlePawHover"
+                  >
+                    <span class="material-icons-sharp">pets</span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -277,7 +343,7 @@ const togglePanel = (panel) => {
               <span
                 v-for="(tag, tagIndex) in cat.tags"
                 :key="tagIndex"
-                class="cat-tag"
+                :class="['cat-tag', getTagClass(tag)]"
               >
                 {{ tag }}
               </span>
@@ -317,7 +383,7 @@ const togglePanel = (panel) => {
               <span
                 v-for="(tag, tagIndex) in cat.tags"
                 :key="tagIndex"
-                class="cat-tag"
+                :class="['cat-tag', getTagClass(tag)]"
               >
                 {{ tag }}
               </span>
@@ -333,7 +399,12 @@ const togglePanel = (panel) => {
 
       <!-- 加载更多按钮 -->
       <div class="load-more-container">
-        <button class="load-more-btn" @click="loadMorePets" :disabled="loading">
+        <button 
+          class="load-more-btn" 
+          @click="loadMorePets" 
+          :class="{loading: loading}"
+          :disabled="loading"
+        >
           <span v-if="!loading" class="button-text">加载更多</span>
           <span class="button-loader" v-if="loading"></span>
         </button>
@@ -580,7 +651,7 @@ const togglePanel = (panel) => {
 .stat-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 .stat-label {
@@ -594,18 +665,50 @@ const togglePanel = (panel) => {
   font-weight: 600;
 }
 
-.stat-bar {
-  height: 8px;
-  background-color: var(--light);
-  border-radius: var(--radius-pill);
-  overflow: hidden;
+/* 爪印进度条样式 */
+.paw-progress {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  height: 24px;
 }
 
-.stat-fill {
-  height: 100%;
-  background-color: var(--deongaree);
-  border-radius: var(--radius-pill);
-  transition: width 0.5s ease;
+.paw-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.25;
+  transition: all 0.3s ease;
+  filter: grayscale(100%);
+  transform: scale(0.9);
+  cursor: pointer;
+}
+
+.paw-icon .material-icons-sharp {
+  font-size: 20px;
+  color: var(--deongaree);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.paw-icon:hover .material-icons-sharp {
+  transform: scale(1.2);
+}
+
+.paw-icon.filled {
+  opacity: 1;
+  filter: grayscale(0%);
+  transform: scale(1.05);
+}
+
+.paw-icon.filled .material-icons-sharp {
+  animation: pawPulse 0.5s ease-in-out;
+  color: var(--deongaree);
+}
+
+@keyframes pawPulse {
+  0% { transform: scale(0.9); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 
 .cat-tags {
@@ -616,11 +719,117 @@ const togglePanel = (panel) => {
 }
 
 .cat-tag {
-  padding: 4px 12px;
-  background-color: var(--deongaree-yw);
+  padding: 6px 12px;
   border-radius: var(--radius-pill);
   font-size: var(--fs-12);
-  color: var(--dark);
+  color: var(--dark-variant);
+  background-color: var(--light);
+  transition: all 0.3s ease;
+}
+
+/* 特殊标签样式 */
+.cat-tag.tag-gentle {
+  background-color: #FFEFD5; /* 浅橙色 */
+  color: #E67E22;
+  border: 1px dashed #FFCC80;
+  box-shadow: 0 2px 4px rgba(255, 152, 0, 0.1);
+}
+
+.cat-tag.tag-friendly {
+  background-color: #FFF8E1; /* 奶油白 */
+  color: #FF9800;
+  border: 1px dashed #FFE082;
+  box-shadow: 0 2px 4px rgba(255, 193, 7, 0.1);
+}
+
+.cat-tag.tag-easy-care {
+  background-color: #F1F8E9; /* 浅绿色 */
+  color: #8BC34A;
+  border: 1px dashed #C5E1A5;
+  box-shadow: 0 2px 4px rgba(139, 195, 74, 0.1);
+}
+
+.cat-tag.tag-size {
+  background-color: #E1F5FE; /* 浅蓝色 */
+  color: #03A9F4;
+  border: 1px dashed #81D4FA;
+  box-shadow: 0 2px 4px rgba(3, 169, 244, 0.1);
+}
+
+.cat-tag.tag-smart {
+  background-color: #E8EAF6; /* 浅紫色 */
+  color: #5C6BC0;
+  border: 1px dashed #9FA8DA;
+  box-shadow: 0 2px 4px rgba(92, 107, 192, 0.1);
+}
+
+.cat-tag.tag-active {
+  background-color: #FFE0B2; /* 浅黄色 */
+  color: #FF7043;
+  border: 1px dashed #FFCC80;
+  box-shadow: 0 2px 4px rgba(255, 112, 67, 0.1);
+}
+
+.cat-tag.tag-short-hair {
+  background-color: #E0F7FA; /* 浅青色 */
+  color: #00ACC1;
+  border: 1px dashed #80DEEA;
+  box-shadow: 0 2px 4px rgba(0, 172, 193, 0.1);
+}
+
+.cat-tag.tag-long-hair {
+  background-color: #F3E5F5; /* 浅紫红色 */
+  color: #AB47BC;
+  border: 1px dashed #CE93D8;
+  box-shadow: 0 2px 4px rgba(171, 71, 188, 0.1);
+}
+
+.cat-tag.tag-independent {
+  background-color: #E8F5E9; /* 浅绿色 */
+  color: #43A047;
+  border: 1px dashed #A5D6A7;
+  box-shadow: 0 2px 4px rgba(67, 160, 71, 0.1);
+}
+
+.cat-tag.tag-elegant {
+  background-color: #ECEFF1; /* 淡蓝灰色 */
+  color: #607D8B;
+  border: 1px dashed #B0BEC5;
+  box-shadow: 0 2px 4px rgba(96, 125, 139, 0.1);
+}
+
+.cat-tag.tag-quiet {
+  background-color: #E1F5FE; /* 极淡蓝色 */
+  color: #039BE5;
+  border: 1px dashed #81D4FA;
+  box-shadow: 0 2px 4px rgba(3, 155, 229, 0.1);
+}
+
+.cat-tag.tag-clingy {
+  background-color: #F8BBD0; /* 粉色 */
+  color: #EC407A;
+  border: 1px dashed #F48FB1;
+  box-shadow: 0 2px 4px rgba(236, 64, 122, 0.1);
+}
+
+.cat-tag.tag-curious {
+  background-color: #BBDEFB; /* 淡蓝色 */
+  color: #1E88E5;
+  border: 1px dashed #90CAF9;
+  box-shadow: 0 2px 4px rgba(30, 136, 229, 0.1);
+}
+
+.cat-tag.tag-alert {
+  background-color: #FFECB3; /* 淡黄色 */
+  color: #FFA000;
+  border: 1px dashed #FFD54F;
+  box-shadow: 0 2px 4px rgba(255, 160, 0, 0.1);
+}
+
+/* hover effect for all tags */
+.cat-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .detail-btn {
@@ -643,24 +852,6 @@ const togglePanel = (panel) => {
 
 .detail-btn .material-icons-sharp {
   font-size: 18px;
-}
-
-.loading-more {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 30px 0;
-  color: var(--dark-variant);
-}
-
-.spinner {
-  width: 30px;
-  height: 30px;
-  border: 3px solid var(--light);
-  border-top-color: var(--deongaree);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 10px;
 }
 
 .empty-state {
@@ -886,6 +1077,10 @@ const togglePanel = (panel) => {
   margin: 0 auto;
   margin-top: 60px;
   background-color: var(--deongaree);
+  border-radius: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
 .load-more-btn {
@@ -899,6 +1094,8 @@ const togglePanel = (panel) => {
   letter-spacing: 0.05em;
   position: relative;
   overflow: hidden;
+  min-width: 140px;
+  min-height: 44px;
 }
 
 .load-more-btn::after {
@@ -922,23 +1119,23 @@ const togglePanel = (panel) => {
   cursor: not-allowed;
 }
 
+.load-more-btn.loading {
+  background-color: var(--deongaree);
+  color: transparent;
+}
+
 .button-loader {
   display: block;
   width: 20px;
   height: 20px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
   border-radius: 50%;
-  margin: 0;
+  border-top-color: #fff;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   animation: spin 1s infinite linear;
-}
-
-.load-more-btn.loading .button-text {
-  visibility: hidden;
 }
 
 @keyframes spin {

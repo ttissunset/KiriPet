@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { zhCN } from "date-fns/locale";
 import { useChatStore } from "@/stores/chatStore";
 import { chatAPI } from "../../apis/chat";
+import EmojiPicker from "@/components/EmojiPicker.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -17,10 +18,10 @@ const imageInput = ref(null); // 图片输入框的引用
 const messageText = ref(""); // 消息文本内容
 const error = ref(null); // 错误信息
 const showEmojiPicker = ref(false); // 是否显示表情框
-const currentCategory = ref("表情"); // 当前选中的表情分类
 const previewVisible = ref(false); // 是否预览
 const loading = ref(false); // 加载状态
 const currentPreview = ref(""); // 当前预览图片
+const lastCursorPosition = ref(null); // 记录最后光标位置
 
 // 当前用户信息
 const currentUser = {
@@ -52,20 +53,28 @@ const formatTime = (timestamp) => {
 
 // 发送消息
 const sendMessage = async () => {
-  // 判断输入框内容不为空
-  if (!messageText.value.trim()) return;
+  // 从contenteditable div获取内容
+  const messageContent = messageInput.value.innerHTML;
+  
+  // 判断输入框内容不为空，并排除只有空白字符的情况
+  if (!messageContent.trim() || messageContent === '<br>') return;
 
   try {
     loading.value = true;
+    // 关闭表情选择器
+    showEmojiPicker.value = false;
+
     await chatStore.addMessage(route.params.id, {
       type: "text",
-      content: messageText.value,
+      content: messageContent,
       senderId: currentUser.id,
       receiverId: route.params.id,
     });
 
     if (route.params.id === "11111") {
-      chatAPI(messageText.value)
+      // 发送到AI时移除HTML标签
+      const plainText = messageContent.replace(/<[^>]*>/g, '');
+      chatAPI(plainText)
         .then((result) => {
           const { data } = result;
           console.log(data.result.chatReply);
@@ -87,7 +96,18 @@ const sendMessage = async () => {
       scrollToBottom();
     }
 
-    messageText.value = ""; // 清空输入框
+    // 清空输入框
+    messageInput.value.innerHTML = ""; 
+    
+    // 重置光标位置
+    lastCursorPosition.value = null;
+    
+    // 重新初始化输入框光标
+    setTimeout(() => {
+      messageInput.value.focus();
+      initInputCursor();
+    }, 0);
+    
     await nextTick();
     scrollToBottom();
   } catch (err) {
@@ -218,6 +238,31 @@ onMounted(async () => {
   try {
     loading.value = true;
     await chatStore.loadChatMessages(route.params.id);
+    
+    // 初始化输入框光标，确保第一次点击表情时可以正常插入
+    if (messageInput.value) {
+      messageInput.value.addEventListener('click', initInputCursor);
+      // 记录光标位置变化
+      messageInput.value.addEventListener('keyup', saveCursorPosition);
+      messageInput.value.addEventListener('mouseup', saveCursorPosition);
+      
+      // 初始点击一次，确保光标可用
+      setTimeout(() => {
+        messageInput.value.focus();
+        initInputCursor();
+      }, 100);
+      
+      // 修复Firefox或Safari中可能存在的插入问题
+      messageInput.value.addEventListener('input', (e) => {
+        // 如果输入框为空，确保有一个初始BR元素
+        if (messageInput.value.innerHTML === '') {
+          messageInput.value.innerHTML = '<br>';
+        }
+        saveCursorPosition();
+      });
+    }
+    
+    document.addEventListener("keydown", handleKeyDown);
     await nextTick();
     scrollToBottom();
   } catch (err) {
@@ -226,6 +271,35 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+
+// 保存光标位置
+const saveCursorPosition = () => {
+  const selection = window.getSelection();
+  if (selection.rangeCount > 0) {
+    lastCursorPosition.value = selection.getRangeAt(0);
+  }
+};
+
+// 初始化输入框光标位置（设置到末尾）
+const initInputCursor = () => {
+  if (!messageInput.value) return;
+  
+  const range = document.createRange();
+  const selection = window.getSelection();
+  
+  // 将光标定位到内容末尾
+  range.selectNodeContents(messageInput.value);
+  range.collapse(false); // false表示折叠到末尾
+  
+  selection.removeAllRanges();
+  selection.addRange(range);
+  
+  // 保存此光标位置
+  saveCursorPosition();
+  
+  // 确保输入框可见
+  messageInput.value.scrollTop = messageInput.value.scrollHeight;
+};
 
 // 辅助函数：判断是否为图片文件
 const isImageFile = (url) => {
@@ -238,6 +312,11 @@ const getFileName = (url) => {
   if (!url) return "未知文件";
   const parts = url.split("/");
   return parts[parts.length - 1];
+};
+
+// 检查消息内容是否包含HTML
+const hasHtmlContent = (content) => {
+  return typeof content === 'string' && (content.includes('<img') || content.includes('<div'));
 };
 
 // 创建图片预览
@@ -263,1138 +342,106 @@ const closePreview = () => {
   currentPreview.value = "";
 };
 
-/**
- * 以下是 emoji 的函数
- */
-// 表情分类
-const emojiCategories = {
-  表情: [
-    "😃",
-    "😄",
-    "😁",
-    "😆",
-    "😅",
-    "🤣",
-    "😂",
-    "🙂",
-    "🙃",
-    "🫠",
-    "😉",
-    "😊",
-    "😇",
-    "🥰",
-    "😍",
-    "🤩",
-    "😘",
-    "😗",
-    "😚",
-    "😙",
-    "🥲",
-    "😋",
-    "😛",
-    "😜",
-    "🤪",
-    "😝",
-    "🤑",
-    "🤗",
-    "🤭",
-    "🫢",
-    "🫣",
-    "🤫",
-    "🤔",
-    "🫡",
-    "🤐",
-    "🤨",
-    "😐️",
-    "😑",
-    "😶",
-    "🫥",
-    "😶‍🌫️",
-    "😏",
-    "😒",
-    "🙄",
-    "😬",
-    "😮‍💨",
-    "🤥",
-    "🫨",
-    "🙂‍↔️",
-    "🙂‍↕️",
-    "😌",
-    "😔",
-    "😪",
-    "🤤",
-    "😴",
-    "😷",
-    "🤒",
-    "🤕",
-    "🤢",
-    "🤮",
-    "🤧",
-    "🥵",
-    "🥶",
-    "🥴",
-    "😵",
-    "😵‍💫",
-    "🤯",
-    "🤠",
-    "🥳",
-    "🥸",
-    "😎",
-    "🤓",
-    "🧐",
-    "😕",
-    "🫤",
-    "😟",
-    "🙁",
-    "☹️",
-    "😮",
-    "😯",
-    "😲",
-    "😳",
-    "🥺",
-    "🥹",
-    "😦",
-    "😧",
-    "😨",
-    "😰",
-    "😥",
-    "😢",
-    "😭",
-    "😱",
-    "😖",
-    "😣",
-    "😞",
-    "😓",
-    "😩",
-    "😫",
-    "🥱",
-    "😤",
-    "😡",
-    "😠",
-    "🤬",
-    "😈",
-    "👿",
-    "💀",
-    "☠️",
-    "💩",
-    "🤡",
-    "👹",
-    "👺",
-    "👻",
-    "👽️",
-    "👾",
-    "🤖",
-    "😺",
-    "😸",
-    "😹",
-    "😻",
-    "😼",
-    "😽",
-    "🙀",
-    "😿",
-    "😾",
-    "🙈",
-    "🙉",
-    "🙊",
-    "💌",
-    "💘",
-    "💝",
-    "💖",
-    "💗",
-    "💓",
-    "💞",
-    "💕",
-    "💟",
-    "❣️",
-    "💔",
-    "❤️‍🔥",
-    "❤️‍🩹",
-    "❤️",
-    "🩷",
-    "🧡",
-    "💛",
-    "💚",
-    "💙",
-    "🩵",
-    "💜",
-    "🤎",
-    "🖤",
-    "🩶",
-    "🤍",
-    "💋",
-    "💯",
-    "💢",
-    "💥",
-    "💫",
-    "💦",
-    "💨",
-    "🕳️",
-    "💬",
-    "👁️‍🗨️",
-    "🗨️",
-    "🗯️",
-    "💭",
-    "💤",
-  ],
-  人物: [
-    " 👋",
-    "🤚",
-    "🖐️",
-    "✋️",
-    "🖖",
-    "🫱",
-    "🫲",
-    "🫳",
-    "🫴",
-    "🫷",
-    "🫸",
-    "👌",
-    "🤌",
-    "🤏",
-    "✌️",
-    "🤞",
-    "🫰",
-    "🤟",
-    "🤘",
-    "🤙",
-    "👈️",
-    "👉️",
-    "👆️",
-    "🖕",
-    "👇️",
-    "☝️",
-    "🫵",
-    "👍️",
-    "👎️",
-    "✊️",
-    "👊",
-    "🤛",
-    "🤜",
-    "👏",
-    "🙌",
-    "🫶",
-    "👐",
-    "🤲",
-    "🤝",
-    "🙏",
-    "✍️",
-    "💅",
-    "🤳",
-    "💪",
-    "🦾",
-    "🦿",
-    "🦵",
-    "🦶",
-    "👂️",
-    "🦻",
-    "👃",
-    "🧠",
-    "🫀",
-    "🫁",
-    "🦷",
-    "🦴",
-    "👀",
-    "👁️",
-    "👅",
-    "👄",
-    "🫦",
-    "👶",
-    "🧒",
-    "👦",
-    "👧",
-    "🧑",
-    "👱",
-    "👨",
-    "🧔",
-    "🧔‍♂️",
-    "🧔‍♀️",
-    "👨‍🦰",
-    "👨‍🦱",
-    "👨‍🦳",
-    "👨‍🦲",
-    "👩",
-    "👩‍🦰",
-    "🧑‍🦰",
-    "👩‍🦱",
-    "🧑‍🦱",
-    "👩‍🦳",
-    "🧑‍🦳",
-    "👩‍🦲",
-    "🧑‍🦲",
-    "👱‍♀️",
-    "👱‍♂️",
-    "🧓",
-    "👴",
-    "👵",
-    "🙍",
-    "🙍‍♂️",
-    "🙍‍♀️",
-    "🙎",
-    "🙎‍♂️",
-    "🙎‍♀️",
-    "🙅",
-    "🙅‍♂️",
-    "🙅‍♀️",
-    "🙆",
-    "🙆‍♂️",
-    "🙆‍♀️",
-    "💁",
-    "💁‍♂️",
-    "💁‍♀️",
-    "🙋",
-    "🙋‍♂️",
-    "🙋‍♀️",
-    "🧏",
-    "🧏‍♂️",
-    "🧏‍♀️",
-    "🙇",
-    "🙇‍♂️",
-    "🙇‍♀️",
-    "🤦",
-    "🤦‍♂️",
-    "🤦‍♀️",
-    "🤷",
-    "🤷‍♂️",
-    "🤷‍♀️",
-    "🧑‍⚕️",
-    "👨‍⚕️",
-    "👩‍⚕️",
-    "🧑‍🎓",
-    "👨‍🎓",
-    "👩‍🎓",
-    "🧑‍🏫",
-    "👨‍🏫",
-    "👩‍🏫",
-    "🧑‍⚖️",
-    "👨‍⚖️",
-    "👩‍⚖️",
-    "🧑‍🌾",
-    "👨‍🌾",
-    "👩‍🌾",
-    "🧑‍🍳",
-    "👨‍🍳",
-    "👩‍🍳",
-    "🧑‍🔧",
-    "👨‍🔧",
-    "👩‍🔧",
-    "🧑‍🏭",
-    "👨‍🏭",
-    "👩‍🏭",
-    "🧑‍💼",
-    "👨‍💼",
-    "👩‍💼",
-    "🧑‍🔬",
-    "👨‍🔬",
-    "👩‍🔬",
-    "🧑‍💻",
-    "👨‍💻",
-    "👩‍💻",
-    "🧑‍🎤",
-    "👨‍🎤",
-    "👩‍🎤",
-    "🧑‍🎨",
-    "👨‍🎨",
-    "👩‍🎨",
-    "🧑‍✈️",
-    "👨‍✈️",
-    "👩‍✈️",
-    "🧑‍🚀",
-    "👨‍🚀",
-    "👩‍🚀",
-    "🧑‍🚒",
-    "👨‍🚒",
-    "👩‍🚒",
-    "👮",
-    "👮‍♂️",
-    "👮‍♀️",
-    "🕵️",
-    "🕵️‍♂️",
-    "🕵️‍♀️",
-    "💂",
-    "💂‍♂️",
-    "💂‍♀️",
-    "🥷",
-    "👷",
-    "👷‍♂️",
-    "👷‍♀️",
-    "🫅",
-    "🤴",
-    "👸",
-    "👳",
-    "👳‍♂️",
-    "👳‍♀️",
-    "👲",
-    "🧕",
-    "🤵",
-    "🤵‍♂️",
-    "🤵‍♀️",
-    "👰",
-    "👰‍♂️",
-    "👰‍♀️",
-    "🤰",
-    "🫃",
-    "🫄",
-    "🤱",
-    "👩‍🍼",
-    "👨‍🍼",
-    "🧑‍🍼",
-    "👼",
-    "🎅",
-    "🤶",
-    "🧑‍🎄",
-    "🦸",
-    "🦸‍♂️",
-    "🦸‍♀️",
-    "🦹",
-    "🦹‍♂️",
-    "🦹‍♀️",
-    "🧙",
-    "🧙‍♂️",
-    "🧙‍♀️",
-    "🧚",
-    "🧚‍♂️",
-    "🧚‍♀️",
-    "🧛",
-    "🧛‍♂️",
-    "🧛‍♀️",
-    "🧜",
-    "🧜‍♂️",
-    "🧜‍♀️",
-    "🧝",
-    "🧝‍♂️",
-    "🧝‍♀️",
-    "🧞",
-    "🧞‍♂️",
-    "🧞‍♀️",
-    "🧟",
-    "🧟‍♂️",
-    "🧟‍♀️",
-    "🧌",
-    "💆",
-    "💆‍♂️",
-    "💆‍♀️",
-    "💇",
-    "💇‍♂️",
-    "💇‍♀️",
-    "🚶",
-    "🚶‍♂️",
-    "🚶‍♀️",
-    "🚶‍➡️",
-    "🚶‍♀️‍➡️",
-    "🚶‍♂️‍➡️",
-    "🧍",
-    "🧍‍♂️",
-    "🧍‍♀️",
-    "🧎",
-    "🧎‍♂️",
-    "🧎‍♀️",
-    "🧎‍➡️",
-    "🧎‍♀️‍➡️",
-    "🧎‍♂️‍➡️",
-    "🧑‍🦯",
-    "🧑‍🦯‍➡️",
-    "👨‍🦯",
-    "👨‍🦯‍➡️",
-    "👩‍🦯",
-    "👩‍🦯‍➡️",
-    "🧑‍🦼",
-    "🧑‍🦼‍➡️",
-    "👨‍🦼",
-    "👨‍🦼‍➡️",
-    "👩‍🦼",
-    "👩‍🦼‍➡️",
-    "🧑‍🦽",
-    "🧑‍🦽‍➡️",
-    "👨‍🦽",
-    "👨‍🦽‍➡️",
-    "👩‍🦽",
-    "👩‍🦽‍➡️",
-    "🏃",
-    "🏃‍♂️",
-    "🏃‍♀️",
-    "🏃‍➡️",
-    "🏃‍♀️‍➡️",
-    "🏃‍♂️‍➡️",
-    "💃",
-    "🕺",
-    "🕴️",
-    "👯",
-    "👯‍♂️",
-    "👯‍♀️",
-    "🧖",
-    "🧖‍♂️",
-    "🧖‍♀️",
-    "🧗",
-    "🧗‍♂️",
-    "🧗‍♀️",
-    "🤺",
-    "🏇",
-    "⛷️",
-    "🏂️",
-    "🏌️",
-    "🏌️‍♂️",
-    "🏌️‍♀️",
-    "🏄️",
-    "🏄‍♂️",
-    "🏄‍♀️",
-    "🚣",
-    "🚣‍♂️",
-    "🚣‍♀️",
-    "🏊️",
-    "🏊‍♂️",
-    "🏊‍♀️",
-    "⛹️",
-    "⛹️‍♂️",
-    "⛹️‍♀️",
-    "🏋️",
-    "🏋️‍♂️",
-    "🏋️‍♀️",
-    "🚴",
-    "🚴‍♂️",
-    "🚴‍♀️",
-    "🚵",
-    "🚵‍♂️",
-    "🚵‍♀️",
-    "🤸",
-    "🤸‍♂️",
-    "🤸‍♀️",
-    "🤼",
-    "🤼‍♂️",
-    "🤼‍♀️",
-    "🤽",
-    "🤽‍♂️",
-    "🤽‍♀️",
-    "🤾",
-    "🤾‍♂️",
-    "🤾‍♀️",
-    "🤹",
-    "🤹‍♂️",
-    "🤹‍♀️",
-    "🧘",
-    "🧘‍♂️",
-    "🧘‍♀️",
-    "🛀",
-    "🛌",
-    "🧑‍🤝‍🧑",
-    "👭",
-    "👫",
-    "👬",
-    "💏",
-    "👩‍❤️‍💋‍👨",
-    "👨‍❤️‍💋‍👨",
-    "👩‍❤️‍💋‍👩",
-    "💑",
-    "👩‍❤️‍👨",
-    "👨‍❤️‍👨",
-    "👩‍❤️‍👩",
-    "👨‍👩‍👦",
-    "👨‍👩‍👧",
-    "👨‍👩‍👧‍👦",
-    "👨‍👩‍👦‍👦",
-    "👨‍👩‍👧‍👧",
-    "👨‍👨‍👦",
-    "👨‍👨‍👧",
-    "👨‍👨‍👧‍👦",
-    "👨‍👨‍👦‍👦",
-    "👨‍👨‍👧‍👧",
-    "👩‍👩‍👦",
-    "👩‍👩‍👧",
-    "👩‍👩‍👧‍👦",
-    "👩‍👩‍👦‍👦",
-    "👩‍👩‍👧‍👧",
-    "👨‍👦",
-    "👨‍👦‍👦",
-    "👨‍👧",
-    "👨‍👧‍👦",
-    "👨‍👧‍👧",
-    "👩‍👦",
-    "👩‍👦‍👦",
-    "👩‍👧",
-    "👩‍👧‍👦",
-    "👩‍👧‍👧",
-    "🗣️",
-    "👤",
-    "👥",
-    "🫂",
-    "👪️",
-    "🧑‍🧑‍🧒",
-    "🧑‍🧑‍🧒‍🧒",
-    "🧑‍🧒",
-    "🧑‍🧒‍🧒",
-    "👣",
-  ],
-  动物: [
-    "🐵",
-    "🐒",
-    "🦍",
-    "🦧",
-    "🐶",
-    "🐕️",
-    "🦮",
-    "🐕‍🦺",
-    "🐩",
-    "🐺",
-    "🦊",
-    "🦝",
-    "🐱",
-    "🐈️",
-    "🐈‍⬛",
-    "🦁",
-    "🐯",
-    "🐅",
-    "🐆",
-    "🐴",
-    "🫎",
-    "🫏",
-    "🐎",
-    "🦄",
-    "🦓",
-    "🦌",
-    "🦬",
-    "🐮",
-    "🐂",
-    "🐃",
-    "🐄",
-    "🐷",
-    "🐖",
-    "🐗",
-    "🐽",
-    "🐏",
-    "🐑",
-    "🐐",
-    "🐪",
-    "🐫",
-    "🦙",
-    "🦒",
-    "🐘",
-    "🦣",
-    "🦏",
-    "🦛",
-    "🐭",
-    "🐁",
-    "🐀",
-    "🐹",
-    "🐰",
-    "🐇",
-    "🐿️",
-    "🦫",
-    "🦔",
-    "🦇",
-    "🐻",
-    "🐻‍❄️",
-    "🐨",
-    "🐼",
-    "🦥",
-    "🦦",
-    "🦨",
-    "🦘",
-    "🦡",
-    "🐾",
-    "🦃",
-    "🐔",
-    "🐓",
-    "🐣",
-    "🐤",
-    "🐥",
-    "🐦️",
-    "🐧",
-    "🕊️",
-    "🦅",
-    "🦆",
-    "🦢",
-    "🦉",
-    "🦤",
-    "🪶",
-    "🦩",
-    "🦚",
-    "🦜",
-    "🪽",
-    "🐦‍⬛",
-    "🪿",
-    "🐦‍🔥",
-    "🐸",
-    "🐊",
-    "🐢",
-    "🦎",
-    "🐍",
-    "🐲",
-    "🐉",
-    "🦕",
-    "🦖",
-    "🐳",
-    "🐋",
-    "🐬",
-    "🦭",
-    "🐟️",
-    "🐠",
-    "🐡",
-    "🦈",
-    "🐙",
-    "🐚",
-    "🪸",
-    "🪼",
-    "🐌",
-    "🦋",
-    "🐛",
-    "🐜",
-    "🐝",
-    "🪲",
-    "🐞",
-    "🦗",
-    "🪳",
-    "🕷️",
-    "🕸️",
-    "🦂",
-    "🦟",
-    "🪰",
-    "🪱",
-  ],
-  食物: [
-    "🍇",
-    "🍈",
-    "🍉",
-    "🍊",
-    "🍋",
-    "🍋‍🟩",
-    "🍌",
-    "🍍",
-    "🥭",
-    "🍎",
-    "🍏",
-    "🍐",
-    "🍑",
-    "🍒",
-    "🍓",
-    "🫐",
-    "🥝",
-    "🍅",
-    "🫒",
-    "🥥",
-    "🥑",
-    "🍆",
-    "🥔",
-    "🥕",
-    "🌽",
-    "🌶️",
-    "🫑",
-    "🥒",
-    "🥬",
-    "🥦",
-    "🧄",
-    "🧅",
-    "🥜",
-    "🫘",
-    "🌰",
-    "🫚",
-    "🫛",
-    "🍄‍🟫",
-    "🍞",
-    "🥐",
-    "🥖",
-    "🫓",
-    "🥨",
-    "🥯",
-    "🥞",
-    "🧇",
-    "🧀",
-    "🍖",
-    "🍗",
-    "🥩",
-    "🥓",
-    "🍔",
-    "🍟",
-    "🍕",
-    "🌭",
-    "🥪",
-    "🌮",
-    "🌯",
-    "🫔",
-    "🥙",
-    "🧆",
-    "🥚",
-    "🍳",
-    "🥘",
-    "🍲",
-    "🫕",
-    "🥣",
-    "🥗",
-    "🍿",
-    "🧈",
-    "🧂",
-    "🥫",
-    "🍱",
-    "🍘",
-    "🍙",
-    "🍚",
-    "🍛",
-    "🍜",
-    "🍝",
-    "🍠",
-    "🍢",
-    "🍣",
-    "🍤",
-    "🍥",
-    "🥮",
-    "🍡",
-    "🥟",
-    "🥠",
-  ],
-  活动: [
-    "🎃",
-    "🎄",
-    "🎆",
-    "🎇",
-    "🧨",
-    "✨️",
-    "🎈",
-    "🎉",
-    "🎊",
-    "🎋",
-    "🎍",
-    "🎎",
-    "🎏",
-    "🎐",
-    "🎑",
-    "🧧",
-    "🎀",
-    "🎁",
-    "🎗️",
-    "🎟️",
-    "🎫",
-    "🎖️",
-    "🏆️",
-    "🏅",
-    "🥇",
-    "🥈",
-    "🥉",
-    "⚽️",
-    "⚾️",
-    "🥎",
-    "🏀",
-    "🏐",
-    "🏈",
-    "🏉",
-    "🎾",
-    "🥏",
-    "🎳",
-    "🏏",
-    "🏑",
-    "🏒",
-    "🥍",
-    "🏓",
-    "🏸",
-    "🥊",
-    "🥋",
-    "🥅",
-    "⛳️",
-    "⛸️",
-    "🎣",
-    "🤿",
-    "🎽",
-    "🎿",
-    "🛷",
-    "🥌",
-    "🎯",
-    "🪀",
-    "🪁",
-    "🔫",
-    "🎱",
-    "🔮",
-    "🪄",
-    "🎮️",
-    "🕹️",
-    "🎰",
-    "🎲",
-    "🧩",
-    "🧸",
-    "🪅",
-    "🪩",
-    "🪆",
-    "♠️",
-    "♥️",
-    "♦️",
-    "♣️",
-    "♟️",
-    "🃏",
-    "🀄️",
-    "🎴",
-    "🎭️",
-    "🖼️",
-    "🎨",
-    "🧵",
-    "🪡",
-    "🧶",
-  ],
-  旅行: [
-    "🌏️",
-    "🌐",
-    "🗺️",
-    "🗾",
-    "🧭",
-    "🏔️",
-    "⛰️",
-    "🌋",
-    "🗻",
-    "🏕️",
-    "🏖️",
-    "🏜️",
-    "🏝️",
-    "🏞️",
-    "🏟️",
-    "🏛️",
-    "🏗️",
-    "🧱",
-    "🪨",
-    "🪵",
-    "🛖",
-    "🏘️",
-    "🏚️",
-    "🏠️",
-    "🏡",
-    "🏢",
-    "🏣",
-    "🏤",
-    "🏥",
-    "🏦",
-    "🏨",
-    "🏩",
-    "🏪",
-    "🏫",
-    "🏬",
-    "🏭️",
-    "🏯",
-    "🏰",
-    "💒",
-    "🗼",
-    "🗽",
-    "⛪️",
-    "🕌",
-    "🛕",
-    "🕍",
-    "⛩️",
-    "🕋",
-    "⛲️",
-    "⛺️",
-    "🌁",
-    "🌃",
-    "🏙️",
-    "🌄",
-    "🌅",
-    "🌆",
-    "🌇",
-    "🌉",
-    "♨️",
-    "🎠",
-    "🛝",
-    "🎡",
-    "🎢",
-    "💈",
-    "🎪",
-    "🚂",
-    "🚃",
-    "🚄",
-    "🚅",
-    "🚆",
-    "🚇️",
-    "🚈",
-    "🚉",
-    "🚊",
-    "🚝",
-    "🚞",
-    "🚋",
-    "🚌",
-    "🚍️",
-    "🚎",
-    "🚐",
-    "🚑️",
-    "🚒",
-    "🚓",
-    "🚔️",
-    "🚕",
-    "🚖",
-    "🚗",
-    "🚘️",
-    "🚙",
-    "🛻",
-    "🚚",
-    "🚛",
-    "🚜",
-    "🏎️",
-    "🏍️",
-    "🛵",
-    "🦽",
-    "🦼",
-    "🛺",
-    "🚲️",
-    "🛴",
-    "🛹",
-    "🛼",
-    "🚏",
-    "🛣️",
-    "🛤️",
-    "🛢️",
-    "⛽️",
-    "🛞",
-    "🚨",
-    "🚥",
-    "🚦",
-    "🛑",
-    "🚧",
-    "⚓️",
-    "🛟",
-    "⛵️",
-    "🛶",
-    "🚤",
-    "🛳️",
-    "⛴️",
-    "🛥️",
-    "🚢",
-    "✈️",
-    "🛩️",
-    "🛫",
-    "🛬",
-    "🪂",
-    "💺",
-    "🚁",
-    "🚟",
-    "🚠",
-    "🚡",
-    "🛰️",
-    "🚀",
-    "🛸",
-    "🛎️",
-    "🧳",
-    "⌛️",
-    "⏳️",
-    "⌚️",
-    "⏰️",
-    "⏱️",
-    "⏲️",
-    "🕰️",
-    "🕛️",
-    "🕧️",
-    "🕐️",
-    "🕜️",
-    "🕑️",
-    "🕝️",
-    "🕒️",
-    "🕞️",
-    "🕓️",
-    "🕟️",
-    "🕔️",
-    "🕠️",
-    "🕕️",
-    "🕡️",
-    "🕖️",
-    "🕢️",
-    "🕗️",
-    "🕣️",
-    "🕘️",
-    "🕤️",
-    "🕙️",
-    "🕥️",
-    "🕚️",
-    "🕦️",
-    "🌑",
-    "🌒",
-    "🌓",
-    "🌔",
-    "🌕️",
-    "🌖",
-    "🌗",
-    "🌘",
-    "🌙",
-    "🌚",
-    "🌛",
-    "🌜️",
-    "🌡️",
-    "☀️",
-    "🌝",
-    "🌞",
-    "🪐",
-    "⭐️",
-    "🌟",
-    "🌠",
-    "🌌",
-    "☁️",
-    "⛅️",
-    "⛈️",
-    "🌤️",
-    "🌥️",
-    "🌦️",
-    "🌧️",
-    "🌨️",
-    "🌩️",
-    "🌪️",
-    "🌫️",
-    "🌬️",
-    "🌀",
-    "🌈",
-    "🌂",
-    "☂️",
-    "☔️",
-    "⛱️",
-    "⚡️",
-    "❄️",
-    "☃️",
-    "⛄️",
-    "☄️",
-    "🔥",
-    "💧",
-    "🌊",
-  ],
+// 插入表情
+const insertEmoji = (emoji) => {
+  if (!messageInput.value) return;
+  
+  // 确保输入框有焦点
+  messageInput.value.focus();
+  
+  let range;
+  // 优先使用上次保存的光标位置
+  if (lastCursorPosition.value) {
+    range = lastCursorPosition.value.cloneRange();
+  } else {
+    // 如果没有保存的位置，获取当前选区
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+      range = selection.getRangeAt(0).cloneRange();
+    } else {
+      // 如果没有当前选区，创建一个新的选区在末尾
+      initInputCursor();
+      range = window.getSelection().getRangeAt(0).cloneRange();
+    }
+  }
+  
+  // 确保range有效
+  if (!range) {
+    initInputCursor();
+    range = window.getSelection().getRangeAt(0).cloneRange();
+  }
+  
+  // 清除当前选择内容（如果有）
+  range.deleteContents();
+  
+  // 根据表情类型插入内容
+  if (typeof emoji === 'string' && emoji.endsWith('.gif')) {
+    // 插入GIF图片（从doro分类）
+    const img = document.createElement('img');
+    img.src = `/src/assets/doro/${emoji}`;
+    img.alt = 'emoji';
+    img.className = 'chat-emoji-gif';
+    img.style.maxWidth = '100px';
+    img.style.maxHeight = '100px';
+    img.style.verticalAlign = 'middle';
+    
+    range.insertNode(img);
+    
+    // 将光标位置移动到插入的图片后面
+    range.setStartAfter(img);
+    range.setEndAfter(img);
+  } else {
+    // 插入普通emoji
+    const text = document.createTextNode(emoji);
+    range.insertNode(text);
+    
+    // 将光标位置移动到插入的文本后面
+    range.setStartAfter(text);
+    range.setEndAfter(text);
+  }
+  
+  // 更新选择区域
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+  
+  // 保存新的光标位置
+  lastCursorPosition.value = range.cloneRange();
+  
+  // 确保输入框可见
+  messageInput.value.scrollTop = messageInput.value.scrollHeight;
 };
-
-// 计算当前分类的表情
-const currentEmojis = computed(() => {
-  return emojiCategories[currentCategory.value] || [];
-});
 
 // 切换表情选择器显示状态
 const toggleEmojiPicker = () => {
   showEmojiPicker.value = !showEmojiPicker.value;
-  console.log(111);
-};
-
-// 插入表情
-const insertEmoji = (emoji) => {
-  const input = messageInput.value;
-  const start = input.selectionStart;
-  const end = input.selectionEnd;
-  const text = messageText.value;
-  messageText.value = text.substring(0, start) + emoji + text.substring(end);
-
-  // 下一个 tick 后设置光标位置
-  setTimeout(() => {
-    input.focus();
-    input.setSelectionRange(start + emoji.length, start + emoji.length);
-  }, 0);
 };
 
 // 点击外部关闭表情选择器
 const handleClickOutside = (event) => {
-  const picker = document.querySelector(".emoji-picker");
-  const button = document.querySelector(".emoji-button");
-
-  if (
-    showEmojiPicker.value &&
-    picker &&
-    !picker.contains(event.target) &&
-    !button.contains(event.target)
-  ) {
-    showEmojiPicker.value = false;
-  }
+  // This is now handled by the EmojiPicker component
 };
 
 // 生命周期钩子
 onMounted(() => {
-  document.addEventListener("click", handleClickOutside);
   scrollToBottom();
 });
 
 onUnmounted(() => {
-  document.removeEventListener("click", handleClickOutside);
+  scrollToBottom();
 });
+
+// 处理Enter键
+const handleEnterKey = (e) => {
+  // 如果按下Shift+Enter，允许换行
+  if (e.shiftKey) {
+    return;
+  }
+  
+  // 如果只按Enter，发送消息
+  e.preventDefault();
+  sendMessage();
+};
 </script>
 
 <template>
@@ -1459,7 +506,8 @@ onUnmounted(() => {
                 @contextmenu.prevent="showContextMenu($event, message)"
               >
                 <template v-if="message.message_type === 'text'">
-                  {{ message.content }}
+                  <span v-if="hasHtmlContent(message.content)" v-html="message.content"></span>
+                  <span v-else>{{ message.content }}</span>
                 </template>
 
                 <template v-else-if="message.message_type === 'file'">
@@ -1497,30 +545,11 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <!-- emoji 区 -->
-      <div class="emoji-picker" v-show="showEmojiPicker">
-        <div class="emoji-tabs">
-          <div
-            v-for="(category, name) in emojiCategories"
-            :key="name"
-            class="emoji-tab"
-            :class="{ active: currentCategory === name }"
-            @click="currentCategory = name"
-          >
-            {{ name }}
-          </div>
-        </div>
-        <div class="emoji-grid">
-          <div
-            v-for="emoji in currentEmojis"
-            :key="emoji"
-            class="emoji-item"
-            @click="insertEmoji(emoji)"
-          >
-            {{ emoji }}
-          </div>
-        </div>
-      </div>
+      <!-- EmojiPicker 组件 -->
+      <EmojiPicker
+        v-model:visible="showEmojiPicker"
+        @select-emoji="insertEmoji"
+      />
 
       <!-- 图片预览弹窗 -->
       <div v-if="previewVisible" class="preview-modal" @click="closePreview">
@@ -1559,13 +588,13 @@ onUnmounted(() => {
           />
           <i class="fa-solid fa-paperclip" @click="triggerFileInput"></i>
         </div>
-        <input
-          type="text"
+        <div
           ref="messageInput"
+          class="message-input-editable"
+          contenteditable="true"
+          @keydown.enter="handleEnterKey"
           placeholder="说些什么吧 ฅ^•ﻌ•^ฅ"
-          v-model="messageText"
-          @keypress.enter.prevent="sendMessage"
-        />
+        ></div>
         <button @click="sendMessage" class="send-btn">
           发送<i class="fa-regular fa-paper-plane"></i>
         </button>
@@ -1686,7 +715,7 @@ onUnmounted(() => {
   font-weight: 600;
   cursor: pointer;
 
-  &:hover{
+  &:hover {
     color: #8b98e4;
   }
   i {
@@ -1817,7 +846,7 @@ onUnmounted(() => {
   cursor: pointer;
 }
 
-.chat-area-footer input {
+.message-input-editable {
   border: none;
   background-color: #f2f4f7;
   padding: 12px;
@@ -1825,10 +854,28 @@ onUnmounted(() => {
   font-size: 15px;
   margin: 0 12px;
   width: 80%;
+  min-height: 20px;
+  max-height: 100px;
+  overflow-y: auto;
+  outline: none;
+  line-height: 1.5;
 }
 
-.chat-area-footer input::placeholder {
+.message-input-editable[placeholder]:empty:before {
+  content: attr(placeholder);
   color: #66696b;
+}
+
+.message-input-editable[placeholder]:empty:focus:before {
+  content: "";
+}
+
+.message-input-editable img.chat-emoji-gif {
+  width: 24px !important; /* 强制覆盖，确保输入框中的表情尺寸正确 */
+  height: 24px !important;
+  vertical-align: middle;
+  display: inline-block;
+  margin: 0 2px;
 }
 
 .chat-area-footer button {
@@ -1836,6 +883,7 @@ onUnmounted(() => {
   height: 100%;
   letter-spacing: 2px;
   border-radius: var(--radius-6);
+  border: 1px solid #e4e7eb;
 }
 
 .chat-area-footer button i {
@@ -1933,68 +981,6 @@ onUnmounted(() => {
   color: #949393;
 }
 
-/* emoji表情 */
-.emoji-picker {
-  position: absolute;
-  left: 318px;
-  bottom: 61px;
-  z-index: 1000;
-  width: 350px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.emoji-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #eee;
-  overflow-x: auto;
-}
-
-.emoji-tab {
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background-color 0.2s;
-}
-
-.emoji-tab:hover {
-  background: #f0f0f0;
-}
-
-.emoji-tab.active {
-  background: #8b98e4;
-  color: white;
-}
-
-.emoji-grid {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 5px;
-  height: 200px;
-  overflow-y: auto;
-}
-
-.emoji-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.emoji-item:hover {
-  background-color: #f0f0f0;
-}
-
 /* 预览弹窗 */
 .preview-modal {
   position: fixed;
@@ -2020,19 +1006,6 @@ onUnmounted(() => {
   object-fit: contain;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.fa-spinner {
-  animation: spin 1s linear infinite;
-}
-
 .loading-overlay {
   position: absolute;
   top: 0;
@@ -2050,5 +1023,46 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* GIF emoji styles */
+:deep(.chat-emoji-gif) {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* 聊天区域中的GIF表情 */
+.message-content {
+  :deep(img.chat-emoji-gif) {
+    width: 60px; /* 聊天区域中显示更大的尺寸 */
+    height: 60px;
+    vertical-align: middle;
+    margin: 2px;
+  }
+  
+  :deep(img) {
+    max-width: 100%;
+    vertical-align: middle;
+  }
+}
+
+/* GIF表情样式 */
+.chat-emoji-gif {
+  max-width: 100px;
+  max-height: 100px;
+  vertical-align: middle;
+  margin: 2px;
+  border-radius: 4px;
+}
+
+/* 输入框中的GIF表情样式 */
+.message-input .chat-emoji-gif {
+  max-width: 80px;
+  max-height: 80px;
+  vertical-align: middle;
+  margin: 2px;
+  display: inline-block;
 }
 </style>

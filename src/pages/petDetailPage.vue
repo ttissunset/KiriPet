@@ -96,9 +96,9 @@ const toggleAnimation = () => {
 const fetchPetData = async () => {
   const petType = route.params.type; // 'cats' 或 'dogs'
   const petId = Number(route.params.id);
-  
+
   console.log(`正在获取宠物数据: 类型=${petType}, ID=${petId}`);
-  
+
   if (petType === "cats") {
     // 使用导入的猫咪数据
     const foundCat = catInfos.find((cat) => cat.id === petId);
@@ -167,9 +167,9 @@ function initScene() {
 
   // 创建相机
   camera = new THREE.PerspectiveCamera(
-    45, 
-    modelContainer.value.clientWidth / modelContainer.value.clientHeight, 
-    0.1, 
+    45,
+    modelContainer.value.clientWidth / modelContainer.value.clientHeight,
+    0.1,
     1000
   );
   camera.position.set(5, 3, 5);
@@ -208,7 +208,7 @@ function initScene() {
 function createTempModel() {
   // 创建一个更加精细的狗形状
   const group = new THREE.Group();
-  
+
   // 使用更复杂的几何体和材质
   const bodyMaterial = new THREE.MeshPhongMaterial({
     color: 0xf9d71c,
@@ -236,14 +236,14 @@ function createTempModel() {
   const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
   body.position.set(0, 0, 0);
   group.add(body);
-  
+
   // 头部 - 使用更平滑的球体，略微拉长
   const headGeometry = new THREE.SphereGeometry(0.45, 32, 32);
   headGeometry.scale(1.2, 1, 1);
   const head = new THREE.Mesh(headGeometry, bodyMaterial);
   head.position.set(-0.9, 0.2, 0);
   group.add(head);
-  
+
   // 吻部 - 添加立体感的吻部
   const muzzleGeometry = new THREE.SphereGeometry(0.25, 32, 16);
   muzzleGeometry.scale(1.2, 0.8, 1);
@@ -257,7 +257,7 @@ function createTempModel() {
   const nose = new THREE.Mesh(noseGeometry, noseMaterial);
   nose.position.set(-1.5, 0.15, 0);
   group.add(nose);
-  
+
   // 眼睛 - 添加更立体的眼睛
   const eyeGeometry = new THREE.SphereGeometry(0.07, 16, 16);
 
@@ -310,12 +310,12 @@ function createTempModel() {
   frontLegL.position.set(-0.4, -0.6, 0.3);
   frontLegL.rotation.x = Math.PI / 36;
   group.add(frontLegL);
-  
+
   const frontLegR = new THREE.Mesh(frontLegGeometry, bodyMaterial);
   frontLegR.position.set(-0.4, -0.6, -0.3);
   frontLegR.rotation.x = -Math.PI / 36;
   group.add(frontLegR);
-  
+
   // 后腿 - 更加强壮的后腿
   const backLegGeometry = new THREE.CylinderGeometry(0.15, 0.12, 0.85, 16);
 
@@ -323,12 +323,12 @@ function createTempModel() {
   backLegL.position.set(0.7, -0.6, 0.32);
   backLegL.rotation.x = Math.PI / 24;
   group.add(backLegL);
-  
+
   const backLegR = new THREE.Mesh(backLegGeometry, bodyMaterial);
   backLegR.position.set(0.7, -0.6, -0.32);
   backLegR.rotation.x = -Math.PI / 24;
   group.add(backLegR);
-  
+
   // 脚爪 - 添加脚爪细节
   const pawGeometry = new THREE.SphereGeometry(0.12, 16, 16);
   pawGeometry.scale(1, 0.4, 1);
@@ -376,7 +376,7 @@ function createTempModel() {
   // 调整整体位置和大小
   group.scale.set(0.9, 0.9, 0.9);
   group.position.set(0, 0.3, 0);
-  
+
   // 添加到场景
   scene.add(group);
   model = group;
@@ -408,9 +408,9 @@ function animate() {
     model.rotation.y += 0.003;
   }
 
-    renderer.render(scene, camera);
-  }
-  
+  renderer.render(scene, camera);
+}
+
 // 计算饼图切片的样式
 function getPieSliceStyle(index) {
   const regions = petData.value.globalDistribution.regions;
@@ -718,7 +718,7 @@ function initSpecificRisksChart(risksData) {
 onMounted(() => {
   // 获取宠物数据
   fetchPetData();
-  
+
   // 初始化3D场景
   if (modelContainer.value) {
     initScene();
@@ -771,7 +771,7 @@ onUnmounted(() => {
       </button>
       <h1>{{ petData.name }}</h1>
     </div>
-    
+
     <div class="pet-detail-content">
       <!-- 左侧图片/3D模型视图 -->
       <div class="pet-model-section">
@@ -877,24 +877,24 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-      
+
       <!-- 右侧宠物信息 -->
       <div class="pet-info-section">
         <div class="pet-header">
           <h1>{{ petData.breed }}</h1>
           <p class="pet-short-desc">{{ petData.shortDesc }}</p>
         </div>
-        
+
         <div class="pet-tags">
           <span class="tag" v-for="(tag, index) in petData.tags" :key="index">
             {{ tag }}
           </span>
         </div>
-        
+
         <div class="pet-description">
           <p>{{ petData.description }}</p>
         </div>
-        
+
         <div class="pet-detail-section">
           <h2>性格特点</h2>
           <ul class="trait-list">
@@ -907,7 +907,7 @@ onUnmounted(() => {
             </li>
           </ul>
         </div>
-        
+
         <div class="pet-detail-section">
           <h2>养护建议</h2>
           <ul class="care-list">
@@ -917,7 +917,7 @@ onUnmounted(() => {
             </li>
           </ul>
         </div>
-        
+
         <!-- 基本特征区域 -->
         <div class="pet-detail-section">
           <h2>基本特征</h2>
@@ -973,7 +973,7 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
-        
+
         <!-- 新增基因身份证展示 -->
         <div class="pet-detail-section" v-if="petData.geneticProfile">
           <h2>基因身份证</h2>
@@ -993,7 +993,7 @@ onUnmounted(() => {
                 </button>
               </div>
             </div>
-            
+
             <div class="gene-info">
               <div v-if="showDominantGenes" class="gene-list dominant">
                 <h3>显性基因标记</h3>
@@ -1009,7 +1009,7 @@ onUnmounted(() => {
                   </span>
                 </div>
               </div>
-              
+
               <div v-else class="gene-list recessive">
                 <h3>隐性基因标记</h3>
                 <div class="gene-tags">
@@ -1024,7 +1024,7 @@ onUnmounted(() => {
                   </span>
                 </div>
               </div>
-              
+
               <div class="health-risks">
                 <h3>健康风险评估</h3>
                 <ul class="risk-list">
@@ -1055,7 +1055,7 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
-        
+
         <!-- 新增历史溯源轴展示 -->
         <div
           class="pet-detail-section"
@@ -1080,7 +1080,7 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
-        
+
         <!-- 修改全球分布热力图展示 -->
         <div class="pet-detail-section" v-if="petData.globalDistribution">
           <h2>全球分布热力图</h2>
@@ -1088,7 +1088,7 @@ onUnmounted(() => {
             <!-- 使用ECharts的饼图代替原来的CSS实现 -->
             <div class="distribution-chart">
               <div ref="pieChart" class="pie-chart-container"></div>
-                </div>
+            </div>
             <div
               class="popularity-rank"
               v-if="petData.globalDistribution.popularityRank"
@@ -1100,7 +1100,7 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
-        
+
         <!-- 联系/领养按钮 -->
         <div class="pet-actions">
           <button class="action-button primary">联系咨询领养</button>
@@ -1122,7 +1122,7 @@ onUnmounted(() => {
           <img :src="getCurrentPreviewImage()" :alt="petData.name" />
 
           <!-- 导出按钮 -->
-          <button class="export-btn" @click="exportImage" title="导出图片">
+          <button class="img-export-btn" @click="exportImage" title="导出图片">
             <span class="material-icons-sharp">file_download</span>
           </button>
         </div>
@@ -1435,16 +1435,16 @@ onUnmounted(() => {
   .pet-detail-content {
     flex-direction: column;
   }
-  
+
   .pet-image-container,
   .model-container {
     min-height: 350px;
   }
-  
+
   .features-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .pet-actions {
     flex-direction: column;
   }
@@ -1752,29 +1752,29 @@ onUnmounted(() => {
   .genetic-profile {
     flex-direction: column;
   }
-  
+
   .gene-image-container {
     height: 200px;
   }
-  
+
   .timeline-item.even,
   .timeline-item.odd {
     flex-direction: column;
     padding: 0 0 0 30px;
   }
-  
+
   .timeline-line {
     left: 15px;
   }
-  
+
   .timeline-marker {
     left: 15px;
   }
-  
+
   .timeline-content {
     width: 100%;
   }
-  
+
   .timeline-item.even .timeline-content::after,
   .timeline-item.odd .timeline-content::after {
     left: -7px;
@@ -1851,6 +1851,28 @@ onUnmounted(() => {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+
+.img-export-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.img-export-btn:hover {
+  color: #fff;
+  background-color: rgba(224, 28, 21, 0.2);
 }
 
 .preview-thumbnails {
@@ -2043,4 +2065,4 @@ onUnmounted(() => {
     width: 100%;
   }
 }
-</style> 
+</style>

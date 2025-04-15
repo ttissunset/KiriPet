@@ -25,6 +25,16 @@ const routes = [
     component: () => import("../pages/regPages.vue"),
   },
   {
+    path: "/adoption",
+    name: "adoption",
+    component: () => import("../pages/adoptionPages.vue"),
+  },
+  {
+    path: "/adoption/detail/:id",
+    name: "adoptionDetail",
+    component: () => import("../pages/adoptionDetailPages.vue"),
+  },
+  {
     path: "/wiki",
     component: () => import("../pages/wikiPages.vue"),
     children: [
@@ -51,6 +61,11 @@ const routes = [
         path: ":type/:id",
         name: "WikiPetDetail",
         component: () => import("../pages/petDetailPage.vue"),
+      },
+      {
+        path: "article/:id",
+        name: "ArticleDetail",
+        component: () => import("../pages/articleDetailPage.vue"),
       },
     ],
   },
@@ -81,6 +96,16 @@ const routes = [
   {
     path: "/serve",
     component: () => import("../pages/servePages.vue"),
+  },
+  {
+    path: "/store/:id",
+    name: "storeDetail",
+    component: () => import("../pages/storeDetailPages.vue"),
+  },
+  {
+    path: "/medical",
+    name: "medical",
+    component: () => import("../pages/medicalServicePages.vue"),
   },
   {
     path: "/userinfo",

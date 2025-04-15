@@ -328,7 +328,7 @@ const togglePanel = (panel) => {
       </div>
       
       <!-- 加载更多按钮 -->
-      <div class="load-more-container">
+      <div class="load-more-container" v-if="filteredDogs.length > 0">
         <button 
           class="load-more-btn" 
           @click="loadMorePets" 
@@ -346,7 +346,13 @@ const togglePanel = (panel) => {
 
       <!-- 空状态 -->
       <div class="empty-state" v-if="filteredDogs.length === 0">
-        <span class="material-icons-sharp">sentiment_dissatisfied</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 512 512" fill="none">
+          <path d="M430.1 347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1 0-43.8l30.3-26.9c46.4-41 46.4-108.2 0-149.2-34.2-30.1-80.1-45-127.8-45-55.7 0-113.9 20.3-158.8 60.1-83.5 73.8-83.5 194.7 0 268.5 41.5 36.7 97.5 55 152.9 55.4h1.7c55.4 0 110-17.9 148.8-52.4 14.4-12.7 12-36.6-1.4-47.7zm-156.5 90c-43.1 0-89.3-14.9-122.3-44.3-69.3-61.3-69.3-161 0-222.3 38.1-33.7 89-52.4 140.7-52.4 41.2 0 80.9 12.8 110.5 38.9 35.3 31.2 35.3 81.9 0 113.1l-30.3 26.9c-27.2 24-27.2 64.8 0 88.9 11.4 10.1 22.2 14.9 41.5 18 0 0 6 1.3 9.7 2.5-23.6 17.7-59.6 31.1-97.8 30.9-18.3-.2-36.5-3.2-52-7.3z" fill="#ffa500"/>
+          <path d="M256.9 126.2c-67.5 0-124.5 48.8-136.1 115.8-.4 2.3.6 4.6 2.5 5.9 1.8 1.3 4.2 1.3 6 0 17.2-12.5 41-6.7 51.9 12.1 2.6 4.6 4.2 9.7 4.5 14.9.2 2.6 2.4 4.6 5 4.6h20.4c1.8 0 3.4-.9 4.3-2.4s.9-3.4 0-4.9c-10-16.8-3.6-38.5 14.2-48.3 24.5-14 54.2-5.5 68.1 18.9 2.7 4.7 4.5 10 5.2 15.3.4 2.9 3.2 5.1 6.1 4.5 22.8-4.5 44.9 13.1 46.2 36.2.1 1.8 2.1 3.1 4.9 3.2.1 0 .2 0 .3 0 24 0 43.5-20.3 43.5-45.3-.1-71.1-57.8-129-129.5-129z" fill="#3f94ea"/>
+          <circle cx="200" cy="300" r="30" fill="#FF6F61"/>
+          <circle cx="310" cy="290" r="30" fill="#5B5EA6"/>
+          <path d="M200 342c-8 0-15.5-2.5-21.5-6.5-3.5-2.3-8.2-1.4-10.5 2.1-2.3 3.5-1.4 8.2 2.1 10.5 8.5 5.7 18.9 9 29.9 9 11 0 21.4-3.3 29.9-9 3.5-2.3 4.4-7.1 2.1-10.5-2.3-3.5-7.1-4.4-10.5-2.1-6 4-13.5 6.5-21.5 6.5zM310 332c-8 0-15.5-2.5-21.5-6.5-3.5-2.3-8.2-1.4-10.5 2.1-2.3 3.5-1.4 8.2 2.1 10.5 8.5 5.7 18.9 9 29.9 9 11 0 21.4-3.3 29.9-9 3.5-2.3 4.4-7.1 2.1-10.5-2.3-3.5-7.1-4.4-10.5-2.1-6 4-13.5 6.5-21.5 6.5z" fill="#333"/>
+        </svg>
         <p>没有找到符合条件的狗狗</p>
         <button
           @click="
@@ -354,7 +360,7 @@ const togglePanel = (panel) => {
           "
           class="reset-btn"
         >
-          重置搜索
+          <span>重置搜索</span>
         </button>
       </div>
     </div>
@@ -680,26 +686,24 @@ const togglePanel = (panel) => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 0;
-  color: var(--dark-variant);
+  padding: 60px 20px;
+  text-align: center;
 }
 
-.empty-state .material-icons-sharp {
-  font-size: 64px;
-  color: var(--light);
+.empty-state svg {
   margin-bottom: 20px;
 }
 
 .empty-state p {
   font-size: var(--fs-18);
-  margin-bottom: 20px;
+  color: var(--dark-variant);
+  margin-bottom: 30px;
 }
 
 .reset-btn {
   background-color: var(--deongaree);
   color: white;
   border: none;
-  border-radius: var(--radius-pill);
   padding: 10px 20px;
   font-size: var(--fs-14);
   cursor: pointer;
@@ -707,7 +711,6 @@ const togglePanel = (panel) => {
 }
 
 .reset-btn:hover {
-  background-color: var(--deongaree-dark);
   transform: translateY(-2px);
 }
 

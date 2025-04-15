@@ -139,7 +139,7 @@ onBeforeUnmount(() => {
         <div class="doctor-btn">
           <h3 class="btn-content">专业的宠物医疗服务，让您安心</h3>
           <div class="btn-button">
-            <button>前往查看</button>
+            <button @click="router.push('/medical')">前往查看</button>
           </div>
         </div>
       </div>
@@ -169,7 +169,7 @@ onBeforeUnmount(() => {
           <div class="adopt-section-main-right">
             <div class="adopt-section-main-right-title">
               <h3>仅需4步，即可把"他"带回家</h3>
-              <button @click="router.push('/severe')">立即领养</button>
+              <button @click="router.push('/adoption')">立即领养</button>
             </div>
             <div class="adopt-section-main-right-steps-list">
               <div class="adopt-section-steps-item">
@@ -482,13 +482,28 @@ button {
   border-radius: var(--radius-8);
   color: var(--light-white);
   background-color: var(--deongaree);
+  cursor: pointer;
+  z-index: 1;
+  position: relative;
+  border: 2px solid var(--deongaree);
+  transition: var(--transition-4);
 }
 
 button:hover {
   background-color: var(--light-white);
   border: 2px solid var(--deongaree);
   color: var(--deongaree);
-  transition: var(--transition-4);
+}
+
+.btn-button {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+}
+
+.btn-button button {
+  margin-top: 0;
 }
 
 .severe-container {
@@ -571,15 +586,18 @@ button:hover {
   justify-content: flex-end;
   margin-top: 20px;
   align-items: center;
+  position: relative;
+  z-index: 2;
 }
 
 .btn-content {
   margin-right: 20px;
+  flex: 1;
 }
 
-.btn-button button {
-  align-content: center;
-  margin-top: 0px;
+.btn-button button:hover {
+  background-color: var(--light-white);
+  color: var(--deongaree);
 }
 /* 宠物医生 End */
 
@@ -1101,12 +1119,12 @@ button:hover {
   .severe-container {
     width: 85%;
   }
-  
+
   .doctor-img img {
     width: 100%;
     height: auto;
   }
-  
+
   .info-card {
     padding: 0 40px;
   }
@@ -1116,52 +1134,52 @@ button:hover {
   .severe-container {
     width: 90%;
   }
-  
+
   .content-heading {
     font-size: 30px;
     letter-spacing: 10px;
   }
-  
+
   .content-subheading {
     font-size: 18px;
     letter-spacing: 8px;
   }
-  
+
   /* 医生板块响应式 */
   .main-images {
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
   }
-  
+
   .info-card {
     padding: 20px 30px;
   }
-  
+
   .severe-doctor {
     height: auto;
     padding-bottom: 50px;
   }
-  
+
   /* 领养板块响应式 */
   .severe-petAdopt {
     height: auto;
     padding-bottom: 50px;
   }
-  
+
   .adopt-section-main {
     flex-direction: column;
     height: auto;
   }
-  
-  .adopt-section-main-left, 
+
+  .adopt-section-main-left,
   .adopt-section-main-right {
     width: 100%;
   }
-  
+
   .adopt-section-main-left {
     margin-bottom: 30px;
   }
-  
+
   .circle-1 {
     width: 100%;
     max-width: 400px;
@@ -1174,7 +1192,7 @@ button:hover {
     grid-template-columns: 1fr 1fr;
     gap: 20px;
   }
-  
+
   .adopt-section-steps-item {
     width: 100%;
   }
@@ -1185,26 +1203,26 @@ button:hover {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .btn-content {
     margin-right: 0;
     margin-bottom: 15px;
     text-align: center;
   }
-  
+
   /* 医生板块在手机端改为一列布局 */
   .main-images {
     grid-template-columns: 1fr;
   }
-  
+
   .carousel-image {
     height: 180px;
   }
-  
+
   .carousel-content {
     padding: 15px;
   }
-  
+
   .carousel-content h4 {
     font-size: 18px;
   }
@@ -1214,44 +1232,44 @@ button:hover {
   .severe-container {
     width: 95%;
   }
-  
+
   .content-heading {
     font-size: 24px;
     letter-spacing: 5px;
   }
-  
+
   .content-subheading {
     font-size: 16px;
     letter-spacing: 3px;
   }
-  
+
   .adopt-section-main-right-title {
     flex-direction: column;
     text-align: center;
     margin-bottom: 25px; /* 增加底部间距 */
   }
-  
+
   .adopt-section-main-right-title h3 {
     margin-bottom: 15px;
   }
-  
+
   .adopt-section-main-right-steps-list {
     grid-template-columns: 1fr 1fr; /* 小屏幕上改为两列 */
     gap: 15px;
   }
-  
+
   .region-column {
     width: 48%; /* 确保即使在最小屏幕也保持两列 */
   }
-  
+
   .nationwide-store-section {
     padding: 40px 0;
   }
-  
+
   .carousel-controls {
     flex-wrap: wrap;
   }
-  
+
   .carousel-indicators {
     order: -1;
     width: 100%;

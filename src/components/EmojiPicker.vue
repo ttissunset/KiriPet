@@ -1,11 +1,136 @@
 <script setup>
-const showEmojiPicker = ref(false); // 是否显示表情框
+import { ref, computed, onMounted, onUnmounted } from "vue";
+
+const props = defineProps({
+  visible: {
+    type: Boolean,
+    default: false
+  }
+});
+
 const currentCategory = ref("表情"); // 当前选中的表情分类
-const messageInput = ref(null); // 消息输入框的引用
-const messageText = ref(""); // 消息文本内容
-/**
- * 以下是 emoji 的函数
- */
+const preloadedGifs = ref(new Set()); // 用于跟踪已预加载的GIF表情
+
+const emit = defineEmits(['select-emoji', 'update:visible']);
+
+// 创建 doro GIF 文件路径数组
+const doroGifs = [
+  '640.gif',
+  '640_1.gif',
+  '640_2.gif',
+  '640_4.gif',
+  '640_8.gif',
+  '640_11.gif',
+  '640_12.gif',
+  '640_13.gif',
+  '640_14.gif',
+  '640_20.gif',
+  '640_25.gif',
+  '640_26.gif',
+  '640_29.gif',
+  '640_30.gif',
+  '640_31.gif',
+  '640_32.gif',
+  '640_34.gif',
+  '640_35.gif',
+  '640_38.gif',
+  '640_39.gif',
+  '640_40.gif',
+  '640_41.gif',
+  '640_45.gif',
+  '640_46.gif',
+  '640_47.gif',
+  '640_49.gif',
+  '640_50.gif',
+  '640_51.gif',
+  '640_52.gif',
+  '640_53.gif',
+  '640_54.gif',
+  '640_55.gif',
+  '640_56.gif',
+  '640_57.gif',
+  '640_58.gif',
+  '640_59.gif',
+  '640_60.gif',
+  '640_61.gif',
+  '640_62.gif',
+  '640_63.gif',
+  '640_64.gif',
+  '640_65.gif',
+  '640_66.gif',
+  '640_67.gif',
+  '640_68.gif',
+  '640_69.gif',
+  '640_70.gif',
+  '640_71.gif',
+  '640_72.gif',
+  '640_73.gif',
+  '640_74.gif',
+  '640_75.gif',
+  '640_76.gif',
+  '640_77.gif',
+  '640_78.gif',
+  '640_79.gif',
+  '640_80.gif',
+  '640_81.gif',
+  '640_82.gif',
+  '640_83.gif',
+  '640_84.gif',
+  '640_85.gif',
+  '640_86.gif',
+  '640_87.gif',
+  '640_88.gif',
+  '640_89.gif',
+  '640_90.gif',
+  '640_91.gif',
+  '640_92.gif',
+  '640_93.gif',
+  '640_94.gif',
+  '640_95.gif',
+  '640_96.gif',
+  '640_97.gif',
+  '640_100.gif',
+  '640_101.gif',
+  '640_102.gif',
+  '640_103.gif',
+  '640_104.gif',
+  '640_105.gif',
+  '640_106.gif',
+  '640_107.gif',
+  '640_108.gif',
+  '640_109.gif',
+  '640_110.gif',
+  '640_111.gif',
+  '640_112.gif',
+  '640_113.gif',
+  '640_114.gif',
+  '640_115.gif',
+  '640_116.gif',
+  '640_117.gif',
+  '640_118.gif',
+  '640_119.gif',
+  '640_120.gif',
+  '640_121.gif',
+  '640_122.gif',
+  '640_123.gif',
+  '640_124.gif',
+  '640_125.gif',
+];
+
+// 预加载GIF图片
+const preloadGifImages = () => {
+  doroGifs.forEach(gif => {
+    if (!preloadedGifs.value.has(gif)) {
+      const img = new Image();
+      img.src = `/src/assets/doro/${gif}`;
+      img.onload = () => {
+        preloadedGifs.value.add(gif);
+      };
+    }
+  });
+};
+
+
 // 表情分类
 const emojiCategories = {
   表情: [
@@ -1083,6 +1208,7 @@ const emojiCategories = {
     "💧",
     "🌊",
   ],
+  doro: doroGifs
 };
 
 // 计算当前分类的表情
@@ -1090,25 +1216,19 @@ const currentEmojis = computed(() => {
   return emojiCategories[currentCategory.value] || [];
 });
 
-// 切换表情选择器显示状态
-const toggleEmojiPicker = () => {
-  showEmojiPicker.value = !showEmojiPicker.value;
-  console.log(111);
+// 判断是否为GIF表情
+const isGifEmoji = (emoji) => {
+  return typeof emoji === 'string' && emoji.endsWith('.gif');
 };
 
 // 插入表情
 const insertEmoji = (emoji) => {
-  const input = messageInput.value;
-  const start = input.selectionStart;
-  const end = input.selectionEnd;
-  const text = messageText.value;
-  messageText.value = text.substring(0, start) + emoji + text.substring(end);
+  emit('select-emoji', emoji);
+};
 
-  // 下一个 tick 后设置光标位置
-  setTimeout(() => {
-    input.focus();
-    input.setSelectionRange(start + emoji.length, start + emoji.length);
-  }, 0);
+// 关闭表情选择器
+const closePicker = () => {
+  emit('update:visible', false);
 };
 
 // 点击外部关闭表情选择器
@@ -1117,18 +1237,20 @@ const handleClickOutside = (event) => {
   const button = document.querySelector(".emoji-button");
 
   if (
-    showEmojiPicker.value &&
+    props.visible &&
     picker &&
     !picker.contains(event.target) &&
-    !button.contains(event.target)
+    button && !button.contains(event.target)
   ) {
-    showEmojiPicker.value = false;
+    closePicker();
   }
 };
 
 // 生命周期钩子
 onMounted(() => {
   document.addEventListener("click", handleClickOutside);
+  // 预加载GIF图片
+  preloadGifImages();
 });
 
 onUnmounted(() => {
@@ -1138,7 +1260,7 @@ onUnmounted(() => {
 
 <template>
   <!-- emoji 区 -->
-  <div class="emoji-picker" v-show="showEmojiPicker">
+  <div class="emoji-picker" v-if="visible">
     <div class="emoji-tabs">
       <div
         v-for="(category, name) in emojiCategories"
@@ -1150,14 +1272,19 @@ onUnmounted(() => {
         {{ name }}
       </div>
     </div>
-    <div class="emoji-grid">
+    <div :class="{'emoji-grid': true, 'doro-grid': currentCategory === 'doro'}">
       <div
         v-for="emoji in currentEmojis"
         :key="emoji"
         class="emoji-item"
         @click="insertEmoji(emoji)"
       >
-        {{ emoji }}
+        <template v-if="isGifEmoji(emoji)">
+          <img :src="'/src/assets/doro/' + emoji" class="gif-emoji" />
+        </template>
+        <template v-else>
+          {{ emoji }}
+        </template>
       </div>
     </div>
   </div>
@@ -1212,6 +1339,11 @@ onUnmounted(() => {
   overflow-y: auto;
 }
 
+/* doro GIF布局为一行四个 */
+.doro-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 .emoji-item {
   display: flex;
   justify-content: center;
@@ -1220,9 +1352,20 @@ onUnmounted(() => {
   cursor: pointer;
   border-radius: 4px;
   transition: background-color 0.2s;
+  height: 36px;
+  box-sizing: border-box;
 }
 
 .emoji-item:hover {
   background-color: #f0f0f0;
+}
+
+.gif-emoji {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 4px;
+  max-width: 100%;
+  display: block;
 }
 </style>

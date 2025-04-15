@@ -1,9 +1,17 @@
 <script setup>
 import { ref, computed, inject } from "vue";
+import { useRouter } from "vue-router";
+import { knowledge } from "../../mock/infos.js";
+
+// 使用router跳转到文章详情页
+const router = useRouter();
 
 // Inject search state from parent
 const parentSearchQuery = inject("searchQuery", ref(""));
 const showSearchResults = inject("showSearchResults", ref(false));
+
+// 视图模式
+const viewMode = ref("grid");
 
 // 宠物知识分类
 const categories = [
@@ -13,69 +21,8 @@ const categories = [
   { id: 4, name: "宠物行为" },
 ];
 
-// 宠物知识文章
-const knowledgeArticles = [
-  {
-    id: 1,
-    title: "如何识别猫咪健康问题的早期征兆",
-    summary:
-      "了解猫咪健康问题的早期征兆，包括行为改变、饮食习惯变化等信号，帮助您及时发现并处理潜在的健康问题。",
-    image: "https://s2.loli.net/2023/08/10/1RVJrKnBgQyA4jH.jpg",
-    category: "宠物健康",
-    timestamp: "2023-05-15",
-    readTime: "5分钟",
-  },
-  {
-    id: 2,
-    title: "狗狗基础训练：从坐下到握手的完整指南",
-    summary:
-      '本指南涵盖了从简单的"坐下"命令到更复杂的"握手"技巧的训练方法，适合各个年龄段的狗狗学习基础训练。',
-    image: "https://s2.loli.net/2023/08/10/G7WDCZg5RtFXEcu.jpg",
-    category: "宠物训练",
-    timestamp: "2023-06-02",
-    readTime: "8分钟",
-  },
-  {
-    id: 3,
-    title: "宠物饮食禁忌：哪些人类食物对宠物有害",
-    summary:
-      "深入了解哪些日常食物对猫狗有害，包括巧克力、葡萄、洋葱等，以及如何确保您的宠物获得均衡的营养。",
-    image: "https://s2.loli.net/2023/08/10/xYHQXyG3R2z6Mtn.jpg",
-    category: "宠物饮食",
-    timestamp: "2023-04-18",
-    readTime: "6分钟",
-  },
-  {
-    id: 4,
-    title: "解读猫咪身体语言：尾巴、耳朵和姿态",
-    summary:
-      "学习如何通过观察猫咪的尾巴姿势、耳朵位置和整体身体姿态来理解它们的情绪和意图，改善您与爱猫的沟通。",
-    image: "https://s2.loli.net/2023/08/10/PH9SaZhpmY3QOTG.jpg",
-    category: "宠物行为",
-    timestamp: "2023-07-10",
-    readTime: "7分钟",
-  },
-  {
-    id: 5,
-    title: "季节性宠物护理：夏季和冬季的特殊注意事项",
-    summary:
-      "根据不同季节调整宠物护理方案，包括夏季防暑、冬季保暖，以及季节性皮肤问题的预防和处理方法。",
-    image: "https://s2.loli.net/2023/08/10/VKZ1jWl7fAdJwUL.jpg",
-    category: "宠物健康",
-    timestamp: "2023-06-25",
-    readTime: "9分钟",
-  },
-  {
-    id: 6,
-    title: "狗狗社交化训练：帮助害羞或过度活跃的狗狗",
-    summary:
-      "针对性解决狗狗社交问题的训练方法，帮助害羞的狗狗建立信心，或帮助过度活跃的狗狗学会在社交场合中保持冷静。",
-    image: "https://s2.loli.net/2023/08/10/D5f9KyWg4q8CQnE.jpg",
-    category: "宠物训练",
-    timestamp: "2023-05-30",
-    readTime: "10分钟",
-  },
-];
+// 从infos.js导入知识库文章
+const knowledgeArticles = knowledge;
 
 // 活跃分类
 const activeCategory = ref("全部");
@@ -109,6 +56,11 @@ const filteredArticles = computed(() => {
 const setCategory = (categoryName) => {
   activeCategory.value = categoryName;
 };
+
+// 跳转到文章详情页
+const goToArticleDetail = (articleId) => {
+  router.push(`/wiki/article/${articleId}`);
+};
 </script>
 
 <template>
@@ -135,12 +87,39 @@ const setCategory = (categoryName) => {
       </div>
     </div>
 
+    <!-- 宠物知识百科标题 -->
+    <div class="wiki-header">
+      <h1 class="wiki-title">
+        <span class="material-icons-sharp">menu_book</span>
+        宠物知识百科
+        <span class="article-count">{{ filteredArticles.length }}篇文章</span>
+      </h1>
+
+      <div class="view-toggle">
+        <button
+          class="view-toggle-btn"
+          :class="{ active: viewMode === 'grid' }"
+          @click="viewMode = 'grid'"
+        >
+          <span class="material-icons-sharp">grid_view</span>
+        </button>
+        <button
+          class="view-toggle-btn"
+          :class="{ active: viewMode === 'list' }"
+          @click="viewMode = 'list'"
+        >
+          <span class="material-icons-sharp">view_list</span>
+        </button>
+      </div>
+    </div>
+
     <!-- 知识文章列表 -->
-    <div class="articles-grid">
+    <div :class="['articles-grid', viewMode]">
       <div
         v-for="article in filteredArticles"
         :key="article.id"
         class="article-card"
+        @click="goToArticleDetail(article.id)"
       >
         <div class="article-image">
           <img :src="article.image" :alt="article.title" />
@@ -175,6 +154,59 @@ const setCategory = (categoryName) => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Wiki Header 样式 */
+.wiki-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--deongaree-yw);
+}
+
+.wiki-title {
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-32);
+  color: var(--dark);
+}
+
+.wiki-title .material-icons-sharp {
+  margin-right: 12px;
+  color: var(--deongaree);
+}
+
+.article-count {
+  margin-left: 15px;
+  font-size: var(--fs-16);
+  color: var(--dark-variant);
+  background-color: var(--deongaree-yw);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+}
+
+.view-toggle {
+  display: flex;
+  gap: 10px;
+}
+
+.view-toggle-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: var(--radius-8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--dark-variant);
+}
+
+.view-toggle-btn:hover,
+.view-toggle-btn.active {
+  background-color: var(--light);
+  color: var(--deongaree);
 }
 
 .filter-chips {
@@ -209,18 +241,44 @@ const setCategory = (categoryName) => {
   margin-left: 5px;
 }
 
+/* 网格和列表视图样式 */
 .articles-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
 }
 
+.articles-grid.list {
+  grid-template-columns: 1fr;
+}
+
+.articles-grid.list .article-card {
+  display: flex;
+  height: 180px;
+}
+
+.articles-grid.list .article-image {
+  flex: 0 0 250px;
+  height: 100%;
+}
+
+.articles-grid.list .article-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.articles-grid.list .article-summary {
+  flex: 1;
+}
+
 .article-card {
   background: white;
-  border-radius: 0.75rem;
+  border-radius: 0.25rem;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
 .article-card:hover {
@@ -250,28 +308,26 @@ const setCategory = (categoryName) => {
 
 .article-category {
   display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #3b82f6;
-  background: #eff6ff;
-  padding: 0.25rem 0.5rem;
-  border-radius: 9999px;
+  padding: 4px 8px;
+  background-color: var(--light);
+  border-radius: var(--radius-4);
   margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--gray);
 }
 
 .article-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #1e293b;
+  font-size: 1.25rem;
   margin-bottom: 0.75rem;
+  color: var(--dark);
   line-height: 1.4;
 }
 
 .article-summary {
+  color: var(--gray);
   font-size: 0.9rem;
-  color: #64748b;
-  line-height: 1.5;
   margin-bottom: 1rem;
+  line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -281,8 +337,8 @@ const setCategory = (categoryName) => {
 .article-meta {
   display: flex;
   justify-content: space-between;
+  color: var(--gray);
   font-size: 0.8rem;
-  color: #94a3b8;
 }
 
 @media (max-width: 640px) {
@@ -298,6 +354,28 @@ const setCategory = (categoryName) => {
 
   .filter-chip {
     white-space: nowrap;
+  }
+  
+  .wiki-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+  }
+  
+  .view-toggle {
+    align-self: flex-end;
+  }
+  
+  .articles-grid.list .article-card {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .articles-grid.list .article-image {
+    flex: none;
+    height: 180px;
   }
 }
 </style>
