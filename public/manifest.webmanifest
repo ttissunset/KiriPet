@@ -1,0 +1,20 @@
+{
+  "name": "Kiri Pet",
+  "short_name": "KiriPet",
+  "description": "Your pet companion app",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["pets", "lifestyle"],
+  "lang": "en",
+  "dir": "ltr"
+} 
